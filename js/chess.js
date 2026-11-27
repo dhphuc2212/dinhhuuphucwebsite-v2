@@ -18,11 +18,11 @@
     strokeMain = "#090d16";
     detailStroke = isWhite ? "#090d16" : "#e4e4e7";
   } else {
-    // Giao diện tối: Quân trắng sáng rõ vs Quân đen tông xanh lam sáng dễ nhìn
-    fillMain = isWhite ? "#ffffff" : "#0284c7";
-    fillAccent = isWhite ? "#e2e8f0" : "#0369a1";
-    strokeMain = isWhite ? "#090d16" : "#e0f2fe";
-    detailStroke = isWhite ? "#0f172a" : "#ffffff";
+    // Giao diện tối: Trắng tinh viền đậm vs Tím mận đậm viền sáng dịu (dễ tách biệt cả 2 màu ô)
+    fillMain = isWhite ? "#ffffff" : "#6b21a8";
+    fillAccent = isWhite ? "#e2e8f0" : "#4c1d95";
+    strokeMain = isWhite ? "#0f172a" : "#f3e8ff";
+    detailStroke = isWhite ? "#0f172a" : "#fae8ff";
   }
 
   let paths = "";
