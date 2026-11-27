@@ -1143,6 +1143,26 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .container,
   .section-mount,
   .site-main,
+  .tab-panel,
+  .card,
+  .profile-card,
+  .ai-hub-card,
+  .intro-card,
+  .calendar-section-card,
+  .work-hero-card,
+  .work-video-card,
+  .pricing-card,
+  .minigame-shell,
+  .info-mini-box,
+  .pillar-box,
+  .chat-row,
+  .schedule-draft {
+    min-width: 0 !important;
+  }
+
+  .container,
+  .section-mount,
+  .site-main,
   .tab-panel {
     width: 100% !important;
     max-width: 100% !important;
@@ -1460,8 +1480,9 @@ html[data-theme="night"] .dhp-dd-item.danger {
   }
 
   .ai-chat-sidebar.mobile-open {
-    top: 64px !important;
-    bottom: 16px !important;
+    top: 68px;
+    bottom: 16px;
+    max-height: calc(100dvh - 84px);
   }
 
   .table-responsive {
