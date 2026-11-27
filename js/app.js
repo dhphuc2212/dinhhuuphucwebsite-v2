@@ -1,151 +1,119 @@
 (function () {
-  const sectionMount = document.getElementById("sectionMount");
-  const scrollProgress = document.getElementById("scrollProgress");
-  const trollModal = document.getElementById("trollModal");
+  const THEME_STORAGE_KEY = "dhp_theme_mode";
+  const VALID_THEMES = ["slate", "linen", "indigo"];
+  const THEME_LABELS = {
+    slate: "Emerald Slate",
+    linen: "Kem ấm (Warm Linen)",
+    indigo: "Midnight Indigo"
+  };
 
-  window.addEventListener("scroll", () => {
-    if (!scrollProgress) return;
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    scrollProgress.style.width = `${scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0}%`;
-  });
-
-  function openTrollModal() {
-    trollModal?.classList.remove("hidden");
-  }
-
-  function closeTrollModal() {
-    trollModal?.classList.add("hidden");
-  }
-
-  function startTypewriter() {
-    const el = document.getElementById("typewriterText");
-    if (!el) return;
-    const roles = [
-      "Thương mại & Phân phối",
-      "Tối ưu Vận hành & Logistics",
-      "Kết nối & Công nghệ"
-    ];
-    let roleIdx = 0;
-    let charIdx = roles[0].length;
-    let deleting = true;
-
-    clearInterval(window._typewriterTimer);
-    window._typewriterTimer = setInterval(() => {
-      const target = document.getElementById("typewriterText");
-      if (!target) return clearInterval(window._typewriterTimer);
-
-      const current = roles[roleIdx];
-      if (deleting) {
-        charIdx--;
-        target.textContent = current.slice(0, charIdx);
-        if (charIdx <= 0) {
-          deleting = false;
-          roleIdx = (roleIdx + 1) % roles.length;
-        }
-      } else {
-        charIdx++;
-        target.textContent = current.slice(0, charIdx);
-        if (charIdx >= current.length) deleting = true;
-      }
-    }, 110);
-  }
-
-  async function loadTab(tabName) {
-    const validTabs = ["about", "work", "minigame", "brain"];
-    const tab = validTabs.includes(tabName) ? tabName : "about";
-
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.tab === tab);
-    });
-
+  function getSavedTheme() {
     try {
-      const res = await fetch(`/sections/${tab}.html`);
-      sectionMount.innerHTML = await res.text();
-
-      sectionMount.querySelectorAll("[data-tab]").forEach((el) => {
-        el.addEventListener("click", (e) => {
-          e.preventDefault();
-          loadTab(el.dataset.tab);
-        });
-      });
-
-      if (tab === "about") {
-        startTypewriter();
-        document.getElementById("downloadVcardBtn")?.addEventListener("click", window.DhpUtils.downloadVCard);
-        document.getElementById("trollBtn")?.addEventListener("click", openTrollModal);
-        document.getElementById("copyEmailBtn")?.addEventListener("click", () => {
-          navigator.clipboard?.writeText("dhphuc2212@dinhhuuphuc.com");
-          window.DhpUtils.showToast("Đã sao chép email: dhphuc2212@dinhhuuphuc.com");
-        });
-        window.initChatAssistant?.();
-        window.GoogleCalendarManager?.bindSectionEvents();
-      } else if (tab === "work") {
-        window.initWorkSection?.();
-      } else if (tab === "minigame") {
-        initMiniGameSwitcher();
-      } else if (tab === "brain") {
-        window.SecondBrainManager?.initTab();
-      }
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      const val = localStorage.getItem(THEME_STORAGE_KEY) || "slate";
+      return VALID_THEMES.includes(val) ? val : "slate";
     } catch {
-      sectionMount.innerHTML = `<div class="skeleton-loader">Không tải được mục ${tab}. Vui lòng tải lại trang.</div>`;
+      return "slate";
     }
   }
 
-  function initMiniGameSwitcher() {
-    const gameBtns = document.querySelectorAll(".game-tab-btn");
-    const panels = {
-      caro: document.getElementById("gamePanelCaro"),
-      snake: document.getElementById("gamePanelSnake"),
-      sudoku: document.getElementById("gamePanelSudoku")
-    };
-
-    gameBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const target = btn.dataset.game;
-        gameBtns.forEach((b) => b.classList.toggle("active", b === btn));
-        Object.entries(panels).forEach(([key, panel]) => {
-          panel?.classList.toggle("hidden", key !== target);
-        });
-      });
+  function syncThemeButtons(theme) {
+    document.querySelectorAll("[data-theme-mode]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.themeMode === theme);
     });
-
-    window.initCaroGame?.();
-    window.initSnakeGame?.();
-    window.initSudokuGame?.();
   }
 
-  document.addEventListener("click", (e) => {
-    if (e.target.closest(".dhp-open-brain-btn, #dhpOpenBrainBtn")) {
-      e.preventDefault();
-      loadTab("brain");
+  function ensureMobileThemeRow(nav) {
+    if (!nav || nav.querySelector("#mobileDrawerThemeRow")) return;
+    const row = document.createElement("div");
+    row.id = "mobileDrawerThemeRow";
+    row.className = "mobile-drawer-theme-row";
+    row.innerHTML = `
+      <span class="mobile-drawer-theme-label">Giao diện:</span>
+      <div class="mobile-drawer-theme-pills">
+        <button type="button" class="dhp-theme-btn" data-theme-mode="slate" title="Emerald Slate">
+          <span class="dhp-theme-swatch swatch-slate"></span><span>Slate</span>
+        </button>
+        <button type="button" class="dhp-theme-btn" data-theme-mode="linen" title="Kem ấm">
+          <span class="dhp-theme-swatch swatch-linen"></span><span>Kem ấm</span>
+        </button>
+        <button type="button" class="dhp-theme-btn" data-theme-mode="indigo" title="Midnight Indigo">
+          <span class="dhp-theme-swatch swatch-indigo"></span><span>Indigo</span>
+        </button>
+      </div>`;
+    nav.appendChild(row);
+    syncThemeButtons(getSavedTheme());
+  }
+
+  function applyTheme(mode, showNotice = true) {
+    const theme = VALID_THEMES.includes(mode) ? mode : "slate";
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {}
+    syncThemeButtons(theme);
+    if (showNotice && typeof window.showToast === "function") {
+      window.showToast(`Đã chuyển giao diện: ${THEME_LABELS[theme]}`);
     }
-  });
+  }
 
-  document.querySelectorAll("[data-tab]").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      loadTab(el.dataset.tab);
-    });
-  });
+  const mountEl = document.getElementById("sectionMount");
+  const validTabs = ["about", "work", "minigame", "brain"];
+  const tabCache = {};
+  let currentTab = "about";
 
-  document.getElementById("footerVcardBtn")?.addEventListener("click", window.DhpUtils.downloadVCard);
-  document.getElementById("footerTrollBtn")?.addEventListener("click", openTrollModal);
-  document.getElementById("closeTrollBtn")?.addEventListener("click", closeTrollModal);
-  trollModal?.addEventListener("click", (e) => {
-    if (e.target === trollModal) closeTrollModal();
-  });
+  const scrollProgressEl = document.getElementById("scrollProgress");
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!scrollProgressEl) return;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgressEl.style.width = `${h > 0 ? Math.min(100, (window.scrollY / h) * 100) : 0}%`;
+    },
+    { passive: true }
+  );
 
-  /* =========================================================
-     MOBILE HAMBURGER MENU (3 GẠCH GỌN GÀNG CHO ĐIỆN THOẠI)
-     ========================================================= */
-  (function initMobileHamburgerMenu() {
+  function showToast(msg) {
+    const el = document.getElementById("toastNotice");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => el.classList.remove("show"), 2600);
+  }
+  window.showToast = showToast;
+
+  function isMobileViewport() {
+    return window.innerWidth <= 768;
+  }
+
+  function setMobileMenuState(open) {
+    const nav = document.querySelector(".site-header .main-nav");
+    const backdrop = document.getElementById("mobileNavBackdrop");
+    const toggleBtn = document.getElementById("mobileMenuToggleBtn");
+    if (!nav) return;
+
+    if (open && isMobileViewport()) {
+      ensureMobileThemeRow(nav);
+      if (window.GoogleCalendarManager?.syncUI) window.GoogleCalendarManager.syncUI();
+      syncThemeButtons(getSavedTheme());
+      nav.classList.add("is-mobile-open");
+      backdrop?.classList.add("show");
+      toggleBtn?.classList.add("is-active");
+      toggleBtn?.setAttribute("aria-expanded", "true");
+      document.body.classList.add("mobile-menu-locked");
+    } else {
+      nav.classList.remove("is-mobile-open");
+      backdrop?.classList.remove("show");
+      toggleBtn?.classList.remove("is-active");
+      toggleBtn?.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("mobile-menu-locked");
+    }
+  }
+
+  function initMobileMenu() {
     const headerInner = document.querySelector(".site-header .header-inner");
-    const mainNav = document.querySelector(".site-header .main-nav");
-    const headerActions = document.querySelector(".site-header .header-actions");
-    if (!headerInner || !mainNav || !headerActions) return;
+    const nav = document.querySelector(".site-header .main-nav");
+    if (!headerInner || !nav) return;
 
     let toggleBtn = document.getElementById("mobileMenuToggleBtn");
     if (!toggleBtn) {
@@ -155,8 +123,8 @@
       toggleBtn.className = "mobile-menu-toggle-btn";
       toggleBtn.setAttribute("aria-label", "Mở menu điều hướng");
       toggleBtn.setAttribute("aria-expanded", "false");
-      toggleBtn.innerHTML = `<span></span><span></span><span></span>`;
-      headerActions.appendChild(toggleBtn);
+      toggleBtn.innerHTML = "<span></span><span></span><span></span>";
+      headerInner.appendChild(toggleBtn);
     }
 
     let backdrop = document.getElementById("mobileNavBackdrop");
@@ -167,30 +135,151 @@
       document.body.appendChild(backdrop);
     }
 
-    function setMenuOpen(open) {
-      mainNav.classList.toggle("is-mobile-open", open);
-      backdrop.classList.toggle("show", open);
-      toggleBtn.classList.toggle("is-active", open);
-      toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
-      document.body.classList.toggle("mobile-menu-locked", open);
-    }
+    ensureMobileThemeRow(nav);
 
     toggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      const nextState = !mainNav.classList.contains("is-mobile-open");
-      setMenuOpen(nextState);
+      const willOpen = !nav.classList.contains("is-mobile-open");
+      setMobileMenuState(willOpen);
     });
 
-    backdrop.addEventListener("click", () => setMenuOpen(false));
-
-    mainNav.querySelectorAll(".nav-btn").forEach((btn) => {
-      btn.addEventListener("click", () => setMenuOpen(false));
-    });
+    backdrop.addEventListener("click", () => setMobileMenuState(false));
 
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 768) setMenuOpen(false);
+      if (!isMobileViewport()) {
+        setMobileMenuState(false);
+      }
+      if (window.GoogleCalendarManager?.syncUI) {
+        window.GoogleCalendarManager.syncUI();
+      }
+      syncThemeButtons(getSavedTheme());
     });
-  })();
+  }
 
-  loadTab("about");
+  function startTypewriter() {
+    const el = document.getElementById("typewriterText");
+    if (!el) return;
+    const phrases = ["Thương mại & Phân phối", "Tối ưu vận hành", "Trợ lý AI & Lịch trình"];
+    let pIdx = 0;
+    let cIdx = 0;
+    let deleting = false;
+    clearTimeout(startTypewriter._timer);
+
+    function tick() {
+      const current = phrases[pIdx];
+      if (!deleting) {
+        cIdx++;
+        el.textContent = current.slice(0, cIdx);
+        if (cIdx === current.length) {
+          deleting = true;
+          startTypewriter._timer = setTimeout(tick, 1700);
+          return;
+        }
+        startTypewriter._timer = setTimeout(tick, 75);
+      } else {
+        cIdx--;
+        el.textContent = current.slice(0, cIdx);
+        if (cIdx === 0) {
+          deleting = false;
+          pIdx = (pIdx + 1) % phrases.length;
+          startTypewriter._timer = setTimeout(tick, 350);
+          return;
+        }
+        startTypewriter._timer = setTimeout(tick, 40);
+      }
+    }
+    tick();
+  }
+
+  function setActiveNav(tabName) {
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.tab === tabName);
+    });
+  }
+
+  async function loadTab(tabName, pushHash = true) {
+    const targetTab = validTabs.includes(tabName) ? tabName : "about";
+    currentTab = targetTab;
+    setActiveNav(targetTab);
+    setMobileMenuState(false);
+
+    if (pushHash && location.hash !== `#${targetTab}`) {
+      history.replaceState(null, "", `#${targetTab}`);
+    }
+
+    if (!mountEl) return;
+
+    if (!tabCache[targetTab]) {
+      mountEl.innerHTML = `<div class="skeleton-loader">Đang tải nội dung ${targetTab}...</div>`;
+      try {
+        const res = await fetch(`/sections/${targetTab}.html`, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        tabCache[targetTab] = await res.text();
+      } catch {
+        mountEl.innerHTML = `<div class="card"><p>Không tải được nội dung tab <strong>${targetTab}</strong>.</p></div>`;
+        return;
+      }
+    }
+
+    mountEl.innerHTML = tabCache[targetTab];
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    if (targetTab === "about") {
+      startTypewriter();
+      window.AiChatManager?.bindSectionEvents?.();
+      window.GoogleCalendarManager?.bindSectionEvents?.();
+    } else if (targetTab === "work") {
+      window.WorkSectionManager?.bindSectionEvents?.();
+    } else if (targetTab === "minigame") {
+      window.CaroGameManager?.init?.();
+    } else if (targetTab === "brain") {
+      window.SecondBrainManager?.bindSectionEvents?.();
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    const themeBtn = e.target.closest("[data-theme-mode]");
+    if (themeBtn) {
+      e.preventDefault();
+      applyTheme(themeBtn.dataset.themeMode, true);
+      return;
+    }
+
+    const tabTrigger = e.target.closest("[data-tab]");
+    if (tabTrigger) {
+      e.preventDefault();
+      loadTab(tabTrigger.dataset.tab, true);
+      return;
+    }
+
+    if (e.target.closest("#copyEmailBtn")) {
+      navigator.clipboard?.writeText("dhphuc2212@dinhhuuphuc.com").catch(() => {});
+      showToast("Đã sao chép email: dhphuc2212@dinhhuuphuc.com");
+      return;
+    }
+
+    const trollModal = document.getElementById("trollModal");
+    if (e.target.closest("#trollBtn, #footerTrollBtn")) {
+      e.preventDefault();
+      setMobileMenuState(false);
+      trollModal?.classList.remove("hidden");
+      return;
+    }
+    if (e.target.closest("#closeTrollBtn") || e.target === trollModal) {
+      trollModal?.classList.add("hidden");
+    }
+  });
+
+  window.addEventListener("hashchange", () => {
+    const hashTab = location.hash.replace("#", "").trim();
+    if (validTabs.includes(hashTab) && hashTab !== currentTab) {
+      loadTab(hashTab, false);
+    }
+  });
+
+  applyTheme(getSavedTheme(), false);
+  initMobileMenu();
+  const initialHash = location.hash.replace("#", "").trim();
+  loadTab(validTabs.includes(initialHash) ? initialHash : "about", false);
 })();
