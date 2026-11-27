@@ -66,12 +66,6 @@
       </nav>
 
       <div class="header-actions">
-        <!-- Chuyển đổi ngôn ngữ VI / EN qua bộ từ điển tập trung js/i18n-dict.js -->
-        <div class="dhp-lang-switch" id="dhpLangSwitch" role="group" aria-label="Ngôn ngữ">
-          <button type="button" class="lang-btn active" data-lang-value="vi">VI</button>
-          <button type="button" class="lang-btn" data-lang-value="en">EN</button>
-        </div>
-
         <div class="dhp-theme-menu-wrap" id="dhpThemeMenuWrap">
           <button type="button" id="dhpThemeTrigger" class="dhp-theme-trigger" aria-expanded="false" aria-haspopup="listbox" title="Giao diện">
             <span class="dhp-theme-prefix">Giao diện</span>
@@ -95,6 +89,25 @@
           <span>Liên hệ Zalo</span>
           <span class="arrow">→</span>
         </a>
+
+        <!-- Menu thả xuống chọn ngôn ngữ VI / EN đặt ngoài cùng bên phải -->
+        <div class="dhp-lang-menu-wrap" id="dhpLangMenuWrap">
+          <button type="button" id="dhpLangTrigger" class="dhp-lang-trigger" aria-expanded="false" aria-haspopup="listbox" title="Ngôn ngữ / Language">
+            <span id="dhpLangCurrentFlag" class="dhp-lang-flag" aria-hidden="true">🇻🇳</span>
+            <span id="dhpLangCurrentCode" class="dhp-lang-code">VI</span>
+            <span class="dhp-lang-caret">▾</span>
+          </button>
+          <div id="dhpLangMenu" class="dhp-lang-menu hidden" role="listbox" aria-label="Chọn ngôn ngữ">
+            <button type="button" class="dhp-lang-option is-active active" data-lang-value="vi" role="option" aria-selected="true">
+              <span class="dhp-lang-flag" aria-hidden="true">🇻🇳</span>
+              <span>VI</span>
+            </button>
+            <button type="button" class="dhp-lang-option" data-lang-value="en" role="option" aria-selected="false">
+              <span class="dhp-lang-flag" aria-hidden="true">🇬🇧</span>
+              <span>EN</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
