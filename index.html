@@ -66,6 +66,12 @@
       </nav>
 
       <div class="header-actions">
+        <!-- Chuyển đổi ngôn ngữ VI / EN qua bộ từ điển tập trung js/i18n-dict.js -->
+        <div class="dhp-lang-switch" id="dhpLangSwitch" role="group" aria-label="Ngôn ngữ">
+          <button type="button" class="lang-btn active" data-lang-value="vi">VI</button>
+          <button type="button" class="lang-btn" data-lang-value="en">EN</button>
+        </div>
+
         <div class="dhp-theme-menu-wrap" id="dhpThemeMenuWrap">
           <button type="button" id="dhpThemeTrigger" class="dhp-theme-trigger" aria-expanded="false" aria-haspopup="listbox" title="Giao diện">
             <span class="dhp-theme-prefix">Giao diện</span>
@@ -179,6 +185,9 @@
   <script src="/js/chess.js"></script>
   <script src="/js/snake.js"></script>
   <script src="/js/sudoku.js"></script>
+
+  <!-- Bộ dịch tập trung (sửa mọi câu dịch tại 1 file duy nhất) & Điều phối chính -->
+  <script src="/js/i18n-dict.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/notepad.js"></script>
 </body>
