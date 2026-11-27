@@ -1,72 +1,72 @@
 (function () {
   function createPieceSvg(piece) {
-    if (!piece) return "";
-    const color = piece[0]; // "w" | "b"
-    const type = piece[1];  // "k" | "q" | "r" | "b" | "n" | "p"
+  if (!piece) return "";
+  const color = piece[0]; // "w" | "b"
+  const type = piece[1];  // "k" | "q" | "r" | "b" | "n" | "p"
 
-    const isWhite = color === "w";
-    const fillMain = isWhite ? "#f8fafc" : "#1e293b";
-    const fillAccent = isWhite ? "#e2e8f0" : "#0f172a";
-    const strokeMain = isWhite ? "#0f172a" : "#e2e8f0";
-    const detailStroke = isWhite ? "#1e293b" : "#94a3b8";
+  const isWhite = color === "w";
+  const fillMain = isWhite ? "#ffffff" : "#064e3b";
+  const fillAccent = isWhite ? "#e2e8f0" : "#022c22";
+  const strokeMain = isWhite ? "#090d16" : "#34d399";
+  const detailStroke = isWhite ? "#0f172a" : "#a7f3d0";
 
-    let paths = "";
+  let paths = "";
 
-    if (type === "p") {
-      paths = `
-        <circle cx="25" cy="15.5" r="6.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.2"/>
-        <path d="M16 37.5c0-6.2 4.2-11.2 9-11.2s9 5 9 11.2H16z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.2" stroke-linejoin="round"/>
-        <rect x="13" y="37.5" width="24" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    } else if (type === "r") {
-      paths = `
-        <path d="M14 11h4v4h5v-4h4v4h5v-4h4v7.5l-3 3.5v15.5H17V22l-3-3.5V11z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.1" stroke-linejoin="round"/>
-        <line x1="17" y1="22" x2="33" y2="22" stroke="${detailStroke}" stroke-width="1.8"/>
-        <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    } else if (type === "n") {
-      paths = `
-        <path d="M16.5 37.5c0-7.5 2.5-12 6.5-15.5-2.5-.6-5.2.3-6.8 2.2-1.5-2.6-.6-6.8 2.4-9.8 2.8-2.8 6.5-4.4 9.4-4.4l2.5-2.5 1.5 3.8c3.6 2.5 5.5 7 5 12.2-.4 4.4-2.5 8.5-3.5 14H16.5z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.1" stroke-linejoin="round"/>
-        <circle cx="24.5" cy="15" r="1.5" fill="${strokeMain}"/>
-        <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    } else if (type === "b") {
-      paths = `
-        <circle cx="25" cy="9.5" r="2.6" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
-        <path d="M25 13c-6.2 4.5-8.5 9.8-6.5 15.8 1 2.9 1.5 5.8 1.5 8.7h10c0-2.9.5-5.8 1.5-8.7 2-6-.3-11.3-6.5-15.8z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.1" stroke-linejoin="round"/>
-        <path d="M21.5 20.5l7 7M28.5 20.5l-4.5 4.5" stroke="${detailStroke}" stroke-width="1.8" stroke-linecap="round"/>
-        <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    } else if (type === "q") {
-      paths = `
-        <circle cx="11.5" cy="15.5" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="1.8"/>
-        <circle cx="18.2" cy="12" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="1.8"/>
-        <circle cx="25" cy="10.5" r="2.4" fill="${fillMain}" stroke="${strokeMain}" stroke-width="1.8"/>
-        <circle cx="31.8" cy="12" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="1.8"/>
-        <circle cx="38.5" cy="15.5" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="1.8"/>
-        <path d="M12.5 17.5l4.2 20h16.6l4.2-20-6.2 8.5L25 14l-6.3 12-6.2-8.5z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.1" stroke-linejoin="round"/>
-        <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    } else if (type === "k") {
-      paths = `
-        <line x1="25" y1="7.5" x2="25" y2="15.5" stroke="${strokeMain}" stroke-width="2.4" stroke-linecap="round"/>
-        <line x1="21.5" y1="11" x2="28.5" y2="11" stroke="${strokeMain}" stroke-width="2.4" stroke-linecap="round"/>
-        <path d="M17.5 37.5l-2-11.5c-1.8-1.4-2.5-3.7-1.7-5.8.9-2.3 3.5-3.4 5.9-2.4 1.6.7 2.8 2.1 3.3 3.7h6c.5-1.6 1.7-3 3.3-3.7 2.4-1 5 .1 5.9 2.4.8 2.1.1 4.4-1.7 5.8l-2 11.5h-15z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.1" stroke-linejoin="round"/>
-        <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2"/>
-      `;
-    }
-
-    return `
-      <svg class="chess-piece-svg ${isWhite ? "is-white" : "is-black"}" viewBox="0 0 50 50" aria-hidden="true">
-        <defs>
-          <filter id="chessDrop_${color}_${type}" x="-15%" y="-15%" width="130%" height="130%">
-            <feDropShadow dx="0" dy="1.6" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.32" />
-          </filter>
-        </defs>
-        <g filter="url(#chessDrop_${color}_${type})">${paths}</g>
-      </svg>
+  if (type === "p") {
+    paths = `
+      <circle cx="25" cy="15.5" r="6.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.4"/>
+      <path d="M16 37.5c0-6.2 4.2-11.2 9-11.2s9 5 9 11.2H16z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.4" stroke-linejoin="round"/>
+      <rect x="13" y="37.5" width="24" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
+    `;
+  } else if (type === "r") {
+    paths = `
+      <path d="M14 11h4v4h5v-4h4v4h5v-4h4v7.5l-3 3.5v15.5H17V22l-3-3.5V11z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.3" stroke-linejoin="round"/>
+      <line x1="17" y1="22" x2="33" y2="22" stroke="${detailStroke}" stroke-width="2"/>
+      <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
+    `;
+  } else if (type === "n") {
+    paths = `
+      <path d="M16.5 37.5c0-7.5 2.5-12 6.5-15.5-2.5-.6-5.2.3-6.8 2.2-1.5-2.6-.6-6.8 2.4-9.8 2.8-2.8 6.5-4.4 9.4-4.4l2.5-2.5 1.5 3.8c3.6 2.5 5.5 7 5 12.2-.4 4.4-2.5 8.5-3.5 14H16.5z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.3" stroke-linejoin="round"/>
+      <circle cx="24.5" cy="15" r="1.6" fill="${detailStroke}"/>
+      <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
+    `;
+  } else if (type === "b") {
+    paths = `
+      <circle cx="25" cy="9.5" r="2.6" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.2"/>
+      <path d="M25 13c-6.2 4.5-8.5 9.8-6.5 15.8 1 2.9 1.5 5.8 1.5 8.7h10c0-2.9.5-5.8 1.5-8.7 2-6-.3-11.3-6.5-15.8z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.3" stroke-linejoin="round"/>
+      <path d="M21.5 20.5l7 7M28.5 20.5l-4.5 4.5" stroke="${detailStroke}" stroke-width="2" stroke-linecap="round"/>
+      <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
+    `;
+  } else if (type === "q") {
+    paths = `
+      <circle cx="11.5" cy="15.5" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
+      <circle cx="18.2" cy="12" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
+      <circle cx="25" cy="10.5" r="2.4" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
+      <circle cx="31.8" cy="12" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
+      <circle cx="38.5" cy="15.5" r="2.2" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2"/>
+      <path d="M12.5 17.5l4.2 20h16.6l4.2-20-6.2 8.5L25 14l-6.3 12-6.2-8.5z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.3" stroke-linejoin="round"/>
+      <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
+    `;
+  } else if (type === "k") {
+    paths = `
+      <line x1="25" y1="7.5" x2="25" y2="15.5" stroke="${detailStroke}" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="21.5" y1="11" x2="28.5" y2="11" stroke="${detailStroke}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M17.5 37.5l-2-11.5c-1.8-1.4-2.5-3.7-1.7-5.8.9-2.3 3.5-3.4 5.9-2.4 1.6.7 2.8 2.1 3.3 3.7h6c.5-1.6 1.7-3 3.3-3.7 2.4-1 5 .1 5.9 2.4.8 2.1.1 4.4-1.7 5.8l-2 11.5h-15z" fill="${fillMain}" stroke="${strokeMain}" stroke-width="2.3" stroke-linejoin="round"/>
+      <rect x="12" y="37.5" width="26" height="4.5" rx="2" fill="${fillAccent}" stroke="${strokeMain}" stroke-width="2.2"/>
     `;
   }
+
+  return `
+    <svg class="chess-piece-svg ${isWhite ? "is-white" : "is-black"}" viewBox="0 0 50 50" aria-hidden="true">
+      <defs>
+        <filter id="chessDrop_${color}_${type}" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="1.6" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.35" />
+        </filter>
+      </defs>
+      <g filter="url(#chessDrop_${color}_${type})">${paths}</g>
+    </svg>
+  `;
+}
 
   function initChessGame() {
     const boardEl = document.getElementById("chessBoard");
