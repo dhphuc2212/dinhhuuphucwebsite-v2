@@ -209,11 +209,29 @@ window.GoogleCalendarManager = (function () {
     if (isLoggedIn) {
       if (headerArea) {
         headerArea.innerHTML = `
-          <button type="button" class="dhp-header-user-pill" data-open-account-modal="1" title="Xem thông tin tài khoản Google">
-            ${renderAvatarHtml(userPicture, displayName, userEmail, 24)}
-            <span class="dhp-header-user-name">${H.escapeHtml(displayName)}</span>
-          </button>
-          <button type="button" id="headerLogoutBtn" class="btn btn-outline btn-sm">Đăng xuất</button>`;
+          <div class="dhp-user-menu-wrap" id="dhpUserMenuWrap">
+            <button type="button" id="dhpUserMenuTrigger" class="dhp-header-user-pill" aria-expanded="false" title="Tài khoản Google">
+              ${renderAvatarHtml(userPicture, displayName, userEmail, 26)}
+              <span class="dhp-header-user-name">${H.escapeHtml(displayName)}</span>
+              <span class="dhp-user-caret">▾</span>
+            </button>
+            <div id="dhpUserDropdown" class="dhp-user-dropdown hidden">
+              <div class="dhp-dd-header">
+                ${renderAvatarHtml(userPicture, displayName, userEmail, 36)}
+                <div class="dhp-dd-meta">
+                  <div class="dhp-dd-name">${H.escapeHtml(displayName)}</div>
+                  <div class="dhp-dd-email">${H.escapeHtml(userEmail)}</div>
+                </div>
+              </div>
+              <div class="dhp-dd-divider"></div>
+              <button type="button" class="dhp-dd-item" data-open-account-modal="1">
+                <span>👤</span><span>Hồ sơ & Thông tin cá nhân</span>
+              </button>
+              <button type="button" id="headerLogoutBtn" class="dhp-dd-item danger">
+                <span>🚪</span><span>Đăng xuất</span>
+              </button>
+            </div>
+          </div>`;
       }
       if (cardControls) cardControls.classList.add("hidden");
       if (userBar) userBar.classList.remove("hidden");
@@ -424,6 +442,24 @@ window.GoogleCalendarManager = (function () {
   }
 
   document.addEventListener("click", (e) => {
+    const menuTrigger = e.target.closest("#dhpUserMenuTrigger");
+    if (menuTrigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dd = document.getElementById("dhpUserDropdown");
+      if (dd) {
+        const isOpen = !dd.classList.contains("hidden");
+        dd.classList.toggle("hidden", isOpen);
+        menuTrigger.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      }
+      return;
+    }
+
+    if (!e.target.closest("#dhpUserMenuWrap")) {
+      document.getElementById("dhpUserDropdown")?.classList.add("hidden");
+      document.getElementById("dhpUserMenuTrigger")?.setAttribute("aria-expanded", "false");
+    }
+
     if (e.target.closest("#googleLoginHeaderBtn, #googleLoginCardBtn, #googleLoginDrawerBtn")) {
       e.preventDefault();
       login();
@@ -431,6 +467,7 @@ window.GoogleCalendarManager = (function () {
     }
     if (e.target.closest("[data-open-account-modal]")) {
       e.preventDefault();
+      document.getElementById("dhpUserDropdown")?.classList.add("hidden");
       document.querySelector(".site-header .main-nav")?.classList.remove("is-mobile-open");
       document.getElementById("mobileNavBackdrop")?.classList.remove("show");
       document.getElementById("mobileMenuToggleBtn")?.classList.remove("is-active");
@@ -438,7 +475,12 @@ window.GoogleCalendarManager = (function () {
       openAccountModal();
       return;
     }
-    if (e.target.closest("#headerLogoutBtn, #googleLogoutBtn")) { e.preventDefault(); logout(); return; }
+    if (e.target.closest("#headerLogoutBtn, #googleLogoutBtn")) {
+      e.preventDefault();
+      document.getElementById("dhpUserDropdown")?.classList.add("hidden");
+      logout();
+      return;
+    }
     if (e.target.closest("#refreshCalendarBtn")) { e.preventDefault(); loadEvents(); return; }
 
     if (e.target.closest("#calPrevDayBtn")) { editingEventId = null; manualCreateDraft = null; selectedDateStr = H.shiftDateStr(selectedDateStr, -1); loadEvents(); return; }
