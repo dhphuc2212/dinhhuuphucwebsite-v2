@@ -13,7 +13,7 @@ export default {
     const handlers = [
       () => handleAuthRoutes(pathname, request, env, url),
       () => handleSecondBrainRoutes(pathname, request, env),
-      () => handleChatHistoryRoutes(pathname, request, env),
+      () => handleChatHistoryRoutes(pathname, request, env, url),
       () => handleChatRoutes(pathname, request, env),
       () => handleNotepadRoutes(pathname, request, env)
     ];
