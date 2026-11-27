@@ -656,6 +656,12 @@ html[data-theme="night"] .dhp-rain-warn {
 
 .game-status-pill { color: var(--text-primary) !important; }
 
+.game-controls-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .caro-board,
 .sudoku-grid {
   background: var(--bg-surface) !important;
@@ -710,8 +716,6 @@ html[data-theme="night"] .dhp-rain-warn {
   border: none !important;
   border-radius: 0 !important;
   padding: 6px !important;
-  font-size: clamp(1.45rem, 4vw, 2.25rem);
-  line-height: 1;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -719,16 +723,24 @@ html[data-theme="night"] .dhp-rain-warn {
   transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease !important;
 }
 
-.chess-cell.light {
-  background: var(--bg-elevated) !important;
+html[data-theme="night"] .chess-cell.light {
+  background: #cbd5e1 !important;
 }
 
-.chess-cell.dark {
-  background: var(--bg-subtle) !important;
+html[data-theme="night"] .chess-cell.dark {
+  background: #334155 !important;
+}
+
+html[data-theme="day"] .chess-cell.light {
+  background: #f7f5f0 !important;
+}
+
+html[data-theme="day"] .chess-cell.dark {
+  background: #dfd8c8 !important;
 }
 
 .chess-cell:hover {
-  filter: brightness(1.09) !important;
+  filter: brightness(1.06) !important;
 }
 
 .chess-piece-svg {
@@ -742,13 +754,17 @@ html[data-theme="night"] .dhp-rain-warn {
   transform: scale(1.06);
 }
 
-.chess-cell.piece-white {
-  color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+html[data-theme="night"] .chess-cell.is-white-piece .chess-piece-svg {
+  filter: drop-shadow(0 1.5px 2px rgba(15, 23, 42, 0.35));
 }
 
-.chess-cell.piece-black {
-  color: var(--accent);
+html[data-theme="night"] .chess-cell.is-black-piece .chess-piece-svg {
+  filter: drop-shadow(0 1.5px 2px rgba(0, 0, 0, 0.45));
+}
+
+html[data-theme="day"] .chess-cell.is-white-piece .chess-piece-svg,
+html[data-theme="day"] .chess-cell.is-black-piece .chess-piece-svg {
+  filter: drop-shadow(0 1.5px 2px rgba(15, 23, 42, 0.2));
 }
 
 .chess-cell.selected {
@@ -1379,51 +1395,4 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .chess-cell {
     padding: 4px !important;
   }
-   html[data-theme="night"] .chess-cell.light {
-  background: #24324a !important;
-}
-
-html[data-theme="night"] .chess-cell.dark {
-  background: #121a28 !important;
-}
-
-.chess-piece-svg.is-white {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
-}
-
-.chess-piece-svg.is-black {
-  filter: drop-shadow(0 0 2px rgba(52, 211, 153, 0.35));
-}
-/* Bàn cờ & quân cờ: đồng bộ Night / Day */
-html[data-theme="night"] .chess-cell.light {
-  background: #27354c !important;
-}
-
-html[data-theme="night"] .chess-cell.dark {
-  background: #141c2b !important;
-}
-
-html[data-theme="day"] .chess-cell.light {
-  background: #f7f5f0 !important;
-}
-
-html[data-theme="day"] .chess-cell.dark {
-  background: #dfd8c8 !important;
-}
-
-.chess-piece-svg.is-white {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.42));
-}
-
-.chess-piece-svg.is-black {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
-}
-
-.game-controls-right {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-html[data-theme="night"] .chess-cell.is-black-piece .chess-piece-svg {
-  filter: drop-shadow(0 0 3px rgba(125, 211, 252, 0.45)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
