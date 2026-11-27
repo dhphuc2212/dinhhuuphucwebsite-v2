@@ -1,9 +1,18 @@
 import { corsPreflight, jsonRes, randomId } from "../shared/http.js";
-import { getSessionIdFromRequest } from "../shared/session.js";
 
 const SESSION_TTL = 60 * 60 * 24 * 60; // 60 ngày
 
+function extractSessionId(request) {
+  const headerSid = request.headers.get("X-Session-Id") || request.headers.get("x-session-id");
+  if (headerSid) return headerSid.trim();
+
+  const cookie = request.headers.get("Cookie") || "";
+  const match = cookie.match(/(?:^|;\s*)dhp_sid=([^;]+)/);
+  return match ? decodeURIComponent(match[1]).trim() : "";
+}
+
 export async function handleAuthRoutes(pathname, request, env, url) {
+  // 1. Bắt đầu luồng đăng nhập Google OAuth
   if (pathname === "/auth/google") {
     const clientId = env.GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -28,6 +37,7 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     return Response.redirect(authUrl.toString(), 302);
   }
 
+  // 2. Callback nhận mã từ Google, lấy Tên + Avatar + Email & lưu phiên
   if (pathname === "/auth/google/callback") {
     const code = url.searchParams.get("code");
     const err = url.searchParams.get("error");
@@ -106,9 +116,10 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     });
   }
 
+  // 3. Trả về phiên đăng nhập kèm Tên, Avatar Google & thông tin bổ sung
   if (pathname === "/api/auth/session") {
     if (request.method === "OPTIONS") return corsPreflight();
-    const sid = getSessionIdFromRequest(request);
+    const sid = extractSessionId(request);
     if (!sid || !env.AUTH_SESSIONS) {
       return jsonRes({ authenticated: false });
     }
@@ -174,11 +185,12 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     });
   }
 
+  // 4. Lưu thông tin bổ sung của tài khoản
   if (pathname === "/api/auth/profile") {
     if (request.method === "OPTIONS") return corsPreflight();
     if (request.method !== "POST") return jsonRes({ error: "Method Not Allowed" }, 405);
 
-    const sid = getSessionIdFromRequest(request);
+    const sid = extractSessionId(request);
     if (!sid || !env.AUTH_SESSIONS) return jsonRes({ error: "Chưa đăng nhập." }, 401);
 
     const raw = await env.AUTH_SESSIONS.get(`session:${sid}`);
@@ -203,9 +215,10 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     }
   }
 
+  // 5. Đăng xuất
   if (pathname === "/api/auth/logout") {
     if (request.method === "OPTIONS") return corsPreflight();
-    const sid = getSessionIdFromRequest(request);
+    const sid = extractSessionId(request);
     if (sid && env.AUTH_SESSIONS) {
       await env.AUTH_SESSIONS.delete(`session:${sid}`);
       await env.AUTH_SESSIONS.delete(`email_map:${sid}`);
