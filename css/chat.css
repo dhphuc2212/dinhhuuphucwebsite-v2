@@ -1,5 +1,5 @@
 .ai-hub-card {
-  padding: 26px 28px;
+  padding: 24px 26px;
 }
 
 .ai-hub-header {
@@ -31,12 +31,294 @@
   margin-bottom: 14px;
 }
 
+/* BỐ CỤC WORKSPACE 2 CỘT CHUẨN GEMINI / CHATGPT */
+.ai-chat-workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+  position: relative;
+}
+
+.ai-chat-workspace.sidebar-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ai-chat-workspace.sidebar-collapsed .ai-chat-sidebar {
+  display: none;
+}
+
+.ai-chat-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 12px;
+  height: 520px;
+}
+
+.ai-sidebar-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ai-new-chat-full {
+  flex: 1;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 0.86rem;
+}
+
+.ai-sidebar-close-mobile {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.ai-sidebar-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
+}
+
+.ai-popover-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.ai-filter-btn {
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.ai-filter-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.ai-thread-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 2px;
+}
+
+.ai-thread-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 999px;
+  padding: 5px 6px 5px 12px;
+  transition: background-color 0.15s ease;
+}
+
+.ai-thread-row:hover,
+.ai-thread-row.active,
+.ai-thread-row.menu-open {
+  background: #e2e8f0;
+}
+
+.ai-thread-select-area {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.ai-thread-item-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.ai-title-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+}
+
+.ai-thread-dots-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-thread-dots-btn:hover {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.ai-rename-input {
+  width: 100%;
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.ai-thread-empty {
+  padding: 18px 10px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* MENU NỔI 3 CHẤM KHÔNG BAO GIỜ BỊ CẮT */
+.ai-floating-ctx-menu {
+  position: fixed;
+  width: 236px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 7px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.28);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-ctx-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.ai-ctx-item:hover {
+  background: #f1f5f9;
+}
+
+.ai-ctx-item.danger {
+  color: #e11d48;
+}
+
+.ai-ctx-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 4px 6px;
+}
+
+/* CỘT PHẢI: KHUNG CHAT CHÍNH */
+.ai-chat-main-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ai-chat-main-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ai-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ai-toggle-sidebar-btn {
+  flex-shrink: 0;
+  padding: 6px 11px;
+  font-size: 0.82rem;
+}
+
+.ai-unread-count {
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.ai-active-thread-heading {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-sync-tag {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.ai-sync-tag.cloud {
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  border-color: #99f6e4;
+}
+
 .chat-messages {
-  height: 280px;
+  height: 410px;
   overflow-y: auto;
   background: var(--bg-page);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: 16px;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -47,7 +329,7 @@
 .chat-row {
   display: flex;
   flex-direction: column;
-  max-width: 84%;
+  max-width: 85%;
 }
 
 .chat-row.user {
@@ -141,6 +423,36 @@
   background: #ffffff;
 }
 
+/* RESPONSIVE MOBILE: SIDEBAR TRỞ THÀNH DRAWER DỄ BẤM */
+@media (max-width: 820px) {
+  .ai-chat-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ai-chat-sidebar {
+    display: none;
+  }
+
+  .ai-chat-sidebar.mobile-open {
+    display: flex;
+    position: fixed;
+    top: 74px;
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    height: auto;
+    z-index: 950;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  }
+
+  .ai-sidebar-close-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* GOOGLE CALENDAR SECTION */
 .calendar-section-card {
   margin-top: 24px;
   padding: 28px;
@@ -201,315 +513,4 @@
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: 0.92rem;
-}
-
-.event-card {
-  background: var(--bg-page);
-  border: 1px solid var(--border-color);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.event-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-
-.event-time {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent-dark);
-  margin-bottom: 4px;
-}
-
-.event-title {
-  font-weight: 700;
-  font-size: 0.98rem;
-  color: var(--text-primary);
-}
-
-.event-desc {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-top: 4px;
-}
-/* Thanh quản lý đa phiên chat AI (giống ChatGPT / Gemini) */
-.ai-history-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 12px;
-  margin-bottom: 12px;
-  background: var(--bg-page);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-}
-
-.ai-history-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 210px;
-}
-
-.ai-thread-select {
-  flex: 1;
-  max-width: 320px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  outline: none;
-  cursor: pointer;
-}
-
-.ai-thread-select:focus {
-  border-color: var(--accent);
-}
-
-.ai-history-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.ai-sync-tag {
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid var(--border-color);
-}
-
-.ai-sync-tag.cloud {
-  color: var(--accent-dark);
-  background: var(--accent-soft);
-  border-color: #99f6e4;
-}
-/* Giao diện danh sách luồng trò chuyện & menu 3 chấm chuẩn Gemini */
-.ai-thread-picker-wrap {
-  position: relative;
-  flex: 1;
-  max-width: 340px;
-}
-
-.ai-thread-picker-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  font-family: inherit;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  cursor: pointer;
-  text-align: left;
-}
-
-.ai-picker-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ai-unread-count {
-  background: var(--accent);
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 999px;
-}
-
-.ai-thread-popover {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  width: 340px;
-  max-width: 88vw;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.18);
-  z-index: 950;
-  padding: 10px;
-}
-
-.ai-popover-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 8px 8px;
-  border-bottom: 1px solid #f1f5f9;
-  margin-bottom: 6px;
-}
-
-.ai-popover-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
-
-.ai-filter-btn {
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: var(--text-secondary);
-  font-size: 0.74rem;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.ai-filter-btn.active {
-  background: var(--accent-soft);
-  color: var(--accent-dark);
-  border-color: var(--accent);
-}
-
-.ai-thread-list {
-  max-height: 290px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.ai-thread-row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 999px;
-  padding: 4px 6px 4px 12px;
-  transition: background-color 0.15s ease;
-}
-
-.ai-thread-row:hover,
-.ai-thread-row.active {
-  background: #f1f5f9;
-}
-
-.ai-thread-select-area {
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-  padding: 4px 0;
-}
-
-.ai-thread-item-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.86rem;
-  font-weight: 600;
-}
-
-.ai-title-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ai-unread-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10b981;
-  flex-shrink: 0;
-}
-
-.ai-thread-dots-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.ai-thread-dots-btn:hover {
-  background: rgba(15, 23, 42, 0.08);
-}
-
-.ai-rename-input {
-  width: 100%;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
-.ai-thread-context-menu {
-  position: absolute;
-  right: 8px;
-  top: 36px;
-  width: 224px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 6px;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
-  z-index: 980;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.ai-ctx-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border: none;
-  background: transparent;
-  border-radius: 9px;
-  font-family: inherit;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  cursor: pointer;
-  text-align: left;
-}
-
-.ai-ctx-item:hover {
-  background: #f1f5f9;
-}
-
-.ai-ctx-item.danger {
-  color: #e11d48;
-}
-
-.ai-ctx-divider {
-  height: 1px;
-  background: #e2e8f0;
-  margin: 4px 6px;
-}
-
-.ai-thread-empty {
-  padding: 16px;
-  text-align: center;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
 }
