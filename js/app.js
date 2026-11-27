@@ -1,24 +1,19 @@
 (function () {
   const THEME_STORAGE_KEY = "dhp_theme_mode";
-  const VALID_THEMES = ["slate", "linen", "indigo"];
-  const THEME_LABELS = {
-    slate: "Emerald Slate",
-    linen: "Kem ấm (Warm Linen)",
-    indigo: "Midnight Indigo"
-  };
+  const VALID_THEMES = ["night", "day"];
 
   function getSavedTheme() {
     try {
-      const val = localStorage.getItem(THEME_STORAGE_KEY) || "slate";
-      return VALID_THEMES.includes(val) ? val : "slate";
+      const val = localStorage.getItem(THEME_STORAGE_KEY) || "night";
+      return VALID_THEMES.includes(val) ? val : "night";
     } catch {
-      return "slate";
+      return "night";
     }
   }
 
-  function syncThemeButtons(theme) {
-    document.querySelectorAll("[data-theme-mode]").forEach((btn) => {
-      btn.classList.toggle("is-active", btn.dataset.themeMode === theme);
+  function syncThemeSelects(theme) {
+    document.querySelectorAll("select.dhp-theme-select, select.mobile-drawer-mobile-select").forEach((sel) => {
+      sel.value = theme;
     });
   }
 
@@ -28,31 +23,24 @@
     row.id = "mobileDrawerThemeRow";
     row.className = "mobile-drawer-theme-row";
     row.innerHTML = `
-      <span class="mobile-drawer-theme-label">Giao diện:</span>
-      <div class="mobile-drawer-theme-pills">
-        <button type="button" class="dhp-theme-btn" data-theme-mode="slate" title="Emerald Slate">
-          <span class="dhp-theme-swatch swatch-slate"></span><span>Slate</span>
-        </button>
-        <button type="button" class="dhp-theme-btn" data-theme-mode="linen" title="Kem ấm">
-          <span class="dhp-theme-swatch swatch-linen"></span><span>Kem ấm</span>
-        </button>
-        <button type="button" class="dhp-theme-btn" data-theme-mode="indigo" title="Midnight Indigo">
-          <span class="dhp-theme-swatch swatch-indigo"></span><span>Indigo</span>
-        </button>
-      </div>`;
+      <label for="mobileThemeSelect" class="mobile-drawer-theme-label">Giao diện</label>
+      <select id="mobileThemeSelect" class="mobile-drawer-mobile-select" aria-label="Chọn giao diện">
+        <option value="night">night</option>
+        <option value="day">day</option>
+      </select>`;
     nav.appendChild(row);
-    syncThemeButtons(getSavedTheme());
+    syncThemeSelects(getSavedTheme());
   }
 
   function applyTheme(mode, showNotice = true) {
-    const theme = VALID_THEMES.includes(mode) ? mode : "slate";
+    const theme = VALID_THEMES.includes(mode) ? mode : "night";
     document.documentElement.setAttribute("data-theme", theme);
     try {
       localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {}
-    syncThemeButtons(theme);
+    syncThemeSelects(theme);
     if (showNotice && typeof window.showToast === "function") {
-      window.showToast(`Đã chuyển giao diện: ${THEME_LABELS[theme]}`);
+      window.showToast(`Giao diện: ${theme}`);
     }
   }
 
@@ -95,7 +83,7 @@
     if (open && isMobileViewport()) {
       ensureMobileThemeRow(nav);
       if (window.GoogleCalendarManager?.syncUI) window.GoogleCalendarManager.syncUI();
-      syncThemeButtons(getSavedTheme());
+      syncThemeSelects(getSavedTheme());
       nav.classList.add("is-mobile-open");
       backdrop?.classList.add("show");
       toggleBtn?.classList.add("is-active");
@@ -153,7 +141,7 @@
       if (window.GoogleCalendarManager?.syncUI) {
         window.GoogleCalendarManager.syncUI();
       }
-      syncThemeButtons(getSavedTheme());
+      syncThemeSelects(getSavedTheme());
     });
   }
 
@@ -238,14 +226,13 @@
     }
   }
 
-  document.addEventListener("click", (e) => {
-    const themeBtn = e.target.closest("[data-theme-mode]");
-    if (themeBtn) {
-      e.preventDefault();
-      applyTheme(themeBtn.dataset.themeMode, true);
-      return;
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("select.dhp-theme-select, select.mobile-drawer-mobile-select")) {
+      applyTheme(e.target.value, true);
     }
+  });
 
+  document.addEventListener("click", (e) => {
     const tabTrigger = e.target.closest("[data-tab]");
     if (tabTrigger) {
       e.preventDefault();
