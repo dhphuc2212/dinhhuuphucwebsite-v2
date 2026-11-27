@@ -26,6 +26,142 @@ window.GoogleCalendarManager = (function () {
     try { localStorage.setItem("dhp_gcal_done", JSON.stringify(eventDoneState)); } catch {}
   }
 
+  function getInitials(name, email) {
+    const src = (name || email || "U").trim();
+    const parts = src.split(/\s+/);
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    return src.slice(0, 2).toUpperCase();
+  }
+
+  function renderAvatarHtml(picture, name, email, size = 24) {
+    if (picture) {
+      return `<img src="${H.escapeHtml(picture)}" alt="${H.escapeHtml(name || "Avatar")}" class="dhp-user-avatar" style="width:${size}px;height:${size}px;" referrerpolicy="no-referrer" />`;
+    }
+    return `<span class="dhp-user-avatar-fallback" style="width:${size}px;height:${size}px;">${H.escapeHtml(
+      getInitials(name, email)
+    )}</span>`;
+  }
+
+  function openAccountModal() {
+    const { isLoggedIn, userEmail, userName, userPicture, userProfile, expiresAtMs } = Api.getAuthState();
+    if (!isLoggedIn) {
+      login();
+      return;
+    }
+
+    document.getElementById("dhpAccountModal")?.remove();
+
+    const displayName = userName || (userEmail ? userEmail.split("@")[0] : "Tài khoản Google");
+    const expDate = expiresAtMs ? new Date(expiresAtMs).toLocaleDateString("vi-VN") : "60 ngày";
+    const p = userProfile || {};
+
+    const modal = document.createElement("div");
+    modal.id = "dhpAccountModal";
+    modal.className = "modal-backdrop";
+    modal.innerHTML = `
+      <div class="modal-card dhp-account-modal-card" role="dialog" aria-modal="true" style="max-width:460px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span class="modal-badge" style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.28);">GOOGLE ACCOUNT</span>
+          <button type="button" id="closeAccountModalTop" class="btn btn-outline btn-sm">✕</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;background:#18181b;border:1px solid #27272a;margin-bottom:16px;">
+          ${renderAvatarHtml(userPicture, displayName, userEmail, 58)}
+          <div style="min-width:0;flex:1;">
+            <div style="font-size:1.08rem;font-weight:800;color:#fafafa;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+              ${H.escapeHtml(displayName)}
+            </div>
+            <div style="font-size:0.84rem;color:#10b981;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+              ${H.escapeHtml(userEmail)}
+            </div>
+            <div style="font-size:0.75rem;color:#a1a1aa;margin-top:3px;">
+              Duy trì đăng nhập tới: ${H.escapeHtml(expDate)}
+            </div>
+          </div>
+        </div>
+
+        <form id="dhpAccountProfileForm" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#a1a1aa;letter-spacing:0.04em;">THÔNG TIN CÁ NHÂN BỔ SUNG</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <label style="display:block;font-size:0.76rem;color:#a1a1aa;margin-bottom:4px;">Ngày sinh</label>
+              <input type="date" id="accBirthdayInput" value="${H.escapeHtml(p.birthday || "")}" style="width:100%;padding:8px 10px;border-radius:10px;" />
+            </div>
+            <div>
+              <label style="display:block;font-size:0.76rem;color:#a1a1aa;margin-bottom:4px;">Giới tính</label>
+              <select id="accGenderInput" style="width:100%;padding:8px 10px;border-radius:10px;">
+                <option value="" ${!p.gender ? "selected" : ""}>Chưa chọn</option>
+                <option value="Nam" ${p.gender === "Nam" ? "selected" : ""}>Nam</option>
+                <option value="Nữ" ${p.gender === "Nữ" ? "selected" : ""}>Nữ</option>
+                <option value="Khác" ${p.gender === "Khác" ? "selected" : ""}>Khác</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:0.76rem;color:#a1a1aa;margin-bottom:4px;">Số điện thoại</label>
+            <input type="tel" id="accPhoneInput" placeholder="Ví dụ: 09xx xxx xxx" value="${H.escapeHtml(p.phone || "")}" style="width:100%;padding:8px 10px;border-radius:10px;" />
+          </div>
+
+          <div>
+            <label style="display:block;font-size:0.76rem;color:#a1a1aa;margin-bottom:4px;">Ghi chú / Giới thiệu ngắn</label>
+            <textarea id="accBioInput" rows="2" placeholder="Nhập ghi chú cá nhân..." style="width:100%;padding:8px 10px;border-radius:10px;">${H.escapeHtml(p.bio || "")}</textarea>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+            <button type="button" id="closeAccountModalBottom" class="btn btn-outline btn-sm">Đóng</button>
+            <button type="submit" id="saveAccountProfileBtn" class="btn btn-primary btn-sm">Lưu thông tin</button>
+          </div>
+        </form>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeModal = () => modal.remove();
+    modal.querySelector("#closeAccountModalTop")?.addEventListener("click", closeModal);
+    modal.querySelector("#closeAccountModalBottom")?.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    modal.querySelector("#dhpAccountProfileForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const saveBtn = modal.querySelector("#saveAccountProfileBtn");
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Đang lưu...";
+      }
+      try {
+        const payload = {
+          birthday: modal.querySelector("#accBirthdayInput")?.value || "",
+          gender: modal.querySelector("#accGenderInput")?.value || "",
+          phone: modal.querySelector("#accPhoneInput")?.value || "",
+          bio: modal.querySelector("#accBioInput")?.value || ""
+        };
+        const res = await window.DhpApi.request("/api/auth/profile", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          Api.setUserProfile(res.profile || payload);
+          notify("✓ Đã lưu thông tin tài khoản!");
+          closeModal();
+        } else {
+          notify(res.error || "Không thể lưu thông tin.");
+        }
+      } catch {
+        notify("Lỗi kết nối máy chủ.");
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Lưu thông tin";
+        }
+      }
+    });
+  }
+
   function addOneHour(timeStr = "09:00") {
     const [hStr, mStr] = String(timeStr).split(":");
     const h = Math.min(23, (Number(hStr) || 9) + 1);
@@ -60,24 +196,30 @@ window.GoogleCalendarManager = (function () {
   }
 
   function syncUI() {
-    const { isLoggedIn, userEmail, expiresAtMs } = Api.getAuthState();
+    const { isLoggedIn, userEmail, userName, userPicture, expiresAtMs } = Api.getAuthState();
     const headerArea = document.getElementById("headerAuthArea");
+    const mainNav = document.querySelector(".site-header .main-nav");
     const cardControls = document.getElementById("calendarAuthControls");
     const userBar = document.getElementById("calendarUserBar");
     const emailLabel = document.getElementById("loggedUserEmail");
     const container = document.getElementById("calendarEventsContainer");
 
+    const displayName = userName || (userEmail ? userEmail.split("@")[0] : "Tài khoản Google");
+
     if (isLoggedIn) {
       if (headerArea) {
         headerArea.innerHTML = `
-          <span class="status-pill">${H.escapeHtml(userEmail || "Đã đăng nhập")}</span>
+          <button type="button" class="dhp-header-user-pill" data-open-account-modal="1" title="Xem thông tin tài khoản Google">
+            ${renderAvatarHtml(userPicture, displayName, userEmail, 24)}
+            <span class="dhp-header-user-name">${H.escapeHtml(displayName)}</span>
+          </button>
           <button type="button" id="headerLogoutBtn" class="btn btn-outline btn-sm">Đăng xuất</button>`;
       }
       if (cardControls) cardControls.classList.add("hidden");
       if (userBar) userBar.classList.remove("hidden");
       if (emailLabel) {
         const expSuffix = expiresAtMs ? ` • Duy trì tới ${new Date(expiresAtMs).toLocaleDateString("vi-VN")}` : "";
-        emailLabel.textContent = (userEmail || "Tài khoản Google") + expSuffix;
+        emailLabel.innerHTML = `${H.escapeHtml(displayName)} (${H.escapeHtml(userEmail)})${H.escapeHtml(expSuffix)}`;
       }
     } else {
       if (headerArea) {
@@ -94,6 +236,27 @@ window.GoogleCalendarManager = (function () {
             Chưa đăng nhập tài khoản Google. Bấm <strong>"Đăng nhập với Google để xem lịch"</strong> để kết nối và hiển thị lịch làm việc của riêng bạn.
           </div>`;
       }
+    }
+
+    // Thẻ tài khoản ở đầu ngăn kéo Menu 3 gạch (CSS ẩn hoàn toàn trên Desktop > 768px)
+    if (mainNav) {
+      mainNav.querySelector("#mobileDrawerAccountCard")?.remove();
+      const card = document.createElement("div");
+      card.id = "mobileDrawerAccountCard";
+      card.className = "mobile-drawer-account-card";
+      card.innerHTML = isLoggedIn
+        ? `<button type="button" class="mobile-acc-info-btn" data-open-account-modal="1">
+             ${renderAvatarHtml(userPicture, displayName, userEmail, 40)}
+             <div class="mobile-acc-meta">
+               <div class="mobile-acc-name">${H.escapeHtml(displayName)}</div>
+               <div class="mobile-acc-email">${H.escapeHtml(userEmail)}</div>
+             </div>
+             <span class="mobile-acc-arrow">Hồ sơ →</span>
+           </button>`
+        : `<button type="button" id="googleLoginDrawerBtn" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">
+             Đăng nhập Google để đồng bộ
+           </button>`;
+      mainNav.insertBefore(card, mainNav.firstChild);
     }
   }
 
@@ -260,7 +423,20 @@ window.GoogleCalendarManager = (function () {
   }
 
   document.addEventListener("click", (e) => {
-    if (e.target.closest("#googleLoginHeaderBtn, #googleLoginCardBtn")) { e.preventDefault(); login(); return; }
+    if (e.target.closest("#googleLoginHeaderBtn, #googleLoginCardBtn, #googleLoginDrawerBtn")) {
+      e.preventDefault();
+      login();
+      return;
+    }
+    if (e.target.closest("[data-open-account-modal]")) {
+      e.preventDefault();
+      document.querySelector(".site-header .main-nav")?.classList.remove("is-mobile-open");
+      document.getElementById("mobileNavBackdrop")?.classList.remove("show");
+      document.getElementById("mobileMenuToggleBtn")?.classList.remove("is-active");
+      document.body.classList.remove("mobile-menu-locked");
+      openAccountModal();
+      return;
+    }
     if (e.target.closest("#headerLogoutBtn, #googleLogoutBtn")) { e.preventDefault(); logout(); return; }
     if (e.target.closest("#refreshCalendarBtn")) { e.preventDefault(); loadEvents(); return; }
 
@@ -375,6 +551,7 @@ window.GoogleCalendarManager = (function () {
     SCOPES: Api.SCOPES,
     login,
     logout,
+    openAccountModal,
     loadEvents,
     createEvent,
     updateEvent,
