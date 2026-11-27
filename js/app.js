@@ -290,9 +290,20 @@
     } else if (targetTab === "brain") {
       window.SecondBrainManager?.bindSectionEvents?.();
     }
+
+    // Chuyển ngữ toàn bộ nội dung vừa nạp vào mountEl theo ngôn ngữ đang chọn
+    window.DhpI18n?.applyToDom?.(mountEl);
   }
 
   document.addEventListener("click", (e) => {
+    // Chuyển đổi ngôn ngữ VI / EN thông qua bộ dịch tập trung js/i18n-dict.js
+    const langBtn = e.target.closest("[data-lang-value]");
+    if (langBtn) {
+      e.preventDefault();
+      window.DhpI18n?.setLanguage?.(langBtn.dataset.langValue, true);
+      return;
+    }
+
     const gameTabBtn = e.target.closest(".game-tab-btn[data-game]");
     if (gameTabBtn) {
       e.preventDefault();
