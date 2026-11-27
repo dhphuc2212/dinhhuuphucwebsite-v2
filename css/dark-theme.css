@@ -1379,4 +1379,18 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .chess-cell {
     padding: 4px !important;
   }
+   html[data-theme="night"] .chess-cell.light {
+  background: #24324a !important;
+}
+
+html[data-theme="night"] .chess-cell.dark {
+  background: #121a28 !important;
+}
+
+.chess-piece-svg.is-white {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
+}
+
+.chess-piece-svg.is-black {
+  filter: drop-shadow(0 0 2px rgba(52, 211, 153, 0.35));
 }
