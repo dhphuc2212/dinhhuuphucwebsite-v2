@@ -13,3 +13,4 @@ Dự án chia nhỏ theo từng file để dễ chỉnh sửa, bảo trì và tr
    - Dán Client ID vào biến `GOOGLE_CLIENT_ID` trong `js/calendar.js`.
 3. **Cập nhật liên kết mạng xã hội & ảnh đại diện trong `sections/about.html`:**
    - Tìm các thẻ có ghi chú `[BẠN CẦN ĐIỀN]` để cập nhật link Facebook, Instagram, X hoặc ảnh chân dung.
+ok
