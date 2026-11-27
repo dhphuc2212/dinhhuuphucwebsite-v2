@@ -207,7 +207,6 @@ window.GoogleCalendarManager = (function () {
     const displayName = userName || (userEmail ? userEmail.split("@")[0] : "Tài khoản Google");
 
     if (isLoggedIn) {
-      // Giữ nguyên cụm Avatar + Tên + nút Đăng xuất ở góc phải (#headerAuthArea)
       if (headerArea) {
         headerArea.innerHTML = `
           <button type="button" class="dhp-header-user-pill" data-open-account-modal="1" title="Xem thông tin tài khoản Google">
@@ -239,7 +238,6 @@ window.GoogleCalendarManager = (function () {
       }
     }
 
-    // Xóa sạch thẻ tài khoản bên trái thanh menu trên Desktop; chỉ chèn vào ngăn kéo menu 3 gạch khi màn hình <= 768px
     if (mainNav) {
       mainNav.querySelector("#mobileDrawerAccountCard")?.remove();
       if (window.innerWidth <= 768) {
@@ -260,28 +258,6 @@ window.GoogleCalendarManager = (function () {
              </button>`;
         mainNav.insertBefore(card, mainNav.firstChild);
       }
-    }
-  }
-
-    // Thẻ tài khoản ở đầu ngăn kéo Menu 3 gạch (CSS ẩn hoàn toàn trên Desktop > 768px)
-    if (mainNav) {
-      mainNav.querySelector("#mobileDrawerAccountCard")?.remove();
-      const card = document.createElement("div");
-      card.id = "mobileDrawerAccountCard";
-      card.className = "mobile-drawer-account-card";
-      card.innerHTML = isLoggedIn
-        ? `<button type="button" class="mobile-acc-info-btn" data-open-account-modal="1">
-             ${renderAvatarHtml(userPicture, displayName, userEmail, 40)}
-             <div class="mobile-acc-meta">
-               <div class="mobile-acc-name">${H.escapeHtml(displayName)}</div>
-               <div class="mobile-acc-email">${H.escapeHtml(userEmail)}</div>
-             </div>
-             <span class="mobile-acc-arrow">Hồ sơ →</span>
-           </button>`
-        : `<button type="button" id="googleLoginDrawerBtn" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">
-             Đăng nhập Google để đồng bộ
-           </button>`;
-      mainNav.insertBefore(card, mainNav.firstChild);
     }
   }
 
