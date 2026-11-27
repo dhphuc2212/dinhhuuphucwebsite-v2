@@ -29,16 +29,16 @@ window.initSnakeGame = function () {
   }
 
   function draw() {
-    ctx.fillStyle = "#f8fafc";
+    ctx.fillStyle = "#09090b";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#e11d48";
+    ctx.fillStyle = "#f43f5e";
     ctx.beginPath();
     ctx.arc(food.x * TILE + TILE / 2, food.y * TILE + TILE / 2, TILE / 2.4, 0, Math.PI * 2);
     ctx.fill();
 
     snake.forEach((part, idx) => {
-      ctx.fillStyle = idx === 0 ? "#0f766e" : "#14b8a6";
+      ctx.fillStyle = idx === 0 ? "#10b981" : "#34d399";
       ctx.fillRect(part.x * TILE + 1, part.y * TILE + 1, TILE - 2, TILE - 2);
     });
   }
@@ -88,6 +88,7 @@ window.initSnakeGame = function () {
     dy = 0;
     score = 0;
     paused = false;
+    if (pauseBtn) pauseBtn.textContent = "Tạm dừng";
     if (scoreEl) scoreEl.textContent = "0";
     randomFood();
     draw();
@@ -105,6 +106,44 @@ window.initSnakeGame = function () {
   document.querySelectorAll(".dpad-btn").forEach((btn) => {
     btn.addEventListener("click", () => setDirection(btn.dataset.dir));
   });
+
+  // Hỗ trợ vuốt cảm ứng (Swipe) trực tiếp trên khung Canvas cho điện thoại
+  let touchStartX = 0;
+  let touchStartY = 0;
+  canvas.addEventListener(
+    "touchstart",
+    (e) => {
+      const t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+    },
+    { passive: true }
+  );
+
+  canvas.addEventListener(
+    "touchmove",
+    (e) => {
+      if (timer) e.preventDefault();
+    },
+    { passive: false }
+  );
+
+  canvas.addEventListener(
+    "touchend",
+    (e) => {
+      const t = e.changedTouches[0];
+      const diffX = t.clientX - touchStartX;
+      const diffY = t.clientY - touchStartY;
+      if (Math.abs(diffX) < 18 && Math.abs(diffY) < 18) return;
+
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        setDirection(diffX > 0 ? "RIGHT" : "LEFT");
+      } else {
+        setDirection(diffY > 0 ? "DOWN" : "UP");
+      }
+    },
+    { passive: true }
+  );
 
   window.addEventListener("keydown", (e) => {
     const panel = document.getElementById("gamePanelSnake");
