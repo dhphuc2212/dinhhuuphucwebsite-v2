@@ -9,11 +9,11 @@
   <script>
     (function () {
       try {
-        var saved = localStorage.getItem("dhp_theme_mode") || "slate";
-        if (saved !== "slate" && saved !== "linen" && saved !== "indigo") saved = "slate";
+        var saved = localStorage.getItem("dhp_theme_mode") || "night";
+        if (saved !== "day" && saved !== "night") saved = "night";
         document.documentElement.setAttribute("data-theme", saved);
       } catch (e) {
-        document.documentElement.setAttribute("data-theme", "slate");
+        document.documentElement.setAttribute("data-theme", "night");
       }
     })();
   </script>
@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="/css/snake.css" />
   <link rel="stylesheet" href="/css/sudoku.css" />
   <link rel="stylesheet" href="/css/notepad.css" />
-  <link rel="stylesheet" href="/css/dark-theme.css?v=3" />
+  <link rel="stylesheet" href="/css/dark-theme.css?v=5" />
 </head>
 <body>
   <div id="scrollProgress" class="scroll-progress"></div>
@@ -61,20 +61,13 @@
       </nav>
 
       <div class="header-actions">
-        <div class="dhp-theme-switcher" id="dhpThemeSwitcher" role="group" aria-label="Chọn giao diện theme">
-          <button type="button" class="dhp-theme-btn" data-theme-mode="slate" title="Emerald Slate (Tối xanh ngọc)">
-            <span class="dhp-theme-swatch swatch-slate"></span>
-            <span class="dhp-theme-label">Slate</span>
-          </button>
-          <button type="button" class="dhp-theme-btn" data-theme-mode="linen" title="Warm Linen (Kem ấm ban ngày)">
-            <span class="dhp-theme-swatch swatch-linen"></span>
-            <span class="dhp-theme-label">Kem ấm</span>
-          </button>
-          <button type="button" class="dhp-theme-btn" data-theme-mode="indigo" title="Midnight Indigo (Tối sâu ban đêm)">
-            <span class="dhp-theme-swatch swatch-indigo"></span>
-            <span class="dhp-theme-label">Indigo</span>
-          </button>
-        </div>
+        <label class="dhp-theme-dropdown-wrap" for="dhpThemeSelect">
+          <span class="dhp-theme-prefix">Giao diện</span>
+          <select id="dhpThemeSelect" class="dhp-theme-select" aria-label="Chọn giao diện">
+            <option value="night">night</option>
+            <option value="day">day</option>
+          </select>
+        </label>
 
         <div id="headerAuthArea" class="header-auth">
           <button type="button" id="googleLoginHeaderBtn" class="btn btn-outline btn-sm hover-arrow">
@@ -131,7 +124,7 @@
 
     <div class="container footer-bottom">
       <p>© 2026 Đinh Hữu Phúc.</p>
-      <p class="footer-loc">TP. Hồ Chí Minh</p>
+      <p class="footer-loc">Phường Hòa Bình, TP. Hồ Chí Minh</p>
     </div>
   </footer>
 
