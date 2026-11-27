@@ -1394,3 +1394,33 @@ html[data-theme="night"] .chess-cell.dark {
 .chess-piece-svg.is-black {
   filter: drop-shadow(0 0 2px rgba(52, 211, 153, 0.35));
 }
+/* Bàn cờ & quân cờ: đồng bộ Night / Day */
+html[data-theme="night"] .chess-cell.light {
+  background: #263349 !important;
+}
+
+html[data-theme="night"] .chess-cell.dark {
+  background: #131b29 !important;
+}
+
+html[data-theme="day"] .chess-cell.light {
+  background: #f5f2eb !important;
+}
+
+html[data-theme="day"] .chess-cell.dark {
+  background: #ddd6c7 !important;
+}
+
+.chess-cell.is-white-piece .chess-piece-svg {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+}
+
+.chess-cell.is-black-piece .chess-piece-svg {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+
+.game-controls-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
