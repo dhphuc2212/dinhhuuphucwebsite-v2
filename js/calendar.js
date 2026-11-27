@@ -109,9 +109,12 @@ window.GoogleCalendarManager = (function () {
             <textarea id="accBioInput" rows="2" placeholder="Nhập ghi chú cá nhân..." style="width:100%;padding:8px 10px;border-radius:10px;">${H.escapeHtml(p.bio || "")}</textarea>
           </div>
 
-          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
-            <button type="button" id="closeAccountModalBottom" class="btn btn-outline btn-sm">Đóng</button>
-            <button type="submit" id="saveAccountProfileBtn" class="btn btn-primary btn-sm">Lưu thông tin</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
+            <button type="button" id="modalLogoutBtn" class="btn btn-outline btn-sm" style="color:#fb7185;border-color:rgba(244,63,94,0.35);">🚪 Đăng xuất</button>
+            <div style="display:flex;gap:8px;margin-left:auto;">
+              <button type="button" id="closeAccountModalBottom" class="btn btn-outline btn-sm">Đóng</button>
+              <button type="submit" id="saveAccountProfileBtn" class="btn btn-primary btn-sm">Lưu thông tin</button>
+            </div>
           </div>
         </form>
       </div>
@@ -122,6 +125,10 @@ window.GoogleCalendarManager = (function () {
     const closeModal = () => modal.remove();
     modal.querySelector("#closeAccountModalTop")?.addEventListener("click", closeModal);
     modal.querySelector("#closeAccountModalBottom")?.addEventListener("click", closeModal);
+    modal.querySelector("#modalLogoutBtn")?.addEventListener("click", () => {
+      closeModal();
+      logout();
+    });
     modal.addEventListener("click", (e) => {
       if (e.target === modal) closeModal();
     });
