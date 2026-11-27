@@ -912,4 +912,112 @@ select:focus {
     aspect-ratio: 1 / 1;
     font-size: 0.78rem !important;
   }
+   /* =========================================================
+   GOOGLE ACCOUNT AVATAR & USER PILL (DESKTOP + MOBILE DRAWER)
+   ========================================================= */
+.dhp-user-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #10b981;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.dhp-user-avatar-fallback {
+  border-radius: 50%;
+  background: #10b981;
+  color: #09090b;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 800;
+  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dhp-header-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 5px;
+  border-radius: 999px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #fafafa;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 190px;
+}
+
+.dhp-header-user-pill:hover {
+  border-color: #10b981;
+  background: #1f1f23;
+}
+
+.dhp-header-user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-drawer-account-card {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .dhp-header-user-pill {
+    display: none !important;
+  }
+
+  .mobile-drawer-account-card {
+    display: block !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 6px !important;
+    border-bottom: 1px solid #27272a !important;
+  }
+
+  .mobile-acc-info-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #fafafa;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mobile-acc-meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-acc-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fafafa;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-acc-email {
+    font-size: 0.74rem;
+    color: #10b981;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-acc-arrow {
+    font-size: 0.74rem;
+    color: #a1a1aa;
+    white-space: nowrap;
+  }
 }
