@@ -138,5 +138,59 @@
     if (e.target === trollModal) closeTrollModal();
   });
 
+  /* =========================================================
+     MOBILE HAMBURGER MENU (3 GẠCH GỌN GÀNG CHO ĐIỆN THOẠI)
+     ========================================================= */
+  (function initMobileHamburgerMenu() {
+    const headerInner = document.querySelector(".site-header .header-inner");
+    const mainNav = document.querySelector(".site-header .main-nav");
+    const headerActions = document.querySelector(".site-header .header-actions");
+    if (!headerInner || !mainNav || !headerActions) return;
+
+    let toggleBtn = document.getElementById("mobileMenuToggleBtn");
+    if (!toggleBtn) {
+      toggleBtn = document.createElement("button");
+      toggleBtn.type = "button";
+      toggleBtn.id = "mobileMenuToggleBtn";
+      toggleBtn.className = "mobile-menu-toggle-btn";
+      toggleBtn.setAttribute("aria-label", "Mở menu điều hướng");
+      toggleBtn.setAttribute("aria-expanded", "false");
+      toggleBtn.innerHTML = `<span></span><span></span><span></span>`;
+      headerActions.appendChild(toggleBtn);
+    }
+
+    let backdrop = document.getElementById("mobileNavBackdrop");
+    if (!backdrop) {
+      backdrop = document.createElement("div");
+      backdrop.id = "mobileNavBackdrop";
+      backdrop.className = "mobile-nav-backdrop";
+      document.body.appendChild(backdrop);
+    }
+
+    function setMenuOpen(open) {
+      mainNav.classList.toggle("is-mobile-open", open);
+      backdrop.classList.toggle("show", open);
+      toggleBtn.classList.toggle("is-active", open);
+      toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.classList.toggle("mobile-menu-locked", open);
+    }
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const nextState = !mainNav.classList.contains("is-mobile-open");
+      setMenuOpen(nextState);
+    });
+
+    backdrop.addEventListener("click", () => setMenuOpen(false));
+
+    mainNav.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setMenuOpen(false));
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) setMenuOpen(false);
+    });
+  })();
+
   loadTab("about");
 })();
