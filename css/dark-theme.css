@@ -244,15 +244,11 @@ body {
   background: var(--bg-elevated);
 }
 
-.dhp-lang-flag {
-  font-size: 0.96rem;
-  line-height: 1;
-}
-
 #dhpLangMenuWrap .dhp-lang-flag-img,
 #dhpLangMenu .dhp-lang-option .dhp-lang-flag-img,
 .dhp-lang-trigger > img.dhp-lang-flag-img,
-.dhp-lang-option > img.dhp-lang-flag-img {
+.dhp-lang-option > img.dhp-lang-flag-img,
+.mobile-lang-choice > img.dhp-lang-flag-img {
   width: 20px !important;
   height: 14px !important;
   min-width: 20px !important;
@@ -1093,7 +1089,8 @@ html[data-theme="night"] .dhp-dd-item.danger {
 }
 
 .mobile-drawer-account-card,
-.mobile-drawer-theme-row {
+.mobile-drawer-theme-row,
+.mobile-drawer-lang-row {
   display: none !important;
 }
 
@@ -1109,6 +1106,18 @@ html[data-theme="night"] .dhp-dd-item.danger {
 }
 
 @media (max-width: 768px) {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box !important;
+  }
+
+  html,
+  body {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
   input,
   textarea,
   select,
@@ -1120,25 +1129,42 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .dhp-np-textarea,
   .dhp-np-title-input {
     font-size: 16px !important;
+    max-width: 100% !important;
   }
 
   body {
-    padding-bottom: 16px !important;
+    padding-bottom: 24px !important;
   }
 
   body.mobile-menu-locked {
     overflow: hidden !important;
   }
 
+  .container,
+  .section-mount,
+  .site-main,
+  .tab-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .section-mount {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
   .site-header {
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
+    width: 100% !important;
   }
 
   .site-header .header-inner {
     height: 60px !important;
-    padding: 0 14px !important;
+    padding: 0 12px !important;
     flex-wrap: nowrap !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -1297,7 +1323,8 @@ html[data-theme="night"] .dhp-dd-item.danger {
     white-space: nowrap !important;
   }
 
-  .mobile-drawer-theme-row {
+  .mobile-drawer-theme-row,
+  .mobile-drawer-lang-row {
     display: flex !important;
     align-items: center;
     justify-content: space-between;
@@ -1307,14 +1334,17 @@ html[data-theme="night"] .dhp-dd-item.danger {
     border-top: 1px solid var(--border-color);
   }
 
-  .mobile-drawer-theme-label {
+  .mobile-drawer-theme-label,
+  .mobile-drawer-lang-label {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-secondary);
   }
 
-  .mobile-drawer-theme-icons {
+  .mobile-drawer-theme-icons,
+  .mobile-drawer-lang-btns {
     display: inline-flex;
+    align-items: center;
     gap: 6px;
   }
 
@@ -1328,6 +1358,29 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .mobile-drawer-theme-icons .dhp-theme-option.is-active {
     border-color: var(--accent);
     background: var(--accent-soft);
+  }
+
+  .mobile-lang-choice {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 32px !important;
+    padding: 0 10px !important;
+    border-radius: 9px !important;
+    border: 1px solid var(--border-color) !important;
+    background: var(--bg-elevated) !important;
+    color: var(--text-primary) !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+  }
+
+  .mobile-lang-choice.is-active,
+  .mobile-lang-choice.active {
+    border-color: var(--accent) !important;
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
   }
 
   .site-header .main-nav.is-mobile-open .nav-btn {
@@ -1375,6 +1428,8 @@ html[data-theme="night"] .dhp-dd-item.danger {
     text-align: center !important;
   }
 
+  .card,
+  .profile-card,
   .ai-hub-card,
   .intro-card,
   .calendar-section-card,
@@ -1382,12 +1437,15 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .work-video-card,
   .pricing-card,
   .minigame-shell {
-    padding: 18px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px 14px !important;
     border-radius: 16px !important;
   }
 
   .hero-headline {
-    font-size: 1.48rem !important;
+    font-size: 1.42rem !important;
+    word-break: break-word !important;
   }
 
   .chat-messages {
