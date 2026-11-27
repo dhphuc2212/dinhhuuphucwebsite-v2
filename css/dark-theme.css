@@ -1485,4 +1485,11 @@ html[data-theme="night"] .dhp-dd-item.danger {
   .chess-cell {
     padding: 4px !important;
   }
+   .dhp-lang-flag-img {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
 }
