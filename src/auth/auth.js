@@ -1,5 +1,5 @@
-import { jsonRes, parseCookies, randomId } from "../shared/http.js";
-import { SESSION_COOKIE_NAME, extractSessionId } from "../shared/session.js";
+import { corsPreflight, jsonRes, parseCookies, randomId } from "../shared/http.js";
+import { SESSION_COOKIE_NAME, extractSessionId, resolveUserSession } from "../shared/session.js";
 
 const GOOGLE_CLIENT_ID = "645926964017-6hqgk9jf1umh6qu1tc6vu0ec5c233pta.apps.googleusercontent.com";
 const CALENDAR_SCOPES = [
@@ -22,8 +22,26 @@ function buildSessionCookie(sid, maxAgeSec, remember60, isProdDomain) {
   ].join("; ");
 }
 
+async function fetchGoogleUserInfo(accessToken) {
+  try {
+    const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if (!res.ok) return null;
+    const u = await res.json();
+    return {
+      email: u.email || "",
+      name: u.name || "",
+      picture: u.picture || ""
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function handleAuthRoutes(pathname, request, env, url) {
   if (!pathname.startsWith("/api/auth/")) return null;
+  if (request.method === "OPTIONS") return corsPreflight();
 
   const redirectUri = `${url.origin}/api/auth/google/callback`;
   const isProdDomain = url.hostname.endsWith("dinhhuuphuc.com");
@@ -91,16 +109,11 @@ export async function handleAuthRoutes(pathname, request, env, url) {
       );
     }
 
-    let email = "";
-    try {
-      const userRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-        headers: { Authorization: `Bearer ${tokenData.access_token}` }
-      });
-      if (userRes.ok) {
-        const u = await userRes.json();
-        email = u.email || "";
-      }
-    } catch {}
+    const profile = (await fetchGoogleUserInfo(tokenData.access_token)) || {
+      email: "",
+      name: "",
+      picture: ""
+    };
 
     const maxAgeSec = remember60 ? SIXTY_DAYS_SEC : 24 * 60 * 60;
     const expiresAtMs = Date.now() + maxAgeSec * 1000;
@@ -111,7 +124,9 @@ export async function handleAuthRoutes(pathname, request, env, url) {
       refreshToken: tokenData.refresh_token || null,
       accessToken: tokenData.access_token,
       accessExpiresAt: Date.now() + expiresIn * 1000,
-      email,
+      email: profile.email,
+      name: profile.name,
+      picture: profile.picture,
       remember60,
       expiresAtMs
     };
@@ -124,7 +139,9 @@ export async function handleAuthRoutes(pathname, request, env, url) {
 
     const hashParams = new URLSearchParams({
       gcal_sid: sessionId,
-      gcal_email: email,
+      gcal_email: profile.email,
+      gcal_name: profile.name,
+      gcal_pic: profile.picture,
       gcal_exp: String(expiresAtMs)
     });
 
@@ -164,62 +181,98 @@ export async function handleAuthRoutes(pathname, request, env, url) {
         ? { "Set-Cookie": buildSessionCookie(sid, remainingTtl, Boolean(sess.remember60), isProdDomain) }
         : {};
 
-    if (sess.accessToken && sess.accessExpiresAt && Date.now() < sess.accessExpiresAt - 60000) {
-      return jsonRes(
-        {
-          authenticated: true,
-          accessToken: sess.accessToken,
-          expiresIn: Math.floor((sess.accessExpiresAt - Date.now()) / 1000),
-          email: sess.email || "",
-          remember60: Boolean(sess.remember60),
-          expiresAtMs: sess.expiresAtMs
-        },
-        200,
-        setCookieHeader
-      );
+    let needSaveSession = false;
+
+    if (!sess.accessToken || !sess.accessExpiresAt || Date.now() >= sess.accessExpiresAt - 60000) {
+      if (!sess.refreshToken || !env.GOOGLE_CLIENT_SECRET) {
+        return jsonRes({ authenticated: false, reason: "missing_refresh_token" }, 200);
+      }
+
+      const refreshRes = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          client_id: GOOGLE_CLIENT_ID,
+          client_secret: env.GOOGLE_CLIENT_SECRET,
+          refresh_token: sess.refreshToken,
+          grant_type: "refresh_token"
+        })
+      });
+
+      const refreshed = await refreshRes.json();
+      if (!refreshRes.ok || !refreshed.access_token) {
+        return jsonRes({ authenticated: false, reason: refreshed.error || "refresh_failed" }, 200);
+      }
+
+      const newExpiresIn = Number(refreshed.expires_in) || 3600;
+      sess.accessToken = refreshed.access_token;
+      sess.accessExpiresAt = Date.now() + newExpiresIn * 1000;
+      if (refreshed.refresh_token) sess.refreshToken = refreshed.refresh_token;
+      needSaveSession = true;
     }
 
-    if (!sess.refreshToken || !env.GOOGLE_CLIENT_SECRET) {
-      return jsonRes({ authenticated: false, reason: "missing_refresh_token" }, 200);
+    // Tự động bổ sung name & picture từ Google nếu phiên đăng nhập cũ chưa lưu
+    if ((!sess.name || !sess.picture) && sess.accessToken) {
+      const info = await fetchGoogleUserInfo(sess.accessToken);
+      if (info) {
+        sess.email = info.email || sess.email;
+        sess.name = info.name || sess.name;
+        sess.picture = info.picture || sess.picture;
+        needSaveSession = true;
+      }
     }
 
-    const refreshRes = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: env.GOOGLE_CLIENT_SECRET,
-        refresh_token: sess.refreshToken,
-        grant_type: "refresh_token"
-      })
-    });
-
-    const refreshed = await refreshRes.json();
-    if (!refreshRes.ok || !refreshed.access_token) {
-      return jsonRes({ authenticated: false, reason: refreshed.error || "refresh_failed" }, 200);
+    if (needSaveSession) {
+      await env.AUTH_SESSIONS.put(`sess:${sid}`, JSON.stringify(sess), {
+        expirationTtl: remainingTtl
+      });
     }
 
-    const newExpiresIn = Number(refreshed.expires_in) || 3600;
-    sess.accessToken = refreshed.access_token;
-    sess.accessExpiresAt = Date.now() + newExpiresIn * 1000;
-    if (refreshed.refresh_token) sess.refreshToken = refreshed.refresh_token;
-
-    await env.AUTH_SESSIONS.put(`sess:${sid}`, JSON.stringify(sess), {
-      expirationTtl: remainingTtl
-    });
+    let extraProfile = { birthday: "", phone: "", gender: "", bio: "" };
+    if (sess.email) {
+      try {
+        const pRaw = await env.AUTH_SESSIONS.get(`user_profile:${sess.email.toLowerCase()}`);
+        if (pRaw) extraProfile = { ...extraProfile, ...JSON.parse(pRaw) };
+      } catch {}
+    }
 
     return jsonRes(
       {
         authenticated: true,
         accessToken: sess.accessToken,
-        expiresIn: newExpiresIn,
+        expiresIn: Math.max(60, Math.floor((sess.accessExpiresAt - Date.now()) / 1000)),
         email: sess.email || "",
+        name: sess.name || "",
+        picture: sess.picture || "",
         remember60: Boolean(sess.remember60),
-        expiresAtMs: sess.expiresAtMs
+        expiresAtMs: sess.expiresAtMs,
+        profile: extraProfile
       },
       200,
       setCookieHeader
     );
+  }
+
+  if (pathname === "/api/auth/profile" && request.method === "POST") {
+    const { email } = await resolveUserSession(request, env);
+    if (!email) {
+      return jsonRes({ error: "Vui lòng đăng nhập Google để lưu hồ sơ." }, 401);
+    }
+
+    try {
+      const body = await request.json();
+      const profileData = {
+        birthday: String(body.birthday || "").slice(0, 32),
+        phone: String(body.phone || "").slice(0, 32),
+        gender: String(body.gender || "").slice(0, 32),
+        bio: String(body.bio || "").slice(0, 300),
+        updatedAt: new Date().toISOString()
+      };
+      await env.AUTH_SESSIONS.put(`user_profile:${email}`, JSON.stringify(profileData));
+      return jsonRes({ ok: true, profile: profileData });
+    } catch {
+      return jsonRes({ error: "Không thể lưu thông tin tài khoản." }, 500);
+    }
   }
 
   if (pathname === "/api/auth/logout") {
