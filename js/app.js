@@ -3,6 +3,11 @@
   const VALID_THEMES = ["night", "day"];
   const THEME_ICONS = { night: "🌙", day: "☀️" };
 
+  const LANG_META = {
+    vi: { flag: "🇻🇳", code: "VI" },
+    en: { flag: "🇬🇧", code: "EN" }
+  };
+
   function getSavedTheme() {
     try {
       const val = localStorage.getItem(THEME_STORAGE_KEY) || "night";
@@ -17,6 +22,11 @@
     document.getElementById("dhpThemeTrigger")?.setAttribute("aria-expanded", "false");
   }
 
+  function closeLangMenu() {
+    document.getElementById("dhpLangMenu")?.classList.add("hidden");
+    document.getElementById("dhpLangTrigger")?.setAttribute("aria-expanded", "false");
+  }
+
   function syncThemeControls(theme) {
     const iconEl = document.getElementById("dhpThemeCurrentIcon");
     if (iconEl) iconEl.textContent = THEME_ICONS[theme] || "🌙";
@@ -28,6 +38,23 @@
     });
   }
 
+  function syncLangControls(lang) {
+    const active = lang === "en" ? "en" : "vi";
+    const meta = LANG_META[active] || LANG_META.vi;
+
+    const flagEl = document.getElementById("dhpLangCurrentFlag");
+    const codeEl = document.getElementById("dhpLangCurrentCode");
+    if (flagEl) flagEl.textContent = meta.flag;
+    if (codeEl) codeEl.textContent = meta.code;
+
+    document.querySelectorAll("[data-lang-value]").forEach((opt) => {
+      const isSelected = opt.dataset.langValue === active;
+      opt.classList.toggle("is-active", isSelected);
+      opt.classList.toggle("active", isSelected);
+      opt.setAttribute("aria-selected", isSelected ? "true" : "false");
+    });
+  }
+
   function ensureMobileThemeRow(nav) {
     if (!nav || nav.querySelector("#mobileDrawerThemeRow")) return;
     const row = document.createElement("div");
@@ -36,7 +63,7 @@
     row.innerHTML = `
       <span class="mobile-drawer-theme-label">Giao diện</span>
       <div class="mobile-drawer-theme-icons">
-        <button type="button" class="dhp-theme-option" data-theme-value="day" aria-label="Day">☀️</button>      
+        <button type="button" class="dhp-theme-option" data-theme-value="day" aria-label="Day">☀️</button>
         <button type="button" class="dhp-theme-option" data-theme-value="night" aria-label="Night">🌙</button>
       </div>`;
     nav.appendChild(row);
@@ -291,17 +318,36 @@
       window.SecondBrainManager?.bindSectionEvents?.();
     }
 
-    // Chuyển ngữ toàn bộ nội dung vừa nạp vào mountEl theo ngôn ngữ đang chọn
     window.DhpI18n?.applyToDom?.(mountEl);
   }
 
   document.addEventListener("click", (e) => {
-    // Chuyển đổi ngôn ngữ VI / EN thông qua bộ dịch tập trung js/i18n-dict.js
-    const langBtn = e.target.closest("[data-lang-value]");
-    if (langBtn) {
+    const langTrigger = e.target.closest("#dhpLangTrigger");
+    if (langTrigger) {
       e.preventDefault();
-      window.DhpI18n?.setLanguage?.(langBtn.dataset.langValue, true);
+      e.stopPropagation();
+      closeThemeMenu();
+      const menu = document.getElementById("dhpLangMenu");
+      if (menu) {
+        const willOpen = menu.classList.contains("hidden");
+        menu.classList.toggle("hidden", !willOpen);
+        langTrigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      }
       return;
+    }
+
+    const langOpt = e.target.closest("[data-lang-value]");
+    if (langOpt) {
+      e.preventDefault();
+      const chosenLang = langOpt.dataset.langValue === "en" ? "en" : "vi";
+      window.DhpI18n?.setLanguage?.(chosenLang, true);
+      syncLangControls(chosenLang);
+      closeLangMenu();
+      return;
+    }
+
+    if (!e.target.closest("#dhpLangMenuWrap")) {
+      closeLangMenu();
     }
 
     const gameTabBtn = e.target.closest(".game-tab-btn[data-game]");
@@ -315,6 +361,7 @@
     if (themeTrigger) {
       e.preventDefault();
       e.stopPropagation();
+      closeLangMenu();
       const menu = document.getElementById("dhpThemeMenu");
       if (menu) {
         const willOpen = menu.classList.contains("hidden");
@@ -368,6 +415,7 @@
   });
 
   applyTheme(getSavedTheme(), false);
+  syncLangControls(window.DhpI18n?.getLang?.() || "vi");
   initMobileMenu();
   const initialHash = location.hash.replace("#", "").trim();
   loadTab(validTabs.includes(initialHash) ? initialHash : "about", false);
