@@ -587,6 +587,164 @@ select:focus {
 }
 
 /* =========================================================
+   GOOGLE ACCOUNT CHIP & DROPDOWN MENU (HEADER)
+   ========================================================= */
+.dhp-user-menu-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.dhp-user-avatar {
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 1.5px solid #10b981 !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.dhp-user-avatar-fallback {
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #09090b !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-weight: 800 !important;
+  font-size: 0.72rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.dhp-header-user-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 36px !important;
+  padding: 0 12px 0 5px !important;
+  border-radius: 999px !important;
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #fafafa !important;
+  font-family: inherit !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  max-width: 195px !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.dhp-header-user-pill:hover {
+  border-color: #10b981 !important;
+  background: #1f1f23 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12) !important;
+}
+
+.dhp-header-user-name {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.dhp-user-caret {
+  font-size: 0.72rem !important;
+  color: #a1a1aa !important;
+  margin-left: 1px !important;
+}
+
+.dhp-user-dropdown {
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  right: 0 !important;
+  width: 256px !important;
+  background: #111114 !important;
+  border: 1px solid #3f3f46 !important;
+  border-radius: 16px !important;
+  padding: 8px !important;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.82) !important;
+  z-index: 1100 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.dhp-user-dropdown.hidden {
+  display: none !important;
+}
+
+.dhp-dd-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px !important;
+  border-radius: 10px !important;
+  background: #18181b !important;
+}
+
+.dhp-dd-meta {
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.dhp-dd-name {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #fafafa !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.dhp-dd-email {
+  font-size: 0.74rem !important;
+  color: #10b981 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.dhp-dd-divider {
+  height: 1px !important;
+  background: #27272a !important;
+  margin: 4px 2px !important;
+}
+
+.dhp-dd-item {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 9px 10px !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 10px !important;
+  color: #e4e4e7 !important;
+  font-family: inherit !important;
+  font-size: 0.84rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.dhp-dd-item:hover {
+  background: #27272a !important;
+  color: #fafafa !important;
+}
+
+.dhp-dd-item.danger {
+  color: #fb7185 !important;
+}
+
+.dhp-dd-item.danger:hover {
+  background: rgba(244, 63, 94, 0.14) !important;
+}
+
+.mobile-drawer-account-card {
+  display: none !important;
+}
+
+/* =========================================================
    MOBILE UX/UI UPGRADE — HAMBURGER 3 GẠCH & CARD LAYOUT
    ========================================================= */
 .mobile-menu-toggle-btn {
@@ -620,7 +778,7 @@ select:focus {
     overflow: hidden !important;
   }
 
-  /* 2. Thanh Header 1 hàng gọn gàng: Logo trái + Đăng nhập/Đăng xuất & Nút 3 gạch phải */
+  /* 2. Thanh Header 1 hàng gọn gàng: Logo trái + Đăng nhập & Nút 3 gạch phải */
   .site-header {
     position: sticky !important;
     top: 0 !important;
@@ -666,7 +824,8 @@ select:focus {
     flex-shrink: 0 !important;
   }
 
-  /* Ẩn thẻ email dài và nút Zalo trên Header mobile để không đè lên tên thương hiệu */
+  /* Ẩn chip user trên header mobile (đã đưa vào menu 3 gạch) và ẩn nút Zalo */
+  .dhp-user-menu-wrap,
   .site-header .header-actions .status-pill,
   .site-header .header-actions > a[href*="zalo.me"] {
     display: none !important;
@@ -737,6 +896,55 @@ select:focus {
     border: 1px solid #3f3f46 !important;
     box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85) !important;
     z-index: 1010 !important;
+  }
+
+  .mobile-drawer-account-card {
+    display: block !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 6px !important;
+    border-bottom: 1px solid #27272a !important;
+  }
+
+  .mobile-acc-info-btn {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 8px 10px !important;
+    border-radius: 12px !important;
+    background: #18181b !important;
+    border: 1px solid #27272a !important;
+    color: #fafafa !important;
+    text-align: left !important;
+    cursor: pointer !important;
+  }
+
+  .mobile-acc-meta {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-acc-name {
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #fafafa !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-acc-email {
+    font-size: 0.74rem !important;
+    color: #10b981 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-acc-arrow {
+    font-size: 0.74rem !important;
+    color: #a1a1aa !important;
+    white-space: nowrap !important;
   }
 
   .site-header .main-nav.is-mobile-open .nav-btn {
@@ -911,216 +1119,5 @@ select:focus {
     height: auto !important;
     aspect-ratio: 1 / 1;
     font-size: 0.78rem !important;
-  }
-  /* =========================================================
-   GOOGLE ACCOUNT CHIP & DROPDOWN MENU (HEADER)
-   ========================================================= */
-.dhp-user-menu-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.dhp-user-avatar {
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  border: 1.5px solid #10b981 !important;
-  flex-shrink: 0;
-  display: block;
-}
-
-.dhp-user-avatar-fallback {
-  border-radius: 50% !important;
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  color: #09090b !important;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-  font-size: 0.72rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.dhp-header-user-pill {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  height: 36px !important;
-  padding: 0 12px 0 5px !important;
-  border-radius: 999px !important;
-  background: #18181b !important;
-  border: 1px solid #27272a !important;
-  color: #fafafa !important;
-  font-family: inherit !important;
-  font-size: 0.84rem !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  max-width: 195px;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dhp-header-user-pill:hover {
-  border-color: #10b981 !important;
-  background: #1f1f23 !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
-}
-
-.dhp-header-user-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dhp-user-caret {
-  font-size: 0.72rem;
-  color: #a1a1aa;
-  margin-left: 1px;
-}
-
-.dhp-user-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 248px;
-  background: #111114;
-  border: 1px solid #3f3f46;
-  border-radius: 16px;
-  padding: 8px;
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.75);
-  z-index: 1100;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.dhp-user-dropdown.hidden {
-  display: none !important;
-}
-
-.dhp-dd-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 10px;
-  background: #18181b;
-}
-
-.dhp-dd-meta {
-  min-width: 0;
-  flex: 1;
-}
-
-.dhp-dd-name {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #fafafa;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dhp-dd-email {
-  font-size: 0.74rem;
-  color: #10b981;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dhp-dd-divider {
-  height: 1px;
-  background: #27272a;
-  margin: 4px 2px;
-}
-
-.dhp-dd-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 10px;
-  border: none;
-  background: transparent;
-  border-radius: 10px;
-  color: #e4e4e7;
-  font-family: inherit;
-  font-size: 0.84rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.15s ease;
-}
-
-.dhp-dd-item:hover {
-  background: #27272a;
-  color: #fafafa;
-}
-
-.dhp-dd-item.danger {
-  color: #fb7185;
-}
-
-.dhp-dd-item.danger:hover {
-  background: rgba(244, 63, 94, 0.12);
-}
-
-.mobile-drawer-account-card {
-  display: none !important;
-}
-
-@media (max-width: 768px) {
-  .dhp-user-menu-wrap {
-    display: none !important;
-  }
-
-  .mobile-drawer-account-card {
-    display: block !important;
-    padding-bottom: 8px !important;
-    margin-bottom: 6px !important;
-    border-bottom: 1px solid #27272a !important;
-  }
-
-  .mobile-acc-info-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 12px;
-    background: #18181b;
-    border: 1px solid #27272a;
-    color: #fafafa;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .mobile-acc-meta {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .mobile-acc-name {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fafafa;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .mobile-acc-email {
-    font-size: 0.74rem;
-    color: #10b981;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .mobile-acc-arrow {
-    font-size: 0.74rem;
-    color: #a1a1aa;
-    white-space: nowrap;
   }
 }
