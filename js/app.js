@@ -4,8 +4,16 @@
   const THEME_ICONS = { night: "🌙", day: "☀️" };
 
   const LANG_META = {
-    vi: { flag: "🇻🇳", code: "VI" },
-    en: { flag: "🇬🇧", code: "EN" }
+    vi: {
+      flagSrc:
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23da251d'/%3E%3Cpolygon points='15,4 16.8,9.6 22.7,9.6 17.9,13 19.7,18.6 15,15.2 10.3,18.6 12.1,13 7.3,9.6 13.2,9.6' fill='%23ff0'/%3E%3C/svg%3E",
+      code: "VI"
+    },
+    en: {
+      flagSrc:
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect width='60' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23c8102e' stroke-width='3'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23c8102e' stroke-width='6'/%3E%3C/svg%3E",
+      code: "EN"
+    }
   };
 
   function getSavedTheme() {
@@ -44,7 +52,10 @@
 
     const flagEl = document.getElementById("dhpLangCurrentFlag");
     const codeEl = document.getElementById("dhpLangCurrentCode");
-    if (flagEl) flagEl.textContent = meta.flag;
+    if (flagEl) {
+      flagEl.src = meta.flagSrc;
+      flagEl.alt = meta.code;
+    }
     if (codeEl) codeEl.textContent = meta.code;
 
     document.querySelectorAll("[data-lang-value]").forEach((opt) => {
@@ -341,6 +352,7 @@
       e.preventDefault();
       const chosenLang = langOpt.dataset.langValue === "en" ? "en" : "vi";
       window.DhpI18n?.setLanguage?.(chosenLang, true);
+      window.DhpI18n?.applyToDom?.(document.body);
       syncLangControls(chosenLang);
       closeLangMenu();
       return;
