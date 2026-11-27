@@ -325,6 +325,65 @@ select:focus {
   color: #fafafa !important;
 }
 
+/* SIDEBAR WORKSPACE & MENU NỔI GEMINI */
+.ai-chat-sidebar {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+}
+
+.ai-sidebar-filter-bar {
+  border-bottom-color: #27272a !important;
+}
+
+.ai-filter-btn,
+.ai-sidebar-close-mobile {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #a1a1aa !important;
+}
+
+.ai-filter-btn.active {
+  background: rgba(16, 185, 129, 0.14) !important;
+  color: #10b981 !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+.ai-thread-row:hover,
+.ai-thread-row.active,
+.ai-thread-row.menu-open,
+.ai-ctx-item:hover {
+  background: #27272a !important;
+}
+
+.ai-thread-item-title,
+.ai-active-thread-heading,
+.ai-ctx-item {
+  color: #fafafa !important;
+}
+
+.ai-thread-dots-btn {
+  color: #a1a1aa !important;
+}
+
+.ai-thread-dots-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fafafa !important;
+}
+
+.ai-floating-ctx-menu {
+  background: #18181b !important;
+  border: 1px solid #3f3f46 !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.78) !important;
+}
+
+.ai-ctx-item.danger {
+  color: #fb7185 !important;
+}
+
+.ai-ctx-divider {
+  background: #27272a !important;
+}
+
 /* CALENDAR TIMELINE (.dhp-*) */
 .calendar-user-bar,
 .user-info-pill,
@@ -526,184 +585,20 @@ select:focus {
   color: #fafafa !important;
   border: 1px solid #3f3f46 !important;
 }
-/* DARK THEME CHO DANH SÁCH LUỒNG & MENU 3 CHẤM GEMINI */
-.ai-thread-picker-btn {
-  background: #09090b !important;
-  border: 1px solid #27272a !important;
-  color: #fafafa !important;
-}
 
-.ai-thread-picker-btn:hover {
-  border-color: #10b981 !important;
-}
-
-.ai-thread-popover,
-.ai-thread-context-menu {
-  background: #18181b !important;
-  border: 1px solid #27272a !important;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65) !important;
-}
-
-.ai-popover-head {
-  border-bottom-color: #27272a !important;
-}
-
-.ai-filter-btn {
-  background: #09090b !important;
-  border-color: #27272a !important;
-  color: #a1a1aa !important;
-}
-
-.ai-filter-btn.active {
-  background: rgba(16, 185, 129, 0.14) !important;
-  color: #10b981 !important;
-  border-color: rgba(16, 185, 129, 0.35) !important;
-}
-
-.ai-thread-row:hover,
-.ai-thread-row.active,
-.ai-ctx-item:hover {
-  background: #27272a !important;
-}
-
-.ai-thread-item-title,
-.ai-ctx-item {
-  color: #fafafa !important;
-}
-
-.ai-thread-dots-btn {
-  color: #a1a1aa !important;
-}
-
-.ai-thread-dots-btn:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fafafa !important;
-}
-
-.ai-ctx-item.danger {
-  color: #fb7185 !important;
-}
-
-.ai-ctx-divider {
-  background: #27272a !important;
-}
-/* DARK THEME CHO SIDEBAR WORKSPACE & MENU NỔI GEMINI */
-.ai-chat-sidebar {
-  background: #09090b !important;
-  border: 1px solid #27272a !important;
-}
-
-.ai-sidebar-filter-bar {
-  border-bottom-color: #27272a !important;
-}
-
-.ai-filter-btn,
-.ai-sidebar-close-mobile {
-  background: #18181b !important;
-  border-color: #27272a !important;
-  color: #a1a1aa !important;
-}
-
-.ai-filter-btn.active {
-  background: rgba(16, 185, 129, 0.14) !important;
-  color: #10b981 !important;
-  border-color: rgba(16, 185, 129, 0.35) !important;
-}
-
-.ai-thread-row:hover,
-.ai-thread-row.active,
-.ai-thread-row.menu-open,
-.ai-ctx-item:hover {
-  background: #27272a !important;
-}
-
-.ai-thread-item-title,
-.ai-active-thread-heading,
-.ai-ctx-item {
-  color: #fafafa !important;
-}
-
-.ai-thread-dots-btn {
-  color: #a1a1aa !important;
-}
-
-.ai-thread-dots-btn:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fafafa !important;
-}
-
-.ai-floating-ctx-menu {
-  background: #18181b !important;
-  border: 1px solid #3f3f46 !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.78) !important;
-}
-
-.ai-ctx-item.danger {
-  color: #fb7185 !important;
-}
-
-.ai-ctx-divider {
-  background: #27272a !important;
-}
-/* DARK THEME CHO SIDEBAR WORKSPACE & MENU NỔI GEMINI */
-.ai-chat-sidebar {
-  background: #09090b !important;
-  border: 1px solid #27272a !important;
-}
-
-.ai-sidebar-filter-bar {
-  border-bottom-color: #27272a !important;
-}
-
-.ai-filter-btn,
-.ai-sidebar-close-mobile {
-  background: #18181b !important;
-  border-color: #27272a !important;
-  color: #a1a1aa !important;
-}
-
-.ai-filter-btn.active {
-  background: rgba(16, 185, 129, 0.14) !important;
-  color: #10b981 !important;
-  border-color: rgba(16, 185, 129, 0.35) !important;
-}
-
-.ai-thread-row:hover,
-.ai-thread-row.active,
-.ai-thread-row.menu-open,
-.ai-ctx-item:hover {
-  background: #27272a !important;
-}
-
-.ai-thread-item-title,
-.ai-active-thread-heading,
-.ai-ctx-item {
-  color: #fafafa !important;
-}
-
-.ai-thread-dots-btn {
-  color: #a1a1aa !important;
-}
-
-.ai-thread-dots-btn:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fafafa !important;
-}
-
-.ai-floating-ctx-menu {
-  background: #18181b !important;
-  border: 1px solid #3f3f46 !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.78) !important;
-}
-
-.ai-ctx-item.danger {
-  color: #fb7185 !important;
-}
 /* =========================================================
-   MOBILE UX/UI UPGRADE (BOTTOM TAB BAR, CARD PRICING, NO-ZOOM)
+   MOBILE UX/UI UPGRADE — HAMBURGER 3 GẠCH & CARD LAYOUT
    ========================================================= */
+.mobile-menu-toggle-btn {
+  display: none;
+}
+
+.mobile-nav-backdrop {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  /* 1. Chặn tự động phóng to màn hình khi chạm vào ô nhập liệu */
+  /* 1. Chặn auto-zoom khi chạm vào ô nhập liệu */
   input,
   textarea,
   select,
@@ -717,81 +612,163 @@ select:focus {
     font-size: 16px !important;
   }
 
-  /* 2. Header 1 hàng gọn gàng trên cùng + Bottom Tab Bar cố định cạnh dưới */
   body {
-    padding-bottom: 76px !important;
+    padding-bottom: 16px !important;
+  }
+
+  body.mobile-menu-locked {
+    overflow: hidden !important;
+  }
+
+  /* 2. Thanh Header 1 hàng gọn gàng: Logo trái + Đăng nhập & Nút 3 gạch phải */
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
   }
 
   .site-header .header-inner {
-    height: 58px !important;
+    height: 60px !important;
     padding: 0 14px !important;
     flex-wrap: nowrap !important;
     justify-content: space-between !important;
+    align-items: center !important;
     gap: 8px !important;
   }
 
+  .site-header .brand-logo {
+    gap: 8px !important;
+    min-width: 0 !important;
+  }
+
+  .site-header .brand-mark {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.78rem !important;
+    flex-shrink: 0 !important;
+  }
+
   .site-header .brand-name {
-    font-size: 0.96rem !important;
+    font-size: 0.94rem !important;
+    white-space: nowrap !important;
   }
 
   .site-header .header-actions {
     order: 2 !important;
     width: auto !important;
+    display: flex !important;
+    align-items: center !important;
     gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Ẩn nút Liên hệ Zalo trên thanh header chật (vì đã có ngay trong Profile & Menu) */
+  .site-header .header-actions > a[href*="zalo.me"] {
+    display: none !important;
   }
 
   .site-header .header-actions .btn {
     padding: 6px 10px !important;
-    font-size: 0.78rem !important;
+    font-size: 0.76rem !important;
+    white-space: nowrap !important;
   }
 
   .site-header .header-actions .status-pill {
-    max-width: 112px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 96px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
     font-size: 0.72rem !important;
     padding: 4px 8px !important;
   }
 
-  .site-header .main-nav {
-    position: fixed !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: 10px !important;
-    width: auto !important;
-    z-index: 960 !important;
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
-    padding: 5px !important;
-    border-radius: 16px !important;
-    background: rgba(17, 17, 20, 0.94) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid #3f3f46 !important;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.72) !important;
-  }
-
-  .site-header .nav-btn {
+  /* 3. Nút 3 gạch (Hamburger) */
+  .mobile-menu-toggle-btn {
+    display: inline-flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 2px !important;
-    padding: 6px 4px !important;
-    font-size: 0.72rem !important;
+    gap: 4px !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    background: #18181b !important;
+    border: 1px solid #27272a !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .mobile-menu-toggle-btn span {
+    display: block !important;
+    width: 18px !important;
+    height: 2px !important;
+    background: #fafafa !important;
+    border-radius: 2px !important;
+    transition: transform 0.2s ease, opacity 0.2s ease !important;
+  }
+
+  .mobile-menu-toggle-btn.is-active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg) !important;
+  }
+
+  .mobile-menu-toggle-btn.is-active span:nth-child(2) {
+    opacity: 0 !important;
+  }
+
+  .mobile-menu-toggle-btn.is-active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg) !important;
+  }
+
+  /* 4. Ngăn kéo Menu thả xuống khi bấm nút 3 gạch */
+  .site-header .main-nav {
+    display: none !important;
+  }
+
+  .site-header .main-nav.is-mobile-open {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    position: absolute !important;
+    top: 64px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    padding: 8px !important;
+    gap: 4px !important;
+    border-radius: 16px !important;
+    background: #111114 !important;
+    border: 1px solid #3f3f46 !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85) !important;
+    z-index: 1010 !important;
+  }
+
+  .site-header .main-nav.is-mobile-open .nav-btn {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    padding: 12px 14px !important;
+    font-size: 0.94rem !important;
     border-radius: 11px !important;
+    gap: 10px !important;
   }
 
-  .site-header .nav-num {
-    font-size: 0.66rem !important;
-    line-height: 1 !important;
+  .site-header .main-nav.is-mobile-open .nav-num {
+    font-size: 0.8rem !important;
   }
 
-  /* 3. Thu gọn nút nổi Notepad Online nằm cao hơn Bottom Bar, không che nút Gửi */
+  .mobile-nav-backdrop.show {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 990 !important;
+  }
+
+  /* 5. Thu gọn nút nổi Notepad Online ở góc phải dưới */
   .dhp-notepad-fab {
     right: 14px !important;
-    bottom: 76px !important;
+    bottom: 18px !important;
     width: 46px !important;
     height: 46px !important;
     padding: 0 !important;
@@ -806,13 +783,13 @@ select:focus {
   }
 
   .toast-notice {
-    bottom: 82px !important;
+    bottom: 74px !important;
     right: 14px !important;
     left: 14px !important;
     text-align: center !important;
   }
 
-  /* 4. Tối ưu khung chat AI trên màn hình dọc */
+  /* 6. Tối ưu khung thẻ, Chat AI & Bảng giá Gạo Ông Du dạng thẻ */
   .ai-hub-card,
   .intro-card,
   .calendar-section-card,
@@ -822,6 +799,10 @@ select:focus {
   .minigame-shell {
     padding: 18px 16px !important;
     border-radius: 16px !important;
+  }
+
+  .hero-headline {
+    font-size: 1.48rem !important;
   }
 
   .chat-messages {
@@ -837,10 +818,9 @@ select:focus {
 
   .ai-chat-sidebar.mobile-open {
     top: 64px !important;
-    bottom: 76px !important;
+    bottom: 16px !important;
   }
 
-  /* 5. Biến bảng giá Gạo Ông Du thành danh sách thẻ (Card List) dễ đọc */
   .table-responsive {
     border: none !important;
     background: transparent !important;
@@ -882,18 +862,15 @@ select:focus {
     text-align: left !important;
   }
 
-  /* Ẩn cột STT trên mobile */
   .price-table td:nth-child(1) {
     display: none !important;
   }
 
-  /* Tên sản phẩm chiếm trọn hàng trên */
   .price-table td:nth-child(2) {
     grid-column: 1 / -1 !important;
     font-size: 0.94rem !important;
   }
 
-  /* Trọng lượng đóng gói */
   .price-table td:nth-child(3) {
     grid-column: 1 / 2 !important;
     font-size: 0.8rem !important;
@@ -909,7 +886,6 @@ select:focus {
     content: " kg";
   }
 
-  /* Đơn giá */
   .price-table td:nth-child(4) {
     grid-column: 1 / 2 !important;
   }
@@ -922,14 +898,13 @@ select:focus {
     content: " đ";
   }
 
-  /* Nút đặt qua Zalo nằm gọn góc phải */
   .price-table td:nth-child(5) {
     grid-column: 2 / 3 !important;
     grid-row: 2 / 4 !important;
     text-align: right !important;
   }
 
-  /* 6. Bàn cờ Caro 15x15 vừa khít 100% chiều ngang màn hình điện thoại */
+  /* 7. Bàn cờ Caro 15x15 vừa khít màn hình điện thoại */
   .caro-board {
     grid-template-columns: repeat(15, minmax(21px, 5.8vw)) !important;
     grid-template-rows: repeat(15, minmax(21px, 5.8vw)) !important;
@@ -941,8 +916,4 @@ select:focus {
     aspect-ratio: 1 / 1;
     font-size: 0.78rem !important;
   }
-}
-
-.ai-ctx-divider {
-  background: #27272a !important;
 }
