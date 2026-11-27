@@ -685,6 +685,106 @@ html[data-theme="night"] .dhp-rain-warn {
 .sudoku-cell.border-right-thick { border-right: 2px solid var(--border-hover) !important; }
 .sudoku-cell.border-bottom-thick { border-bottom: 2px solid var(--border-hover) !important; }
 
+/* CHESS 8x8 BOARD & VECTOR PIECES */
+.chess-board-wrap {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 16px 0 8px !important;
+}
+
+.chess-board {
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(38px, 66px)) !important;
+  grid-template-rows: repeat(8, minmax(38px, 66px)) !important;
+  border: 2px solid var(--border-hover) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: var(--card-shadow) !important;
+  background: var(--bg-surface) !important;
+}
+
+.chess-cell {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 6px !important;
+  font-size: clamp(1.45rem, 4vw, 2.25rem);
+  line-height: 1;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease !important;
+}
+
+.chess-cell.light {
+  background: var(--bg-elevated) !important;
+}
+
+.chess-cell.dark {
+  background: var(--bg-subtle) !important;
+}
+
+.chess-cell:hover {
+  filter: brightness(1.09) !important;
+}
+
+.chess-piece-svg {
+  width: 86%;
+  height: 86%;
+  display: block;
+  transition: transform 0.16s ease;
+}
+
+.chess-cell:hover .chess-piece-svg {
+  transform: scale(1.06);
+}
+
+.chess-cell.piece-white {
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.chess-cell.piece-black {
+  color: var(--accent);
+}
+
+.chess-cell.selected {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: -2px !important;
+  background: var(--accent-soft) !important;
+}
+
+.chess-cell.selected .chess-piece-svg {
+  transform: scale(1.1);
+}
+
+.chess-cell.last-move {
+  box-shadow: inset 0 0 0 2px var(--sky-accent) !important;
+}
+
+.chess-cell.in-check {
+  background: rgba(244, 63, 94, 0.28) !important;
+  box-shadow: inset 0 0 0 2px #f43f5e !important;
+}
+
+.chess-cell.can-move::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.chess-cell.can-capture {
+  box-shadow: inset 0 0 0 3px #f43f5e !important;
+}
+
 /* FOOTER & TOAST */
 .site-footer {
   background: var(--bg-page) !important;
@@ -1270,88 +1370,13 @@ html[data-theme="night"] .dhp-dd-item.danger {
     aspect-ratio: 1 / 1;
     font-size: 0.78rem !important;
   }
-   /* CHESS 8x8 BOARD */
-.chess-board-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 12px 0;
-}
 
-.chess-board {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(38px, 64px));
-  grid-template-rows: repeat(8, minmax(38px, 64px));
-  border: 2px solid var(--border-hover);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--card-shadow);
-}
-
-.chess-cell {
-  position: relative;
-  border: none;
-  padding: 0;
-  font-size: clamp(1.45rem, 4vw, 2.25rem);
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: filter 0.14s ease, box-shadow 0.14s ease;
-}
-
-.chess-cell.light {
-  background: var(--bg-elevated);
-}
-
-.chess-cell.dark {
-  background: var(--bg-subtle);
-}
-
-.chess-cell:hover {
-  filter: brightness(1.08);
-}
-
-.chess-cell.piece-white {
-  color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-
-.chess-cell.piece-black {
-  color: var(--accent);
-}
-
-.chess-cell.selected {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-  background: var(--accent-soft) !important;
-}
-
-.chess-cell.last-move {
-  box-shadow: inset 0 0 0 2px var(--sky-accent);
-}
-
-.chess-cell.in-check {
-  background: rgba(244, 63, 94, 0.28) !important;
-  box-shadow: inset 0 0 0 2px #f43f5e;
-}
-
-.chess-cell.can-move::after {
-  content: "";
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.72;
-}
-
-.chess-cell.can-capture {
-  box-shadow: inset 0 0 0 3px #f43f5e;
-}
-
-@media (max-width: 768px) {
   .chess-board {
-    grid-template-columns: repeat(8, minmax(36px, 11vw)) !important;
-    grid-template-rows: repeat(8, minmax(36px, 11vw)) !important;
+    grid-template-columns: repeat(8, minmax(34px, 11.2vw)) !important;
+    grid-template-rows: repeat(8, minmax(34px, 11.2vw)) !important;
+  }
+
+  .chess-cell {
+    padding: 4px !important;
   }
 }
