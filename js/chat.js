@@ -3,8 +3,10 @@
   const esc = (s) => window.DhpUtils.escapeHtml(s);
   const fmtDmy = (s) => window.DhpUtils.formatIsoToDmy(s);
 
-  let isDrawerOpen = false;
+  let isSidebarCollapsed = false;
+  let isMobileDrawerOpen = false;
   let openMenuThreadId = "";
+  let menuCoords = { top: 0, left: 0 };
   let renamingThreadId = "";
 
   function getChatElements() {
@@ -16,20 +18,105 @@
     return { card, form, input, sendBtn, messagesBox };
   }
 
-  function ensureHistoryToolbar() {
-    const { card, messagesBox } = getChatElements();
-    if (!card || !messagesBox || !History) return;
+  function ensureWorkspaceLayout() {
+    const { card, form, messagesBox } = getChatElements();
+    if (!card || !messagesBox || !form) return null;
 
-    let bar = card.querySelector("#aiHistoryBar");
-    if (!bar) {
-      bar = document.createElement("div");
-      bar.id = "aiHistoryBar";
-      bar.className = "ai-history-bar";
-      messagesBox.parentNode.insertBefore(bar, messagesBox);
+    // Xóa thanh bar cũ nếu còn sót
+    card.querySelector("#aiHistoryBar")?.remove();
+
+    let workspace = card.querySelector("#aiChatWorkspace");
+    if (!workspace) {
+      workspace = document.createElement("div");
+      workspace.id = "aiChatWorkspace";
+      workspace.className = "ai-chat-workspace";
+
+      const sidebar = document.createElement("aside");
+      sidebar.id = "aiChatSidebar";
+      sidebar.className = "ai-chat-sidebar";
+
+      const mainPane = document.createElement("div");
+      mainPane.id = "aiChatMainPane";
+      mainPane.className = "ai-chat-main-pane";
+
+      const topBar = document.createElement("div");
+      topBar.id = "aiChatMainTopbar";
+      topBar.className = "ai-chat-main-topbar";
+
+      messagesBox.parentNode.insertBefore(workspace, messagesBox);
+      mainPane.appendChild(topBar);
+      mainPane.appendChild(messagesBox);
+      mainPane.appendChild(form);
+
+      workspace.appendChild(sidebar);
+      workspace.appendChild(mainPane);
     }
 
+    return {
+      workspace,
+      sidebar: workspace.querySelector("#aiChatSidebar"),
+      topBar: workspace.querySelector("#aiChatMainTopbar"),
+      messagesBox
+    };
+  }
+
+  function renderFloatingContextMenu(threads) {
+    document.getElementById("aiFloatingCtxMenu")?.remove();
+    if (!openMenuThreadId) return;
+
+    const t = threads.find((item) => item.id === openMenuThreadId);
+    if (!t) return;
+
+    const menu = document.createElement("div");
+    menu.id = "aiFloatingCtxMenu";
+    menu.className = "ai-floating-ctx-menu";
+    menu.style.top = `${menuCoords.top}px`;
+    menu.style.left = `${menuCoords.left}px`;
+
+    menu.innerHTML = `
+      <button type="button" class="ai-ctx-item" data-action="share" data-id="${esc(t.id)}">
+        <span>🔗</span><span>Chia sẻ cuộc trò chuyện</span>
+      </button>
+      <button type="button" class="ai-ctx-item" data-action="pin" data-id="${esc(t.id)}">
+        <span>📌</span><span>${t.pinned ? "Bỏ ghim" : "Ghim"}</span>
+      </button>
+      <button type="button" class="ai-ctx-item" data-action="rename" data-id="${esc(t.id)}">
+        <span>✏️</span><span>Đổi tên</span>
+      </button>
+      <button type="button" class="ai-ctx-item" data-action="unread" data-id="${esc(t.id)}">
+        <span>💬</span><span>${t.unread ? "Đánh dấu đã đọc" : "Mark as unread"}</span>
+      </button>
+      <button type="button" class="ai-ctx-item" data-action="notepad" data-id="${esc(t.id)}">
+        <span>📒</span><span>Thêm vào sổ ghi chú</span>
+      </button>
+      <div class="ai-ctx-divider"></div>
+      <button type="button" class="ai-ctx-item danger" data-action="delete" data-id="${esc(t.id)}">
+        <span>🗑️</span><span>Xoá</span>
+      </button>
+    `;
+
+    document.body.appendChild(menu);
+
+    // Tự điều chỉnh nếu menu tràn mép phải hoặc mép dưới màn hình
+    const rect = menu.getBoundingClientRect();
+    if (rect.right > window.innerWidth - 12) {
+      menu.style.left = `${Math.max(12, window.innerWidth - rect.width - 12)}px`;
+    }
+    if (rect.bottom > window.innerHeight - 12) {
+      menu.style.top = `${Math.max(12, menuCoords.top - rect.height - 34)}px`;
+    }
+  }
+
+  function ensureHistoryToolbar() {
+    const layout = ensureWorkspaceLayout();
+    if (!layout || !History) return;
+
+    const { workspace, sidebar, topBar } = layout;
     const { threads, visibleThreads, activeThread, filterMode, isCloudMode } = History.getState();
     const unreadTotal = threads.filter((t) => t.unread).length;
+
+    workspace.classList.toggle("sidebar-collapsed", isSidebarCollapsed);
+    sidebar.classList.toggle("mobile-open", isMobileDrawerOpen);
 
     const listItemsHtml =
       visibleThreads.length === 0
@@ -37,7 +124,6 @@
         : visibleThreads
             .map((t) => {
               const isActive = t.id === activeThread.id;
-              const isMenuOpen = openMenuThreadId === t.id;
               const isRenaming = renamingThreadId === t.id;
 
               const titleBlock = isRenaming
@@ -48,82 +134,58 @@
                     ${t.unread ? `<span class="ai-unread-dot" title="Chưa đọc"></span>` : ""}
                   </div>`;
 
-              const menuHtml = isMenuOpen
-                ? `
-                  <div class="ai-thread-context-menu" data-menu-for="${esc(t.id)}">
-                    <button type="button" class="ai-ctx-item" data-action="share" data-id="${esc(t.id)}">
-                      <span>🔗</span><span>Chia sẻ cuộc trò chuyện</span>
-                    </button>
-                    <button type="button" class="ai-ctx-item" data-action="pin" data-id="${esc(t.id)}">
-                      <span>📌</span><span>${t.pinned ? "Bỏ ghim" : "Ghim"}</span>
-                    </button>
-                    <button type="button" class="ai-ctx-item" data-action="rename" data-id="${esc(t.id)}">
-                      <span>✏️</span><span>Đổi tên</span>
-                    </button>
-                    <button type="button" class="ai-ctx-item" data-action="unread" data-id="${esc(t.id)}">
-                      <span>💬</span><span>${t.unread ? "Đánh dấu đã đọc" : "Mark as unread"}</span>
-                    </button>
-                    <button type="button" class="ai-ctx-item" data-action="notepad" data-id="${esc(t.id)}">
-                      <span>📒</span><span>Thêm vào sổ ghi chú</span>
-                    </button>
-                    <div class="ai-ctx-divider"></div>
-                    <button type="button" class="ai-ctx-item danger" data-action="delete" data-id="${esc(t.id)}">
-                      <span>🗑️</span><span>Xoá</span>
-                    </button>
-                  </div>
-                `
-                : "";
-
               return `
-                <div class="ai-thread-row ${isActive ? "active" : ""}" data-thread-id="${esc(t.id)}">
+                <div class="ai-thread-row ${isActive ? "active" : ""} ${openMenuThreadId === t.id ? "menu-open" : ""}" data-thread-id="${esc(t.id)}">
                   <div class="ai-thread-select-area" data-switch-id="${esc(t.id)}">
                     ${titleBlock}
                   </div>
                   <button type="button" class="ai-thread-dots-btn" data-dots-id="${esc(t.id)}" title="Tùy chọn">⋮</button>
-                  ${menuHtml}
                 </div>
               `;
             })
             .join("");
 
-    bar.innerHTML = `
-      <div class="ai-history-left">
-        <button type="button" id="aiNewChatBtn" class="btn btn-primary btn-sm">+ Chat mới</button>
+    sidebar.innerHTML = `
+      <div class="ai-sidebar-top">
+        <button type="button" id="aiNewChatBtn" class="btn btn-primary btn-sm ai-new-chat-full">
+          <span>+ Cuộc trò chuyện mới</span>
+        </button>
+        <button type="button" id="aiCloseMobileDrawerBtn" class="ai-sidebar-close-mobile" title="Đóng">✕</button>
+      </div>
 
-        <div class="ai-thread-picker-wrap">
-          <button type="button" id="aiThreadPickerBtn" class="ai-thread-picker-btn" aria-expanded="${isDrawerOpen}">
-            <span class="ai-picker-label">
-              ${activeThread.pinned ? "📌 " : ""}${esc(activeThread.title)}
-            </span>
-            ${unreadTotal > 0 ? `<span class="ai-unread-count">${unreadTotal}</span>` : ""}
-            <span class="ai-picker-caret">▾</span>
-          </button>
+      <div class="ai-sidebar-filter-bar">
+        <span class="ai-popover-title">${filterMode === "pinned" ? "Đã ghim" : "Tất cả"} (${visibleThreads.length})</span>
+        <button type="button" id="aiFilterToggleBtn" class="ai-filter-btn ${filterMode === "pinned" ? "active" : ""}">
+          ${filterMode === "pinned" ? "📌 Đã ghim" : "▽ Lọc ghim"}
+        </button>
+      </div>
 
-          ${
-            isDrawerOpen
-              ? `<div class="ai-thread-popover" id="aiThreadPopover">
-                  <div class="ai-popover-head">
-                    <span class="ai-popover-title">${filterMode === "pinned" ? "Đã ghim" : "Tất cả"} (${visibleThreads.length})</span>
-                    <button type="button" id="aiFilterToggleBtn" class="ai-filter-btn ${filterMode === "pinned" ? "active" : ""}" title="Lọc cuộc trò chuyện đã ghim">
-                      ${filterMode === "pinned" ? "📌 Đã ghim" : "▽ Lọc ghim"}
-                    </button>
-                  </div>
-                  <div class="ai-thread-list">${listItemsHtml}</div>
-                </div>`
-              : ""
-          }
+      <div class="ai-thread-list" id="aiSidebarThreadList">${listItemsHtml}</div>
+    `;
+
+    topBar.innerHTML = `
+      <div class="ai-topbar-left">
+        <button type="button" id="aiToggleSidebarBtn" class="btn btn-outline btn-sm ai-toggle-sidebar-btn" title="Ẩn/hiện danh sách trò chuyện">
+          <span>☰</span>
+          <span class="ai-toggle-label">Lịch sử (${threads.length})</span>
+          ${unreadTotal > 0 ? `<span class="ai-unread-count">${unreadTotal}</span>` : ""}
+        </button>
+        <div class="ai-active-thread-heading" title="${esc(activeThread.title)}">
+          ${activeThread.pinned ? "📌 " : ""}${esc(activeThread.title)}
         </div>
       </div>
 
-      <div class="ai-history-right">
+      <div class="ai-topbar-right">
         <span class="ai-sync-tag ${isCloudMode ? "cloud" : ""}">
           ${isCloudMode ? "☁️ Đồng bộ Google" : "💾 Lưu trên máy"}
         </span>
       </div>
     `;
 
+    renderFloatingContextMenu(threads);
+
     if (renamingThreadId) {
-      const inp = bar.querySelector(`.ai-rename-input[data-rename-id="${renamingThreadId}"]`);
+      const inp = sidebar.querySelector(`.ai-rename-input[data-rename-id="${renamingThreadId}"]`);
       if (inp) {
         inp.focus();
         inp.select();
@@ -328,21 +390,29 @@
 
     if (e.target.closest("#aiNewChatBtn") && History) {
       e.preventDefault();
-      isDrawerOpen = false;
+      isMobileDrawerOpen = false;
       openMenuThreadId = "";
       renamingThreadId = "";
       History.startNewThread();
       return;
     }
 
-    if (e.target.closest("#aiThreadPickerBtn")) {
+    if (e.target.closest("#aiToggleSidebarBtn")) {
       e.preventDefault();
-      e.stopPropagation();
-      isDrawerOpen = !isDrawerOpen;
-      if (!isDrawerOpen) {
-        openMenuThreadId = "";
-        renamingThreadId = "";
+      openMenuThreadId = "";
+      if (window.innerWidth <= 820) {
+        isMobileDrawerOpen = !isMobileDrawerOpen;
+      } else {
+        isSidebarCollapsed = !isSidebarCollapsed;
       }
+      ensureHistoryToolbar();
+      return;
+    }
+
+    if (e.target.closest("#aiCloseMobileDrawerBtn")) {
+      e.preventDefault();
+      isMobileDrawerOpen = false;
+      openMenuThreadId = "";
       ensureHistoryToolbar();
       return;
     }
@@ -350,6 +420,7 @@
     if (e.target.closest("#aiFilterToggleBtn") && History) {
       e.preventDefault();
       e.stopPropagation();
+      openMenuThreadId = "";
       const { filterMode } = History.getState();
       History.setFilterMode(filterMode === "pinned" ? "all" : "pinned");
       return;
@@ -360,7 +431,13 @@
       e.preventDefault();
       e.stopPropagation();
       const id = dotsBtn.dataset.dotsId;
-      openMenuThreadId = openMenuThreadId === id ? "" : id;
+      if (openMenuThreadId === id) {
+        openMenuThreadId = "";
+      } else {
+        const rect = dotsBtn.getBoundingClientRect();
+        openMenuThreadId = id;
+        menuCoords = { top: rect.bottom + 6, left: rect.left };
+      }
       renamingThreadId = "";
       ensureHistoryToolbar();
       return;
@@ -374,7 +451,6 @@
       openMenuThreadId = "";
 
       if (action === "share") {
-        isDrawerOpen = false;
         ensureHistoryToolbar();
         await History.shareThread(id);
       } else if (action === "pin") {
@@ -385,7 +461,7 @@
       } else if (action === "unread") {
         History.toggleUnreadThread(id);
       } else if (action === "notepad") {
-        isDrawerOpen = false;
+        isMobileDrawerOpen = false;
         ensureHistoryToolbar();
         await History.exportThreadToNotepad(id);
       } else if (action === "delete") {
@@ -408,20 +484,29 @@
       e.preventDefault();
       e.stopPropagation();
       if (renamingThreadId) return;
-      isDrawerOpen = false;
+      isMobileDrawerOpen = false;
       openMenuThreadId = "";
       History.switchThread(switchArea.dataset.switchId);
       return;
     }
 
-    // Đóng popover khi bấm ra ngoài
-    if (isDrawerOpen && !e.target.closest(".ai-thread-picker-wrap")) {
-      isDrawerOpen = false;
+    // Đóng menu 3 chấm nếu bấm ra ngoài
+    if (openMenuThreadId && !e.target.closest("#aiFloatingCtxMenu")) {
       openMenuThreadId = "";
-      renamingThreadId = "";
       ensureHistoryToolbar();
     }
   });
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (openMenuThreadId) {
+        openMenuThreadId = "";
+        document.getElementById("aiFloatingCtxMenu")?.remove();
+      }
+    },
+    true
+  );
 
   document.addEventListener("keydown", (e) => {
     const renameInp = e.target.closest(".ai-rename-input");
@@ -455,7 +540,7 @@
     const mount = document.getElementById("sectionMount");
     if (mount) {
       const obs = new MutationObserver(() => {
-        if (document.querySelector(".ai-hub-card") && !document.getElementById("aiHistoryBar")) {
+        if (document.querySelector(".ai-hub-card") && !document.getElementById("aiChatWorkspace")) {
           renderCurrentThread();
         }
       });
