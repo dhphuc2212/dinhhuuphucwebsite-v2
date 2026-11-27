@@ -16,9 +16,15 @@
     <div id="gamePanelCaro" class="game-panel active">
       <div class="game-toolbar">
         <div class="game-controls-left">
-          <select id="caroModeSelect" class="game-select">
+          <select id="caroModeSelect" class="game-select" aria-label="Chế độ chơi Cờ Caro">
             <option value="ai">Đấu với Máy (AI)</option>
             <option value="pvp">2 Người chơi cùng máy</option>
+          </select>
+          <select id="caroDifficultySelect" class="game-select" aria-label="Độ khó của Máy">
+            <option value="easy">Dễ</option>
+            <option value="medium" selected>Trung bình</option>
+            <option value="hard">Khó</option>
+            <option value="extreme">Siêu khó</option>
           </select>
           <span id="caroStatus" class="game-status-pill">Lượt của bạn (X)</span>
         </div>
