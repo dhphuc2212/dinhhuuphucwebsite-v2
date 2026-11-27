@@ -1,6 +1,7 @@
 (function () {
   const THEME_STORAGE_KEY = "dhp_theme_mode";
   const VALID_THEMES = ["night", "day"];
+  const THEME_ICONS = { night: "🌙", day: "☀️" };
 
   function getSavedTheme() {
     try {
@@ -11,9 +12,19 @@
     }
   }
 
-  function syncThemeSelects(theme) {
-    document.querySelectorAll("select.dhp-theme-select, select.mobile-drawer-mobile-select").forEach((sel) => {
-      sel.value = theme;
+  function closeThemeMenu() {
+    document.getElementById("dhpThemeMenu")?.classList.add("hidden");
+    document.getElementById("dhpThemeTrigger")?.setAttribute("aria-expanded", "false");
+  }
+
+  function syncThemeControls(theme) {
+    const iconEl = document.getElementById("dhpThemeCurrentIcon");
+    if (iconEl) iconEl.textContent = THEME_ICONS[theme] || "🌙";
+
+    document.querySelectorAll("[data-theme-value]").forEach((opt) => {
+      const active = opt.dataset.themeValue === theme;
+      opt.classList.toggle("is-active", active);
+      opt.setAttribute("aria-selected", active ? "true" : "false");
     });
   }
 
@@ -23,13 +34,13 @@
     row.id = "mobileDrawerThemeRow";
     row.className = "mobile-drawer-theme-row";
     row.innerHTML = `
-      <label for="mobileThemeSelect" class="mobile-drawer-theme-label">Giao diện</label>
-      <select id="mobileThemeSelect" class="mobile-drawer-mobile-select" aria-label="Chọn giao diện">
-        <option value="night">night</option>
-        <option value="day">day</option>
-      </select>`;
+      <span class="mobile-drawer-theme-label">Giao diện</span>
+      <div class="mobile-drawer-theme-icons">
+        <button type="button" class="dhp-theme-option" data-theme-value="night" aria-label="Night">🌙</button>
+        <button type="button" class="dhp-theme-option" data-theme-value="day" aria-label="Day">☀️</button>
+      </div>`;
     nav.appendChild(row);
-    syncThemeSelects(getSavedTheme());
+    syncThemeControls(getSavedTheme());
   }
 
   function applyTheme(mode, showNotice = true) {
@@ -38,9 +49,10 @@
     try {
       localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {}
-    syncThemeSelects(theme);
+    syncThemeControls(theme);
+    closeThemeMenu();
     if (showNotice && typeof window.showToast === "function") {
-      window.showToast(`Giao diện: ${theme}`);
+      window.showToast(`Giao diện: ${THEME_ICONS[theme]}`);
     }
   }
 
@@ -83,7 +95,7 @@
     if (open && isMobileViewport()) {
       ensureMobileThemeRow(nav);
       if (window.GoogleCalendarManager?.syncUI) window.GoogleCalendarManager.syncUI();
-      syncThemeSelects(getSavedTheme());
+      syncThemeControls(getSavedTheme());
       nav.classList.add("is-mobile-open");
       backdrop?.classList.add("show");
       toggleBtn?.classList.add("is-active");
@@ -141,7 +153,7 @@
       if (window.GoogleCalendarManager?.syncUI) {
         window.GoogleCalendarManager.syncUI();
       }
-      syncThemeSelects(getSavedTheme());
+      syncThemeControls(getSavedTheme());
     });
   }
 
@@ -226,13 +238,31 @@
     }
   }
 
-  document.addEventListener("change", (e) => {
-    if (e.target.matches("select.dhp-theme-select, select.mobile-drawer-mobile-select")) {
-      applyTheme(e.target.value, true);
-    }
-  });
-
   document.addEventListener("click", (e) => {
+    const themeTrigger = e.target.closest("#dhpThemeTrigger");
+    if (themeTrigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const menu = document.getElementById("dhpThemeMenu");
+      if (menu) {
+        const willOpen = menu.classList.contains("hidden");
+        menu.classList.toggle("hidden", !willOpen);
+        themeTrigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      }
+      return;
+    }
+
+    const themeOpt = e.target.closest("[data-theme-value]");
+    if (themeOpt) {
+      e.preventDefault();
+      applyTheme(themeOpt.dataset.themeValue, true);
+      return;
+    }
+
+    if (!e.target.closest("#dhpThemeMenuWrap")) {
+      closeThemeMenu();
+    }
+
     const tabTrigger = e.target.closest("[data-tab]");
     if (tabTrigger) {
       e.preventDefault();
