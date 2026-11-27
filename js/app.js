@@ -319,7 +319,7 @@
       window.AiChatManager?.bindSectionEvents?.();
       window.GoogleCalendarManager?.bindSectionEvents?.();
     } else if (targetTab === "work") {
-      window.WorkSectionManager?.bindSectionEvents?.();
+      window.initWorkSection?.();
     } else if (targetTab === "minigame") {
       initializedSubGames.clear();
       const activeBtn = document.querySelector(".game-tab-btn.active");
