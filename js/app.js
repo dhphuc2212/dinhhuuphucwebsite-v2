@@ -60,6 +60,7 @@
   const validTabs = ["about", "work", "minigame", "brain"];
   const tabCache = {};
   let currentTab = "about";
+  const initializedSubGames = new Set();
 
   const scrollProgressEl = document.getElementById("scrollProgress");
   window.addEventListener(
@@ -192,6 +193,56 @@
     tick();
   }
 
+  function initSubGame(gameKey, force = false) {
+    if (!gameKey) return;
+    if (!force && initializedSubGames.has(gameKey)) return;
+
+    if (gameKey === "caro") {
+      if (typeof window.initCaroGame === "function") {
+        window.initCaroGame();
+        initializedSubGames.add("caro");
+      } else if (window.CaroGameManager?.init) {
+        window.CaroGameManager.init();
+        initializedSubGames.add("caro");
+      }
+    } else if (gameKey === "chess") {
+      if (typeof window.initChessGame === "function") {
+        window.initChessGame();
+        initializedSubGames.add("chess");
+      }
+    } else if (gameKey === "snake") {
+      if (typeof window.initSnakeGame === "function") {
+        window.initSnakeGame();
+        initializedSubGames.add("snake");
+      }
+    } else if (gameKey === "sudoku") {
+      if (typeof window.initSudokuGame === "function") {
+        window.initSudokuGame();
+        initializedSubGames.add("sudoku");
+      }
+    }
+  }
+
+  function switchMiniGameTab(gameKey, forceInit = false) {
+    const panels = document.querySelectorAll(".game-panel");
+    if (!panels.length) return;
+
+    document.querySelectorAll(".game-tab-btn").forEach((btn) => {
+      const active = btn.dataset.game === gameKey;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    const targetId = `gamePanel${gameKey.charAt(0).toUpperCase()}${gameKey.slice(1)}`;
+    panels.forEach((panel) => {
+      const isTarget = panel.id === targetId;
+      panel.classList.toggle("hidden", !isTarget);
+      panel.classList.toggle("active", isTarget);
+    });
+
+    initSubGame(gameKey, forceInit);
+  }
+
   function setActiveNav(tabName) {
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.tab === tabName);
@@ -232,13 +283,23 @@
     } else if (targetTab === "work") {
       window.WorkSectionManager?.bindSectionEvents?.();
     } else if (targetTab === "minigame") {
-      window.CaroGameManager?.init?.();
+      initializedSubGames.clear();
+      const activeBtn = document.querySelector(".game-tab-btn.active");
+      const defaultGame = activeBtn?.dataset.game || "caro";
+      switchMiniGameTab(defaultGame, true);
     } else if (targetTab === "brain") {
       window.SecondBrainManager?.bindSectionEvents?.();
     }
   }
 
   document.addEventListener("click", (e) => {
+    const gameTabBtn = e.target.closest(".game-tab-btn[data-game]");
+    if (gameTabBtn) {
+      e.preventDefault();
+      switchMiniGameTab(gameTabBtn.dataset.game, false);
+      return;
+    }
+
     const themeTrigger = e.target.closest("#dhpThemeTrigger");
     if (themeTrigger) {
       e.preventDefault();
