@@ -4,7 +4,6 @@ import { getSessionIdFromRequest } from "../shared/session.js";
 const SESSION_TTL = 60 * 60 * 24 * 60; // 60 ngày
 
 export async function handleAuthRoutes(pathname, request, env, url) {
-  // 1. Bắt đầu luồng đăng nhập Google OAuth
   if (pathname === "/auth/google") {
     const clientId = env.GOOGLE_CLIENT_ID;
     if (!clientId) {
@@ -29,7 +28,6 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     return Response.redirect(authUrl.toString(), 302);
   }
 
-  // 2. Callback nhận mã từ Google, lấy Tên + Avatar + Email & lưu phiên
   if (pathname === "/auth/google/callback") {
     const code = url.searchParams.get("code");
     const err = url.searchParams.get("error");
@@ -108,7 +106,6 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     });
   }
 
-  // 3. Trả về phiên đăng nhập kèm Tên, Avatar Google & thông tin bổ sung
   if (pathname === "/api/auth/session") {
     if (request.method === "OPTIONS") return corsPreflight();
     const sid = getSessionIdFromRequest(request);
@@ -121,7 +118,6 @@ export async function handleAuthRoutes(pathname, request, env, url) {
 
     const sess = JSON.parse(raw);
 
-    // Tự làm mới access_token nếu hết hạn và bổ sung name/picture nếu phiên cũ chưa có
     if ((!sess.accessToken || Date.now() >= (sess.expiresAt || 0)) && sess.refreshToken) {
       try {
         const refreshRes = await fetch("https://oauth2.googleapis.com/token", {
@@ -178,7 +174,6 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     });
   }
 
-  // 4. Lưu thông tin bổ sung của tài khoản (Ngày sinh, SĐT, Giới tính, Ghi chú)
   if (pathname === "/api/auth/profile") {
     if (request.method === "OPTIONS") return corsPreflight();
     if (request.method !== "POST") return jsonRes({ error: "Method Not Allowed" }, 405);
@@ -208,7 +203,6 @@ export async function handleAuthRoutes(pathname, request, env, url) {
     }
   }
 
-  // 5. Đăng xuất
   if (pathname === "/api/auth/logout") {
     if (request.method === "OPTIONS") return corsPreflight();
     const sid = getSessionIdFromRequest(request);
