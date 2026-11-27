@@ -18,11 +18,24 @@
     return { card, form, input, sendBtn, messagesBox };
   }
 
+  function closeMobileDrawer(shouldRender = true) {
+    isMobileDrawerOpen = false;
+    openMenuThreadId = "";
+    renamingThreadId = "";
+    document.getElementById("aiFloatingCtxMenu")?.remove();
+    const sidebar = document.getElementById("aiChatSidebar");
+    if (sidebar) {
+      sidebar.classList.remove("mobile-open");
+    }
+    if (shouldRender) {
+      ensureHistoryToolbar();
+    }
+  }
+
   function ensureWorkspaceLayout() {
     const { card, form, messagesBox } = getChatElements();
     if (!card || !messagesBox || !form) return null;
 
-    // Xóa thanh bar cũ nếu còn sót
     card.querySelector("#aiHistoryBar")?.remove();
 
     let workspace = card.querySelector("#aiChatWorkspace");
@@ -97,7 +110,6 @@
 
     document.body.appendChild(menu);
 
-    // Tự điều chỉnh nếu menu tràn mép phải hoặc mép dưới màn hình
     const rect = menu.getBoundingClientRect();
     if (rect.right > window.innerWidth - 12) {
       menu.style.left = `${Math.max(12, window.innerWidth - rect.width - 12)}px`;
@@ -115,8 +127,12 @@
     const { threads, visibleThreads, activeThread, filterMode, isCloudMode } = History.getState();
     const unreadTotal = threads.filter((t) => t.unread).length;
 
+    if (window.innerWidth > 820) {
+      isMobileDrawerOpen = false;
+    }
+
     workspace.classList.toggle("sidebar-collapsed", isSidebarCollapsed);
-    sidebar.classList.toggle("mobile-open", isMobileDrawerOpen);
+    sidebar.classList.toggle("mobile-open", isMobileDrawerOpen && window.innerWidth <= 820);
 
     const listItemsHtml =
       visibleThreads.length === 0
@@ -150,7 +166,7 @@
         <button type="button" id="aiNewChatBtn" class="btn btn-primary btn-sm ai-new-chat-full">
           <span>+ Cuộc trò chuyện mới</span>
         </button>
-        <button type="button" id="aiCloseMobileDrawerBtn" class="ai-sidebar-close-mobile" title="Đóng">✕</button>
+        <button type="button" id="aiCloseMobileDrawerBtn" class="ai-sidebar-close-mobile" aria-label="Đóng lịch sử" title="Đóng">✕</button>
       </div>
 
       <div class="ai-sidebar-filter-bar">
@@ -165,7 +181,7 @@
 
     topBar.innerHTML = `
       <div class="ai-topbar-left">
-        <button type="button" id="aiToggleSidebarBtn" class="btn btn-outline btn-sm ai-toggle-sidebar-btn" title="Ẩn/hiện danh sách trò chuyện">
+        <button type="button" id="aiToggleSidebarBtn" class="btn btn-outline btn-sm ai-toggle-sidebar-btn" aria-expanded="${isMobileDrawerOpen ? "true" : "false"}" title="Ẩn/hiện danh sách trò chuyện">
           <span>☰</span>
           <span class="ai-toggle-label">Lịch sử (${threads.length})</span>
           ${unreadTotal > 0 ? `<span class="ai-unread-count">${unreadTotal}</span>` : ""}
@@ -382,23 +398,35 @@
   );
 
   document.addEventListener("click", async (e) => {
+    // 1. Nút đóng drawer lịch sử trên mobile (xử lý đầu tiên và dừng hẳn)
+    const closeDrawerBtn = e.target.closest("#aiCloseMobileDrawerBtn, .ai-sidebar-close-mobile");
+    if (closeDrawerBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeMobileDrawer(true);
+      return;
+    }
+
+    // 2. Nút gửi tin nhắn
     if (e.target.closest("#chatSendBtn, #sendChatBtn, .chat-input-bar button")) {
       e.preventDefault();
       handleSendMessage(e);
       return;
     }
 
+    // 3. Nút tạo cuộc trò chuyện mới
     if (e.target.closest("#aiNewChatBtn") && History) {
       e.preventDefault();
-      isMobileDrawerOpen = false;
-      openMenuThreadId = "";
-      renamingThreadId = "";
+      e.stopPropagation();
+      closeMobileDrawer(false);
       History.startNewThread();
       return;
     }
 
+    // 4. Nút bật/tắt sidebar hoặc drawer lịch sử
     if (e.target.closest("#aiToggleSidebarBtn")) {
       e.preventDefault();
+      e.stopPropagation();
       openMenuThreadId = "";
       if (window.innerWidth <= 820) {
         isMobileDrawerOpen = !isMobileDrawerOpen;
@@ -409,14 +437,7 @@
       return;
     }
 
-    if (e.target.closest("#aiCloseMobileDrawerBtn")) {
-      e.preventDefault();
-      isMobileDrawerOpen = false;
-      openMenuThreadId = "";
-      ensureHistoryToolbar();
-      return;
-    }
-
+    // 5. Lọc ghim / tất cả (giữ nguyên trạng thái drawer hiện tại)
     if (e.target.closest("#aiFilterToggleBtn") && History) {
       e.preventDefault();
       e.stopPropagation();
@@ -426,6 +447,7 @@
       return;
     }
 
+    // 6. Menu 3 chấm từng hội thoại
     const dotsBtn = e.target.closest(".ai-thread-dots-btn");
     if (dotsBtn) {
       e.preventDefault();
@@ -443,6 +465,7 @@
       return;
     }
 
+    // 7. Các hành động trong menu nổi 3 chấm
     const ctxBtn = e.target.closest(".ai-ctx-item");
     if (ctxBtn && History) {
       e.preventDefault();
@@ -461,7 +484,7 @@
       } else if (action === "unread") {
         History.toggleUnreadThread(id);
       } else if (action === "notepad") {
-        isMobileDrawerOpen = false;
+        closeMobileDrawer(false);
         ensureHistoryToolbar();
         await History.exportThreadToNotepad(id);
       } else if (action === "delete") {
@@ -479,18 +502,19 @@
       return;
     }
 
+    // 8. Chuyển hội thoại -> tự đóng drawer trên mobile
     const switchArea = e.target.closest(".ai-thread-select-area");
     if (switchArea && History) {
       e.preventDefault();
       e.stopPropagation();
       if (renamingThreadId) return;
-      isMobileDrawerOpen = false;
-      openMenuThreadId = "";
-      History.switchThread(switchArea.dataset.switchId);
+      const targetId = switchArea.dataset.switchId;
+      closeMobileDrawer(false);
+      History.switchThread(targetId);
       return;
     }
 
-    // Đóng menu 3 chấm nếu bấm ra ngoài
+    // 9. Đóng menu nổi 3 chấm nếu bấm ra ngoài
     if (openMenuThreadId && !e.target.closest("#aiFloatingCtxMenu")) {
       openMenuThreadId = "";
       ensureHistoryToolbar();
@@ -525,6 +549,12 @@
       return;
     }
 
+    if (e.key === "Escape" && isMobileDrawerOpen) {
+      e.preventDefault();
+      closeMobileDrawer(true);
+      return;
+    }
+
     if (e.key === "Enter" && !e.shiftKey) {
       const input = e.target.closest("#chatInput, #aiInput, .chat-input");
       if (input) {
@@ -534,7 +564,6 @@
     }
   });
 
-  // Tự động cuộn khung chat xuống cuối khi mở bàn phím ảo trên điện thoại
   document.addEventListener("focusin", (e) => {
     if (e.target.matches("#chatInput, #aiInput, .chat-input")) {
       setTimeout(() => {
@@ -546,11 +575,13 @@
 
   function bootChatHistory() {
     if (!History) return;
+    isMobileDrawerOpen = false;
     History.init(renderCurrentThread);
     const mount = document.getElementById("sectionMount");
     if (mount) {
       const obs = new MutationObserver(() => {
         if (document.querySelector(".ai-hub-card") && !document.getElementById("aiChatWorkspace")) {
+          isMobileDrawerOpen = false;
           renderCurrentThread();
         }
       });
