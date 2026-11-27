@@ -1,10 +1,14 @@
 window.CalendarApi = (function () {
   const GOOGLE_CLIENT_ID = "645926964017-6hqgk9jf1umh6qu1tc6vu0ec5c233pta.apps.googleusercontent.com";
-  const SCOPES = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email";
+  const SCOPES =
+    "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
 
   let sessionId = localStorage.getItem("dhp_gcal_sid") || "";
   let accessToken = "";
   let userEmail = localStorage.getItem("dhp_gcal_email") || "";
+  let userName = localStorage.getItem("dhp_gcal_name") || "";
+  let userPicture = localStorage.getItem("dhp_gcal_pic") || "";
+  let userProfile = { birthday: "", phone: "", gender: "", bio: "" };
   let expiresAtMs = Number(localStorage.getItem("dhp_gcal_exp") || "0") || 0;
   let refreshTimer = null;
   let ongoingRefreshPromise = null;
@@ -17,6 +21,12 @@ window.CalendarApi = (function () {
       if (userEmail) localStorage.setItem("dhp_gcal_email", userEmail);
       else localStorage.removeItem("dhp_gcal_email");
 
+      if (userName) localStorage.setItem("dhp_gcal_name", userName);
+      else localStorage.removeItem("dhp_gcal_name");
+
+      if (userPicture) localStorage.setItem("dhp_gcal_pic", userPicture);
+      else localStorage.removeItem("dhp_gcal_pic");
+
       if (expiresAtMs) localStorage.setItem("dhp_gcal_exp", String(expiresAtMs));
       else localStorage.removeItem("dhp_gcal_exp");
     } catch {}
@@ -27,9 +37,16 @@ window.CalendarApi = (function () {
       sessionId,
       accessToken,
       userEmail,
+      userName,
+      userPicture,
+      userProfile,
       expiresAtMs,
       isLoggedIn: Boolean(accessToken || (sessionId && expiresAtMs > Date.now()))
     };
+  }
+
+  function setUserProfile(nextProfile) {
+    userProfile = { ...userProfile, ...(nextProfile || {}) };
   }
 
   function scheduleAutoRefresh(expiresInSec = 3500, onStateChange) {
@@ -63,6 +80,9 @@ window.CalendarApi = (function () {
         if (data.authenticated && data.accessToken) {
           accessToken = data.accessToken;
           userEmail = data.email || userEmail || "Tài khoản Google";
+          userName = data.name || userName || "";
+          userPicture = data.picture || userPicture || "";
+          if (data.profile) userProfile = { ...userProfile, ...data.profile };
           expiresAtMs = Number(data.expiresAtMs) || 0;
           persistCache();
           if (typeof onStateChange === "function") onStateChange(true);
@@ -96,6 +116,9 @@ window.CalendarApi = (function () {
     sessionId = "";
     accessToken = "";
     userEmail = "";
+    userName = "";
+    userPicture = "";
+    userProfile = { birthday: "", phone: "", gender: "", bio: "" };
     expiresAtMs = 0;
     persistCache();
   }
@@ -124,6 +147,8 @@ window.CalendarApi = (function () {
       if (newSid) {
         sessionId = newSid;
         userEmail = hashParams.get("gcal_email") || "";
+        userName = hashParams.get("gcal_name") || "";
+        userPicture = hashParams.get("gcal_pic") || "";
         expiresAtMs = Number(hashParams.get("gcal_exp") || "0") || 0;
         persistCache();
       }
@@ -132,7 +157,7 @@ window.CalendarApi = (function () {
     const params = new URLSearchParams(window.location.search);
     if (params.get("gcal_ok") === "1") {
       window.history.replaceState({}, "", window.location.pathname);
-      if (notify) notify("Đã kết nối Google Calendar (duy trì 60 ngày)!");
+      if (notify) notify(`Xin chào ${userName || userEmail || "bạn"}! Đã kết nối Google.`);
     } else if (params.get("gcal_error")) {
       window.history.replaceState({}, "", window.location.pathname);
       if (notify) notify("Đăng nhập Google không thành công: " + params.get("gcal_error"));
@@ -210,6 +235,7 @@ window.CalendarApi = (function () {
     GOOGLE_CLIENT_ID,
     SCOPES,
     getAuthState,
+    setUserProfile,
     refreshSession,
     login,
     logout,
