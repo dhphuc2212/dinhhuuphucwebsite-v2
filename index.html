@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="/css/snake.css" />
   <link rel="stylesheet" href="/css/sudoku.css" />
   <link rel="stylesheet" href="/css/notepad.css" />
-  <link rel="stylesheet" href="/css/dark-theme.css?v=5" />
+  <link rel="stylesheet" href="/css/dark-theme.css?v=7" />
 </head>
 <body>
   <div id="scrollProgress" class="scroll-progress"></div>
@@ -61,13 +61,17 @@
       </nav>
 
       <div class="header-actions">
-        <label class="dhp-theme-dropdown-wrap" for="dhpThemeSelect">
-          <span class="dhp-theme-prefix">Giao diện</span>
-          <select id="dhpThemeSelect" class="dhp-theme-select" aria-label="Chọn giao diện">
-            <option value="night">night</option>
-            <option value="day">day</option>
-          </select>
-        </label>
+        <div class="dhp-theme-menu-wrap" id="dhpThemeMenuWrap">
+          <button type="button" id="dhpThemeTrigger" class="dhp-theme-trigger" aria-expanded="false" aria-haspopup="listbox" title="Giao diện">
+            <span class="dhp-theme-prefix">Giao diện</span>
+            <span id="dhpThemeCurrentIcon" class="dhp-theme-icon" aria-hidden="true">🌙</span>
+            <span class="dhp-theme-caret">▾</span>
+          </button>
+          <div id="dhpThemeMenu" class="dhp-theme-menu hidden" role="listbox" aria-label="Giao diện">
+            <button type="button" class="dhp-theme-option" data-theme-value="night" role="option" aria-label="Night">🌙</button>
+            <button type="button" class="dhp-theme-option" data-theme-value="day" role="option" aria-label="Day">☀️</button>
+          </div>
+        </div>
 
         <div id="headerAuthArea" class="header-auth">
           <button type="button" id="googleLoginHeaderBtn" class="btn btn-outline btn-sm hover-arrow">
@@ -124,7 +128,7 @@
 
     <div class="container footer-bottom">
       <p>© 2026 Đinh Hữu Phúc.</p>
-      <p class="footer-loc">Phường Hòa Bình, TP. Hồ Chí Minh</p>
+      <p class="footer-loc">TP. Hồ Chí Minh</p>
     </div>
   </footer>
 
