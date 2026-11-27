@@ -912,21 +912,27 @@ select:focus {
     aspect-ratio: 1 / 1;
     font-size: 0.78rem !important;
   }
-   /* =========================================================
-   GOOGLE ACCOUNT AVATAR & USER PILL (DESKTOP + MOBILE DRAWER)
+  /* =========================================================
+   GOOGLE ACCOUNT CHIP & DROPDOWN MENU (HEADER)
    ========================================================= */
+.dhp-user-menu-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
 .dhp-user-avatar {
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1.5px solid #10b981;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 1.5px solid #10b981 !important;
   flex-shrink: 0;
-  display: inline-block;
+  display: block;
 }
 
 .dhp-user-avatar-fallback {
-  border-radius: 50%;
-  background: #10b981;
-  color: #09090b;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #09090b !important;
   font-family: "JetBrains Mono", monospace;
   font-weight: 800;
   font-size: 0.72rem;
@@ -937,24 +943,27 @@ select:focus {
 }
 
 .dhp-header-user-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 10px 4px 5px;
-  border-radius: 999px;
-  background: #18181b;
-  border: 1px solid #27272a;
-  color: #fafafa;
-  font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  max-width: 190px;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 36px !important;
+  padding: 0 12px 0 5px !important;
+  border-radius: 999px !important;
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #fafafa !important;
+  font-family: inherit !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  max-width: 195px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dhp-header-user-pill:hover {
-  border-color: #10b981;
-  background: #1f1f23;
+  border-color: #10b981 !important;
+  background: #1f1f23 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
 .dhp-header-user-name {
@@ -963,12 +972,106 @@ select:focus {
   white-space: nowrap;
 }
 
+.dhp-user-caret {
+  font-size: 0.72rem;
+  color: #a1a1aa;
+  margin-left: 1px;
+}
+
+.dhp-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 248px;
+  background: #111114;
+  border: 1px solid #3f3f46;
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.75);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dhp-user-dropdown.hidden {
+  display: none !important;
+}
+
+.dhp-dd-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #18181b;
+}
+
+.dhp-dd-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.dhp-dd-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fafafa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dhp-dd-email {
+  font-size: 0.74rem;
+  color: #10b981;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dhp-dd-divider {
+  height: 1px;
+  background: #27272a;
+  margin: 4px 2px;
+}
+
+.dhp-dd-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  color: #e4e4e7;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.dhp-dd-item:hover {
+  background: #27272a;
+  color: #fafafa;
+}
+
+.dhp-dd-item.danger {
+  color: #fb7185;
+}
+
+.dhp-dd-item.danger:hover {
+  background: rgba(244, 63, 94, 0.12);
+}
+
 .mobile-drawer-account-card {
   display: none !important;
 }
 
 @media (max-width: 768px) {
-  .dhp-header-user-pill {
+  .dhp-user-menu-wrap {
     display: none !important;
   }
 
