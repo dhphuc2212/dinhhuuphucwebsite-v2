@@ -534,6 +534,16 @@
     }
   });
 
+  // Tự động cuộn khung chat xuống cuối khi mở bàn phím ảo trên điện thoại
+  document.addEventListener("focusin", (e) => {
+    if (e.target.matches("#chatInput, #aiInput, .chat-input")) {
+      setTimeout(() => {
+        const box = document.querySelector("#chatMessages, #aiMessages, .chat-messages");
+        if (box) box.scrollTop = box.scrollHeight;
+      }, 320);
+    }
+  });
+
   function bootChatHistory() {
     if (!History) return;
     History.init(renderCurrentThread);
