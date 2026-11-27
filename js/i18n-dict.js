@@ -26,7 +26,7 @@
     ["Đã hiểu, quay lại", "Got it, go back"],
     ["Mở menu điều hướng", "Open navigation menu"],
 
-    // Tab 01: Cá nhân & AI Chat & Google Calendar
+    // Tab 01: Cá nhân, Chat AI & Google Calendar
     ["01 / GIỚI THIỆU CÁ NHÂN", "01 / PERSONAL INTRO"],
     ["Xin chào, tôi là Đinh Hữu Phúc.", "Hi, I'm Dinh Huu Phuc."],
     ["Đơn giản, thực tế và tối ưu hiệu suất.", "Simple, practical, and built for high performance."],
@@ -39,6 +39,7 @@
     ["Thương mại & Phân phối", "Commerce & Distribution"],
     ["Tối ưu vận hành", "Operations Optimization"],
     ["Trợ lý AI & Lịch trình", "AI Assistant & Schedule"],
+    ["Bấm vào để xem ảnh nóng", "Click for spicy photos"],
     ["02 / TRỢ LÝ AI GEMINI & ĐẶT LỊCH NHANH", "02 / GEMINI AI ASSISTANT & QUICK SCHEDULER"],
     ["Trò chuyện & Sắp xếp lịch làm việc", "Chat & Work Scheduling"],
     ["Gõ tự nhiên lịch trình của bạn (ví dụ: \"Hôm nay 19:00 họp kế hoạch, 21:00 kiểm tra công việc\") — AI sẽ tự bóc tách giờ để bạn lưu thẳng vào Google Calendar.", "Type your schedule naturally (e.g., \"Today 19:00 planning meeting, 21:00 work review\") — AI will extract the time so you can save directly to Google Calendar."],
@@ -48,6 +49,10 @@
     ["Lịch sử", "History"],
     ["Đặt lịch", "Schedule"],
     ["Đồng bộ Google", "Google Sync"],
+    ["+ Đồng bộ lại", "+ Re-sync"],
+    ["Trợ lý AI", "AI Assistant"],
+    ["Bạn", "You"],
+    ["Gửi →", "Send →"],
     ["03 / LỊCH LÀM VIỆC GOOGLE CALENDAR", "03 / GOOGLE CALENDAR SCHEDULE"],
     ["Lịch trình cá nhân hóa theo tài khoản đăng nhập", "Personalized schedule by signed-in account"],
     ["Mỗi tài khoản Google đăng nhập sẽ hiển thị đúng dữ liệu lịch làm việc riêng của tài khoản đó.", "Each signed-in Google account displays its own schedule data."],
@@ -66,6 +71,8 @@
     ["Thương hiệu Gạo Ông Du", "Gạo Ông Du Brand"],
     ["Đơn vị chủ quản: Công ty CP Nông nghiệp Gạo Hữu cơ TD Sóc Trăng", "Operated by TD Soc Trang Organic Rice Agriculture JSC"],
     ["Phụ trách phát triển mảng thương mại, mở rộng hệ thống phân phối, đại lý và điều phối chuỗi cung ứng cho các dòng sản phẩm gạo đặc sản Sóc Trăng mang thương hiệu Gạo Ông Du.", "Responsible for commercial growth, expanding distribution channels and dealers, and coordinating supply chain operations for Soc Trang specialty rice under the Gạo Ông Du brand."],
+    ["Truy cập gaoongdu.vn →", "Visit gaoongdu.vn →"],
+    ["Liên hệ hợp tác qua Zalo →", "Partner via Zalo →"],
     ["Kênh Phân Phối & Đại Lý", "Distribution & Dealers"],
     ["Xây dựng mạng lưới điểm bán, nhà phân phối và đối tác bán lẻ trên toàn quốc.", "Building a nationwide network of retail points, distributors, and retail partners."],
     ["Kho Vận & Logistics", "Warehouse & Logistics"],
@@ -84,7 +91,7 @@
     ["Đơn giá (giá bán NTD)", "Unit Price (Retail VND)"],
     ["Đặt hàng", "Order"],
 
-    // Tab 03: Mini Game
+    // Tab 03: Mini Game (Caro, Chess, Snake, Sudoku)
     ["03 / GÓC GIẢI TRÍ", "03 / PLAYGROUND"],
     ["Mini Game thư giãn", "Relaxing Mini Game"],
     ["Cờ Caro", "Caro"],
@@ -99,6 +106,10 @@
     ["Siêu khó", "Extreme"],
     ["Đi lại", "Undo"],
     ["Ván mới", "New Game"],
+    ["Điền số 1–9 không trùng hàng, cột, ô 3x3", "Fill 1–9 without duplicates in row, column, or 3x3 box"],
+    ["Gợi ý 1 ô", "Hint 1 Cell"],
+    ["Kiểm tra", "Check"],
+    ["Xóa", "Clear"],
     ["Lượt của bạn (X)", "Your Turn (X)"],
     ["Lượt của bạn (Trắng)", "Your Turn (White)"],
     ["Lượt của X", "X's Turn"],
@@ -118,7 +129,6 @@
     ["Form chi tiết", "Detailed Form"],
     ["AI tự bóc tiêu đề, tóm tắt ý chính & gắn từ khóa.", "AI auto-extracts titles, summarizes key points, and tags keywords."],
     ["Gửi AI nạp ngay", "Send to AI Now"],
-    ["Kho đã lưu (0)", "Saved Library (0)"],
     ["2. Hỏi đáp từ Bộ Não Thứ 2", "2. Ask Your Second Brain"],
     ["Hỏi lại bất cứ kiến thức, video hay bài viết nào đã nạp bên trái.", "Ask about any knowledge, video, or article added on the left."],
     ["Làm mới chat", "Reset Chat"],
@@ -166,6 +176,9 @@
 
   function translateDynamicText(text) {
     let m;
+    if ((m = text.match(/^Kho đã lưu\s*\((\d+)\)$/i))) {
+      return `Saved Library (${m[1]})`;
+    }
     if ((m = text.match(/^Lượt của bạn \(X\)\s*[•·-]\s*Máy:\s*(.+)$/i))) {
       return `Your Turn (X) • AI: ${mapDifficultyToEn(m[1])}`;
     }
