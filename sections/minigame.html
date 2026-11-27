@@ -8,6 +8,7 @@
 
       <div class="game-switcher" role="tablist" aria-label="Chọn trò chơi">
         <button type="button" class="game-tab-btn active" data-game="caro">⭕❌ Cờ Caro</button>
+        <button type="button" class="game-tab-btn" data-game="chess">♟️ Cờ Vua</button>
         <button type="button" class="game-tab-btn" data-game="snake">🐍 Rắn săn mồi</button>
         <button type="button" class="game-tab-btn" data-game="sudoku">🔢 Sudoku 9x9</button>
       </div>
@@ -32,6 +33,28 @@
       </div>
       <div class="caro-board-wrap">
         <div id="caroBoard" class="caro-board" aria-label="Bàn cờ Caro 15x15"></div>
+      </div>
+    </div>
+
+    <div id="gamePanelChess" class="game-panel hidden">
+      <div class="game-toolbar">
+        <div class="game-controls-left">
+          <select id="chessModeSelect" class="game-select" aria-label="Chế độ chơi Cờ Vua">
+            <option value="ai">Đấu với Máy (AI)</option>
+            <option value="pvp">2 Người chơi cùng máy</option>
+          </select>
+          <select id="chessDifficultySelect" class="game-select" aria-label="Độ khó của Máy Cờ Vua">
+            <option value="easy">Dễ</option>
+            <option value="medium" selected>Trung bình</option>
+            <option value="hard">Khó</option>
+            <option value="extreme">Siêu khó</option>
+          </select>
+          <span id="chessStatus" class="game-status-pill">Lượt của bạn (Trắng)</span>
+        </div>
+        <button type="button" id="chessResetBtn" class="btn btn-primary btn-sm">Ván mới</button>
+      </div>
+      <div class="chess-board-wrap">
+        <div id="chessBoard" class="chess-board" aria-label="Bàn cờ Vua 8x8"></div>
       </div>
     </div>
 
