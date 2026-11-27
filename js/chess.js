@@ -3,27 +3,12 @@
   if (!piece) return "";
   const color = piece[0]; // "w" | "b"
   const type = piece[1];  // "k" | "q" | "r" | "b" | "n" | "p"
-  const isNight = document.documentElement.getAttribute("data-theme") !== "day";
   const isWhite = color === "w";
 
-  let fillMain;
-  let fillAccent;
-  let strokeMain;
-  let detailStroke;
-
-  if (!isNight) {
-    // Giao diện sáng: Đen / Trắng rõ nét
-    fillMain = isWhite ? "#ffffff" : "#18181b";
-    fillAccent = isWhite ? "#f1f5f9" : "#27272a";
-    strokeMain = "#090d16";
-    detailStroke = isWhite ? "#090d16" : "#e4e4e7";
-  } else {
-    // Giao diện tối: Trắng tinh viền đậm vs Tím mận đậm viền sáng dịu (dễ tách biệt cả 2 màu ô)
-    fillMain = isWhite ? "#ffffff" : "#6b21a8";
-    fillAccent = isWhite ? "#e2e8f0" : "#4c1d95";
-    strokeMain = isWhite ? "#0f172a" : "#f3e8ff";
-    detailStroke = isWhite ? "#0f172a" : "#fae8ff";
-  }
+  const fillMain = isWhite ? "#ffffff" : "#111827";
+  const fillAccent = isWhite ? "#f1f5f9" : "#1f2937";
+  const strokeMain = isWhite ? "#090d16" : "#090d16";
+  const detailStroke = isWhite ? "#090d16" : "#e2e8f0";
 
   let paths = "";
 
@@ -74,11 +59,11 @@
   return `
     <svg class="chess-piece-svg ${isWhite ? "is-white" : "is-black"}" viewBox="0 0 50 50" aria-hidden="true">
       <defs>
-        <filter id="chessDrop_${color}_${type}_${isNight ? "n" : "d"}" x="-15%" y="-15%" width="130%" height="130%">
-          <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000000" flood-opacity="0.32" />
+        <filter id="chessDrop_${color}_${type}" x="-15%" y="-15%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000000" flood-opacity="0.35" />
         </filter>
       </defs>
-      <g filter="url(#chessDrop_${color}_${type}_${isNight ? "n" : "d"})">${paths}</g>
+      <g filter="url(#chessDrop_${color}_${type})">${paths}</g>
     </svg>
   `;
 }
