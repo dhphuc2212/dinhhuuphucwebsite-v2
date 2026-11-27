@@ -759,7 +759,7 @@ html[data-theme="night"] .chess-cell.is-white-piece .chess-piece-svg {
 }
 
 html[data-theme="night"] .chess-cell.is-black-piece .chess-piece-svg {
-  filter: drop-shadow(0 1.5px 2px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 0 2px rgba(248, 250, 252, 0.45)) drop-shadow(0 1.5px 2px rgba(0, 0, 0, 0.55));
 }
 
 html[data-theme="day"] .chess-cell.is-white-piece .chess-piece-svg,
