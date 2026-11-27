@@ -636,9 +636,11 @@ select:focus {
     gap: 8px !important;
   }
 
-  .site-header .brand-logo {
+.site-header .brand-logo {
     gap: 8px !important;
     min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
   }
 
   .site-header .brand-mark {
@@ -651,6 +653,12 @@ select:focus {
   .site-header .brand-name {
     font-size: 0.94rem !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+   /* Ẩn thẻ email dài trên thanh Header mobile để tránh đè lên tên thương hiệu */
+  .site-header .header-actions .status-pill {
+    display: none !important;
   }
 
   .site-header .header-actions {
