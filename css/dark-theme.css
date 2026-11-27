@@ -620,7 +620,7 @@ select:focus {
     overflow: hidden !important;
   }
 
-  /* 2. Thanh Header 1 hàng gọn gàng: Logo trái + Đăng nhập & Nút 3 gạch phải */
+  /* 2. Thanh Header 1 hàng gọn gàng: Logo trái + Đăng nhập/Đăng xuất & Nút 3 gạch phải */
   .site-header {
     position: sticky !important;
     top: 0 !important;
@@ -636,7 +636,7 @@ select:focus {
     gap: 8px !important;
   }
 
-.site-header .brand-logo {
+  .site-header .brand-logo {
     gap: 8px !important;
     min-width: 0 !important;
     flex: 1 1 auto !important;
@@ -656,10 +656,6 @@ select:focus {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
-   /* Ẩn thẻ email dài trên thanh Header mobile để tránh đè lên tên thương hiệu */
-  .site-header .header-actions .status-pill {
-    display: none !important;
-  }
 
   .site-header .header-actions {
     order: 2 !important;
@@ -670,7 +666,8 @@ select:focus {
     flex-shrink: 0 !important;
   }
 
-  /* Ẩn nút Liên hệ Zalo trên thanh header chật (vì đã có ngay trong Profile & Menu) */
+  /* Ẩn thẻ email dài và nút Zalo trên Header mobile để không đè lên tên thương hiệu */
+  .site-header .header-actions .status-pill,
   .site-header .header-actions > a[href*="zalo.me"] {
     display: none !important;
   }
@@ -679,15 +676,6 @@ select:focus {
     padding: 6px 10px !important;
     font-size: 0.76rem !important;
     white-space: nowrap !important;
-  }
-
-  .site-header .header-actions .status-pill {
-    max-width: 96px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    font-size: 0.72rem !important;
-    padding: 4px 8px !important;
   }
 
   /* 3. Nút 3 gạch (Hamburger) */
