@@ -3,17 +3,14 @@
   const VALID_THEMES = ["night", "day"];
   const THEME_ICONS = { night: "🌙", day: "☀️" };
 
+  const FLAG_VI_SRC =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23da251d'/%3E%3Cpolygon points='15,4 16.8,9.6 22.7,9.6 17.9,13 19.7,18.6 15,15.2 10.3,18.6 12.1,13 7.3,9.6 13.2,9.6' fill='%23ff0'/%3E%3C/svg%3E";
+  const FLAG_EN_SRC =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect width='60' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23c8102e' stroke-width='3'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23c8102e' stroke-width='6'/%3E%3C/svg%3E";
+
   const LANG_META = {
-    vi: {
-      flagSrc:
-        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='%23da251d'/%3E%3Cpolygon points='15,4 16.8,9.6 22.7,9.6 17.9,13 19.7,18.6 15,15.2 10.3,18.6 12.1,13 7.3,9.6 13.2,9.6' fill='%23ff0'/%3E%3C/svg%3E",
-      code: "VI"
-    },
-    en: {
-      flagSrc:
-        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect width='60' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23c8102e' stroke-width='3'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0 V30 M0,15 H60' stroke='%23c8102e' stroke-width='6'/%3E%3C/svg%3E",
-      code: "EN"
-    }
+    vi: { flagSrc: FLAG_VI_SRC, code: "VI" },
+    en: { flagSrc: FLAG_EN_SRC, code: "EN" }
   };
 
   function getSavedTheme() {
@@ -64,6 +61,27 @@
       opt.classList.toggle("active", isSelected);
       opt.setAttribute("aria-selected", isSelected ? "true" : "false");
     });
+  }
+
+  function ensureMobileLangRow(nav) {
+    if (!nav || nav.querySelector("#mobileDrawerLangRow")) return;
+    const row = document.createElement("div");
+    row.id = "mobileDrawerLangRow";
+    row.className = "mobile-drawer-lang-row";
+    row.innerHTML = `
+      <span class="mobile-drawer-lang-label">Ngôn ngữ</span>
+      <div class="mobile-drawer-lang-btns">
+        <button type="button" class="mobile-lang-choice" data-lang-value="vi" aria-label="Tiếng Việt">
+          <img class="dhp-lang-flag-img" src="${FLAG_VI_SRC}" alt="VI" />
+          <span>VI</span>
+        </button>
+        <button type="button" class="mobile-lang-choice" data-lang-value="en" aria-label="English">
+          <img class="dhp-lang-flag-img" src="${FLAG_EN_SRC}" alt="EN" />
+          <span>EN</span>
+        </button>
+      </div>`;
+    nav.appendChild(row);
+    syncLangControls(window.DhpI18n?.getLang?.() || "vi");
   }
 
   function ensureMobileThemeRow(nav) {
@@ -133,8 +151,11 @@
 
     if (open && isMobileViewport()) {
       ensureMobileThemeRow(nav);
+      ensureMobileLangRow(nav);
       if (window.GoogleCalendarManager?.syncUI) window.GoogleCalendarManager.syncUI();
       syncThemeControls(getSavedTheme());
+      syncLangControls(window.DhpI18n?.getLang?.() || "vi");
+      window.DhpI18n?.applyToDom?.(nav);
       nav.classList.add("is-mobile-open");
       backdrop?.classList.add("show");
       toggleBtn?.classList.add("is-active");
@@ -175,6 +196,7 @@
     }
 
     ensureMobileThemeRow(nav);
+    ensureMobileLangRow(nav);
 
     toggleBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -193,6 +215,7 @@
         window.GoogleCalendarManager.syncUI();
       }
       syncThemeControls(getSavedTheme());
+      syncLangControls(window.DhpI18n?.getLang?.() || "vi");
     });
   }
 
@@ -355,6 +378,7 @@
       window.DhpI18n?.applyToDom?.(document.body);
       syncLangControls(chosenLang);
       closeLangMenu();
+      setMobileMenuState(false);
       return;
     }
 
