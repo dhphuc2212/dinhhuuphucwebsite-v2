@@ -1424,3 +1424,6 @@ html[data-theme="day"] .chess-cell.dark {
   align-items: center;
   gap: 8px;
 }
+html[data-theme="night"] .chess-cell.is-black-piece .chess-piece-svg {
+  filter: drop-shadow(0 0 3px rgba(125, 211, 252, 0.45)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
