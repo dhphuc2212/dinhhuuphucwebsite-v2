@@ -36,8 +36,8 @@
     row.innerHTML = `
       <span class="mobile-drawer-theme-label">Giao diện</span>
       <div class="mobile-drawer-theme-icons">
+        <button type="button" class="dhp-theme-option" data-theme-value="day" aria-label="Day">☀️</button>      
         <button type="button" class="dhp-theme-option" data-theme-value="night" aria-label="Night">🌙</button>
-        <button type="button" class="dhp-theme-option" data-theme-value="day" aria-label="Day">☀️</button>
       </div>`;
     nav.appendChild(row);
     syncThemeControls(getSavedTheme());
