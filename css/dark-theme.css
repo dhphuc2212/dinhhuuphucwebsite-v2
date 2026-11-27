@@ -699,6 +699,249 @@ select:focus {
 .ai-ctx-item.danger {
   color: #fb7185 !important;
 }
+/* =========================================================
+   MOBILE UX/UI UPGRADE (BOTTOM TAB BAR, CARD PRICING, NO-ZOOM)
+   ========================================================= */
+@media (max-width: 768px) {
+  /* 1. Chặn tự động phóng to màn hình khi chạm vào ô nhập liệu */
+  input,
+  textarea,
+  select,
+  .chat-input,
+  .search-input,
+  .dhp-brain-input,
+  .dhp-brain-textarea,
+  .dhp-edit-input,
+  .dhp-np-textarea,
+  .dhp-np-title-input {
+    font-size: 16px !important;
+  }
+
+  /* 2. Header 1 hàng gọn gàng trên cùng + Bottom Tab Bar cố định cạnh dưới */
+  body {
+    padding-bottom: 76px !important;
+  }
+
+  .site-header .header-inner {
+    height: 58px !important;
+    padding: 0 14px !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .site-header .brand-name {
+    font-size: 0.96rem !important;
+  }
+
+  .site-header .header-actions {
+    order: 2 !important;
+    width: auto !important;
+    gap: 6px !important;
+  }
+
+  .site-header .header-actions .btn {
+    padding: 6px 10px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .site-header .header-actions .status-pill {
+    max-width: 112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.72rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .site-header .main-nav {
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    width: auto !important;
+    z-index: 960 !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
+    padding: 5px !important;
+    border-radius: 16px !important;
+    background: rgba(17, 17, 20, 0.94) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid #3f3f46 !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.72) !important;
+  }
+
+  .site-header .nav-btn {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 6px 4px !important;
+    font-size: 0.72rem !important;
+    border-radius: 11px !important;
+  }
+
+  .site-header .nav-num {
+    font-size: 0.66rem !important;
+    line-height: 1 !important;
+  }
+
+  /* 3. Thu gọn nút nổi Notepad Online nằm cao hơn Bottom Bar, không che nút Gửi */
+  .dhp-notepad-fab {
+    right: 14px !important;
+    bottom: 76px !important;
+    width: 46px !important;
+    height: 46px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+  }
+
+  .dhp-notepad-fab::before {
+    content: "📝";
+    font-size: 1.2rem;
+  }
+
+  .toast-notice {
+    bottom: 82px !important;
+    right: 14px !important;
+    left: 14px !important;
+    text-align: center !important;
+  }
+
+  /* 4. Tối ưu khung chat AI trên màn hình dọc */
+  .ai-hub-card,
+  .intro-card,
+  .calendar-section-card,
+  .work-hero-card,
+  .work-video-card,
+  .pricing-card,
+  .minigame-shell {
+    padding: 18px 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .chat-messages {
+    height: 52dvh !important;
+    min-height: 300px !important;
+    max-height: 440px !important;
+    padding: 12px !important;
+  }
+
+  .chat-row {
+    max-width: 92% !important;
+  }
+
+  .ai-chat-sidebar.mobile-open {
+    top: 64px !important;
+    bottom: 76px !important;
+  }
+
+  /* 5. Biến bảng giá Gạo Ông Du thành danh sách thẻ (Card List) dễ đọc */
+  .table-responsive {
+    border: none !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .price-table,
+  .price-table tbody,
+  .price-table tr,
+  .price-table td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .price-table thead {
+    display: none !important;
+  }
+
+  .price-table tbody {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .price-table tbody tr {
+    background: #18181b !important;
+    border: 1px solid #27272a !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 6px 10px !important;
+    align-items: center !important;
+  }
+
+  .price-table td {
+    padding: 0 !important;
+    border: none !important;
+    text-align: left !important;
+  }
+
+  /* Ẩn cột STT trên mobile */
+  .price-table td:nth-child(1) {
+    display: none !important;
+  }
+
+  /* Tên sản phẩm chiếm trọn hàng trên */
+  .price-table td:nth-child(2) {
+    grid-column: 1 / -1 !important;
+    font-size: 0.94rem !important;
+  }
+
+  /* Trọng lượng đóng gói */
+  .price-table td:nth-child(3) {
+    grid-column: 1 / 2 !important;
+    font-size: 0.8rem !important;
+    color: #a1a1aa !important;
+  }
+
+  .price-table td:nth-child(3)::before {
+    content: "Quy cách: ";
+    color: #71717a;
+  }
+
+  .price-table td:nth-child(3)::after {
+    content: " kg";
+  }
+
+  /* Đơn giá */
+  .price-table td:nth-child(4) {
+    grid-column: 1 / 2 !important;
+  }
+
+  .price-table td:nth-child(4) .price-badge {
+    font-size: 0.96rem !important;
+  }
+
+  .price-table td:nth-child(4) .price-badge::after {
+    content: " đ";
+  }
+
+  /* Nút đặt qua Zalo nằm gọn góc phải */
+  .price-table td:nth-child(5) {
+    grid-column: 2 / 3 !important;
+    grid-row: 2 / 4 !important;
+    text-align: right !important;
+  }
+
+  /* 6. Bàn cờ Caro 15x15 vừa khít 100% chiều ngang màn hình điện thoại */
+  .caro-board {
+    grid-template-columns: repeat(15, minmax(21px, 5.8vw)) !important;
+    grid-template-rows: repeat(15, minmax(21px, 5.8vw)) !important;
+  }
+
+  .caro-cell {
+    width: auto !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    font-size: 0.78rem !important;
+  }
+}
 
 .ai-ctx-divider {
   background: #27272a !important;
