@@ -1,0 +1,87 @@
+<section class="tab-panel fade-slide-in">
+  <div class="minigame-shell hover-card">
+    <div class="minigame-header">
+      <div>
+        <div class="section-eyebrow">03 / GÓC GIẢI TRÍ</div>
+        <h2 class="section-title">Mini Game thư giãn</h2>
+      </div>
+
+      <div class="game-switcher" role="tablist" aria-label="Chọn trò chơi">
+        <button type="button" class="game-tab-btn active" data-game="caro">⭕❌ Cờ Caro</button>
+        <button type="button" class="game-tab-btn" data-game="snake">🐍 Rắn săn mồi</button>
+        <button type="button" class="game-tab-btn" data-game="sudoku">🔢 Sudoku 9x9</button>
+      </div>
+    </div>
+
+    <div id="gamePanelCaro" class="game-panel active">
+      <div class="game-toolbar">
+        <div class="game-controls-left">
+          <select id="caroModeSelect" class="game-select">
+            <option value="ai">Đấu với Máy (AI)</option>
+            <option value="pvp">2 Người chơi cùng máy</option>
+          </select>
+          <span id="caroStatus" class="game-status-pill">Lượt của bạn (X)</span>
+        </div>
+        <button type="button" id="caroResetBtn" class="btn btn-primary btn-sm">Ván mới</button>
+      </div>
+      <div class="caro-board-wrap">
+        <div id="caroBoard" class="caro-board" aria-label="Bàn cờ Caro 15x15"></div>
+      </div>
+    </div>
+
+    <div id="gamePanelSnake" class="game-panel hidden">
+      <div class="game-toolbar">
+        <div class="game-controls-left">
+          <span class="game-status-pill">Điểm: <strong id="snakeScore">0</strong></span>
+          <span class="game-status-pill">Kỷ lục: <strong id="snakeHighScore">0</strong></span>
+        </div>
+        <div class="game-controls-right">
+          <button type="button" id="snakeStartBtn" class="btn btn-primary btn-sm">Bắt đầu / Chơi lại</button>
+          <button type="button" id="snakePauseBtn" class="btn btn-outline btn-sm">Tạm dừng</button>
+        </div>
+      </div>
+
+      <div class="snake-stage">
+        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+        <p class="snake-guide">Dùng phím <strong>Mũi tên</strong> hoặc <strong>W A S D</strong> trên máy tính, hoặc bấm nút bên dưới trên điện thoại.</p>
+        <div class="snake-dpad">
+          <button type="button" class="dpad-btn" data-dir="UP">▲</button>
+          <div class="dpad-row">
+            <button type="button" class="dpad-btn" data-dir="LEFT">◀</button>
+            <button type="button" class="dpad-btn" data-dir="DOWN">▼</button>
+            <button type="button" class="dpad-btn" data-dir="RIGHT">▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="gamePanelSudoku" class="game-panel hidden">
+      <div class="game-toolbar">
+        <div class="game-controls-left">
+          <span id="sudokuStatus" class="game-status-pill">Điền số 1–9 không trùng hàng, cột, ô 3x3</span>
+        </div>
+        <div class="game-controls-right">
+          <button type="button" id="sudokuHintBtn" class="btn btn-outline btn-sm">Gợi ý 1 ô</button>
+          <button type="button" id="sudokuCheckBtn" class="btn btn-outline btn-sm">Kiểm tra</button>
+          <button type="button" id="sudokuNewBtn" class="btn btn-primary btn-sm">Ván mới</button>
+        </div>
+      </div>
+
+      <div class="sudoku-stage">
+        <div id="sudokuGrid" class="sudoku-grid" aria-label="Bảng Sudoku 9x9"></div>
+        <div class="sudoku-numpad">
+          <button type="button" class="num-btn" data-num="1">1</button>
+          <button type="button" class="num-btn" data-num="2">2</button>
+          <button type="button" class="num-btn" data-num="3">3</button>
+          <button type="button" class="num-btn" data-num="4">4</button>
+          <button type="button" class="num-btn" data-num="5">5</button>
+          <button type="button" class="num-btn" data-num="6">6</button>
+          <button type="button" class="num-btn" data-num="7">7</button>
+          <button type="button" class="num-btn" data-num="8">8</button>
+          <button type="button" class="num-btn" data-num="9">9</button>
+          <button type="button" class="num-btn num-clear" data-num="0">Xóa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

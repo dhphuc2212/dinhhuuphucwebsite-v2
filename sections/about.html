@@ -1,0 +1,168 @@
+<section class="tab-panel fade-slide-in">
+  <div class="hero-grid">
+    <aside class="profile-card hover-card">
+      <div class="profile-cover">
+        <span class="status-pill">
+          <span class="status-dot"></span> Sẵn sàng kết nối
+        </span>
+      </div>
+
+     <div class="profile-avatar-wrap">
+        <img src="/assets/avatar.jpg" alt="Đinh Hữu Phúc" class="profile-avatar-img" />
+      </div>
+
+      <div class="profile-body">
+        <h1 class="profile-name">Đinh Hữu Phúc</h1>
+        <p class="profile-role">
+          <span id="typewriterText">Operator</span><span class="cursor-blink">|</span>
+        </p>
+        <p class="profile-address">📍 Phường Hòa Bình, TP. Hồ Chí Minh</p>
+
+        <div class="social-row">
+          <!-- [BẠN CẦN ĐIỀN]: Cập nhật đúng link Facebook, Instagram, X cá nhân của bạn -->
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-pill hover-lift" aria-label="Facebook">
+            Facebook
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-pill hover-lift" aria-label="Instagram">
+            Instagram
+          </a>
+          <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="social-pill hover-lift" aria-label="X">
+            X
+          </a>
+        </div>
+
+        <div class="profile-cta-stack">
+          <a href="https://zalo.me/0983533945" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block hover-arrow">
+            <span>Nhắn tin qua Zalo</span>
+            <span class="arrow">→</span>
+          </a>
+
+          <button type="button" id="downloadVcardBtn" class="btn btn-secondary btn-block hover-lift">
+            <span>Lưu danh bạ (Không kèm SĐT)</span>
+          </button>
+
+          <button type="button" id="trollBtn" class="btn btn-troll btn-block hover-lift">
+            <span>🔥 Bấm vào để xem ảnh nóng</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="intro-column">
+      <div class="intro-card hover-card">
+        <div class="section-eyebrow">01 / GIỚI THIỆU CÁ NHÂN</div>
+        <h2 class="hero-headline">
+          Xin chào, tôi là <span class="text-accent">Đinh Hữu Phúc</span>.<br />
+          Đơn giản, thực tế và tối ưu hiệu suất.
+        </h2>
+        <p class="hero-subtext">
+          Chào mừng bạn ghé thăm góc cá nhân của tôi tại <strong>dinhhuuphuc.com</strong>. Đây là nơi lưu giữ thông tin liên hệ trực tiếp, trợ lý AI hỗ trợ sắp xếp lịch trình hằng ngày và một vài trò chơi nhỏ để thư giãn sau giờ làm việc.
+        </p>
+
+        <div class="info-mini-grid">
+          <div class="info-mini-box hover-lift">
+            <span class="mini-label">Khu vực</span>
+            <span class="mini-value">Phường Hòa Bình, TP.HCM</span>
+          </div>
+          <div class="info-mini-box hover-lift">
+            <span class="mini-label">Email liên hệ</span>
+            <button type="button" id="copyEmailBtn" class="mini-value copy-trigger" title="Bấm để sao chép email">
+              dhphuc2212@dinhhuuphuc.com 📋
+            </button>
+          </div>
+          <div class="info-mini-box hover-lift">
+            <span class="mini-label">Công việc hiện tại</span>
+            <button type="button" class="mini-value link-trigger" data-tab="work">
+              Xem tại Tab Công việc →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-hub-card hover-card" id="aiAssistantSection">
+        <div class="ai-hub-header">
+          <div>
+            <div class="section-eyebrow">02 / TRỢ LÝ AI GEMINI & ĐẶT LỊCH NHANH</div>
+            <h3 class="card-title">Trò chuyện & Sắp xếp lịch làm việc</h3>
+          </div>
+          <span class="ai-status-badge">Gemini Pro</span>
+        </div>
+
+        <p class="ai-hint">
+          Gõ tự nhiên lịch trình của bạn (ví dụ: <em>"Hôm nay 19:00 họp kế hoạch, 21:00 kiểm tra công việc"</em>) — AI sẽ tự bóc tách giờ để bạn lưu thẳng vào <strong>Google Calendar</strong>.
+        </p>
+
+        <div id="chatMessages" class="chat-messages">
+          <div class="chat-bubble bot">
+            Xin chào! Mình là trợ lý của Đinh Hữu Phúc. Bạn cần hỏi thông tin gì hoặc muốn mình ghi nhận lịch làm việc hôm nay lúc mấy giờ? Hãy đăng nhập tài khoản Google để ghi nhận lịch làm việc nhé!
+          </div>
+        </div>
+
+        <div id="scheduleDraftBox" class="schedule-draft hidden">
+          <div class="draft-header">
+            <strong>📅 Đã nhận diện lịch làm việc:</strong>
+          </div>
+          <div id="scheduleDraftDetails" class="draft-details"></div>
+          <div class="draft-actions">
+            <button type="button" id="confirmSaveCalendarBtn" class="btn btn-primary btn-sm hover-arrow">
+              <span>Lưu vào Google Calendar</span>
+              <span class="arrow">→</span>
+            </button>
+            <button type="button" id="dismissDraftBtn" class="btn btn-outline btn-sm">Bỏ qua</button>
+          </div>
+        </div>
+
+        <form id="chatForm" class="chat-input-bar">
+          <input
+            type="text"
+            id="chatInput"
+            class="chat-input"
+            placeholder="Nhập lịch làm việc (VD: Hôm nay 15h30 họp nhóm) hoặc câu hỏi..."
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="chatSendBtn" class="btn btn-primary hover-arrow">
+            <span>Gửi</span>
+            <span class="arrow">→</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-section-card hover-card">
+    <div class="calendar-header">
+      <div>
+        <div class="section-eyebrow">03 / LỊCH LÀM VIỆC GOOGLE CALENDAR</div>
+        <h3 class="card-title">Lịch trình cá nhân hóa theo tài khoản đăng nhập</h3>
+        <p class="calendar-sub">
+          Mỗi tài khoản Google đăng nhập sẽ hiển thị đúng dữ liệu lịch làm việc riêng của tài khoản đó.
+        </p>
+      </div>
+
+      <div id="calendarAuthControls" class="calendar-auth-controls">
+        <button type="button" id="googleLoginCardBtn" class="btn btn-primary hover-arrow">
+          <span>Đăng nhập với Google để xem lịch</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="calendarUserBar" class="calendar-user-bar hidden">
+      <div class="user-info-pill">
+        <span class="status-dot"></span>
+        <span>Đang đồng bộ Google Calendar cho: <strong id="loggedUserEmail"></strong></span>
+      </div>
+      <div class="user-bar-actions">
+        <button type="button" id="refreshCalendarBtn" class="btn btn-outline btn-sm">Làm mới lịch</button>
+        <button type="button" id="googleLogoutBtn" class="btn btn-outline btn-sm">Đăng xuất</button>
+      </div>
+    </div>
+
+    <div id="calendarEventsContainer" class="calendar-events-grid">
+      <div class="calendar-empty-state">
+        Chưa đăng nhập tài khoản Google. Bấm <strong>"Đăng nhập với Google để xem lịch"</strong> để kết nối và hiển thị lịch làm việc của riêng bạn.
+      </div>
+    </div>
+  </div>
+</section>

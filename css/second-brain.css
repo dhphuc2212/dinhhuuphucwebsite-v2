@@ -1,0 +1,248 @@
+/* Fix thanh Header nằm gọn 1 hàng không rớt dòng khi có 4 tab */
+.site-header .header-inner {
+  flex-wrap: nowrap;
+  gap: 12px;
+}
+
+.site-header .brand-logo,
+.site-header .brand-name,
+.site-header .nav-btn,
+.site-header .header-actions,
+.site-header .header-actions .btn {
+  white-space: nowrap;
+}
+
+.site-header .main-nav {
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.site-header .nav-btn {
+  padding: 7px 11px;
+  font-size: 0.86rem;
+}
+
+.site-header .header-actions {
+  gap: 8px;
+}
+
+/* Giao diện Tab Second Brain */
+.sb-tab-wrap {
+  padding: 12px 0 32px;
+}
+
+.sb-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.sb-tab-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  margin: 6px 0 4px;
+}
+
+.sb-tab-sub {
+  font-size: 0.92rem;
+  color: var(--text-secondary, #64748b);
+  max-width: 680px;
+}
+
+.sb-account-pill {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: var(--accent-soft, #ccfbf1);
+  color: var(--accent-dark, #0f766e);
+}
+
+.sb-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.sb-panel {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sb-ingest-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sb-panel-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.sb-mode-switch {
+  display: inline-flex;
+  background: var(--bg-page, #f1f5f9);
+  padding: 3px;
+  border-radius: 9px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.sb-mode-btn {
+  border: none;
+  background: transparent;
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary, #64748b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sb-mode-btn.active {
+  background: #ffffff;
+  color: var(--accent-dark, #0f766e);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.dhp-brain-add-box {
+  background: var(--bg-page, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dhp-brain-add-box.hidden {
+  display: none;
+}
+
+.sb-add-footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dhp-brain-input,
+.dhp-brain-textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.dhp-brain-input:focus,
+.dhp-brain-textarea:focus {
+  border-color: var(--accent, #0d9488);
+}
+
+.dhp-brain-textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.sb-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sb-search-input {
+  max-width: 220px;
+  padding: 6px 10px;
+}
+
+.sb-scroll-list {
+  max-height: 360px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 2px;
+}
+
+.dhp-brain-item {
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dhp-brain-item-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary, #0f172a);
+}
+
+.dhp-brain-item-preview {
+  font-size: 0.83rem;
+  color: var(--text-secondary, #475569);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.dhp-brain-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.dhp-brain-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.sb-chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.sb-chat-hint {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #64748b);
+  margin-top: 3px;
+}
+
+.sb-chat-box {
+  height: 440px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 960px) {
+  .site-header .header-inner {
+    flex-wrap: wrap;
+  }
+  .sb-grid {
+    grid-template-columns: 1fr;
+  }
+}

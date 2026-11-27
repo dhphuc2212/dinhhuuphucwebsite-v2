@@ -1,0 +1,528 @@
+/* =========================================================
+   DHP DARK THEME — DEVELOPER / TECH FOUNDER EDITION (COMPLETE)
+   Inspired by Linear, Vercel & Raycast (Zinc Layered UI)
+   ========================================================= */
+
+:root {
+  --bg-page: #09090b;
+  --bg-surface: #111114;
+  --bg-elevated: #18181b;
+  --bg-subtle: #1f1f23;
+  --border-color: #27272a;
+  --border-hover: #3f3f46;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --accent: #10b981;
+  --accent-dark: #059669;
+  --accent-soft: rgba(16, 185, 129, 0.12);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 14px 32px rgba(0, 0, 0, 0.55);
+}
+
+html,
+body {
+  background-color: #09090b !important;
+  color: #fafafa !important;
+  color-scheme: dark;
+}
+
+.ambient-bg {
+  background-color: #09090b !important;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.065) 1px, transparent 1px) !important;
+  background-size: 22px 22px !important;
+  opacity: 1 !important;
+}
+
+.scroll-progress {
+  background: linear-gradient(90deg, #10b981, #38bdf8) !important;
+}
+
+/* HEADER & NAVIGATION */
+.site-header {
+  background: rgba(9, 9, 11, 0.85) !important;
+  backdrop-filter: blur(14px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  border-bottom: 1px solid #27272a !important;
+}
+
+.brand-mark {
+  background: #fafafa !important;
+  color: #09090b !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-weight: 700 !important;
+}
+
+.brand-name { color: #fafafa !important; }
+.brand-dot { color: #10b981 !important; }
+
+.main-nav {
+  background: #111114 !important;
+  border: 1px solid #27272a !important;
+  padding: 4px !important;
+  border-radius: 12px !important;
+}
+
+.nav-btn {
+  color: #a1a1aa !important;
+  background: transparent !important;
+}
+
+.nav-btn:hover {
+  color: #fafafa !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.nav-btn.active {
+  background: #1f1f23 !important;
+  color: #fafafa !important;
+  border: 1px solid #3f3f46 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+.nav-num {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #10b981 !important;
+}
+
+/* CARDS */
+.card,
+.profile-card,
+.intro-card,
+.ai-hub-card,
+.calendar-section-card,
+.work-hero-card,
+.work-video-card,
+.pricing-card,
+.sb-panel,
+.modal-card,
+.minigame-shell,
+.hover-card {
+  background: #111114 !important;
+  border: 1px solid #27272a !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 30px rgba(0, 0, 0, 0.45) !important;
+  color: #fafafa !important;
+}
+
+.hover-card:hover { border-color: #3f3f46 !important; }
+
+/* PROFILE CARD & AVATAR */
+.profile-cover {
+  background: linear-gradient(135deg, #13161f 0%, #0f1f1c 55%, #18181b 100%) !important;
+  border-bottom: 1px solid #27272a !important;
+}
+
+.status-pill {
+  background: rgba(17, 17, 20, 0.88) !important;
+  border: 1px solid #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.profile-avatar-img,
+.profile-avatar-monogram {
+  border: 3px solid #18181b !important;
+  background: #18181b !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+}
+
+.profile-name,
+.hero-headline,
+.card-title,
+.section-title,
+.sb-tab-title,
+.sb-panel-title,
+.modal-card h3 {
+  color: #fafafa !important;
+}
+
+.text-accent { color: #10b981 !important; }
+
+.section-eyebrow,
+.modal-badge {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.22) !important;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.profile-role {
+  color: #10b981 !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.profile-address,
+.hero-subtext,
+.ai-hint,
+.calendar-sub,
+.work-company,
+.work-desc,
+.sb-tab-sub,
+.sb-chat-hint,
+.footer-bio,
+.footer-bottom,
+.modal-card p {
+  color: #a1a1aa !important;
+}
+
+/* SOCIAL PILLS & INFO BOXES */
+.social-pill,
+.info-mini-box,
+.pillar-box {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.social-pill:hover,
+.info-mini-box:hover,
+.pillar-box:hover {
+  background: #1f1f23 !important;
+  border-color: #3f3f46 !important;
+}
+
+.mini-label {
+  color: #71717a !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.mini-value,
+.pillar-box h4 { color: #fafafa !important; }
+.pillar-box p { color: #a1a1aa !important; }
+
+.pillar-num {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #10b981 !important;
+}
+
+/* BUTTONS */
+.btn-primary {
+  background: #fafafa !important;
+  color: #09090b !important;
+  border: 1px solid #fafafa !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:hover {
+  background: #e4e4e7 !important;
+  border-color: #e4e4e7 !important;
+}
+
+.btn-secondary,
+.btn-outline {
+  background: #18181b !important;
+  color: #e4e4e7 !important;
+  border: 1px solid #27272a !important;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+  background: #27272a !important;
+  border-color: #3f3f46 !important;
+  color: #fafafa !important;
+}
+
+.btn-troll {
+  background: rgba(244, 63, 94, 0.1) !important;
+  border: 1px solid rgba(244, 63, 94, 0.28) !important;
+  color: #fda4af !important;
+}
+
+/* INPUTS & FORMS */
+input,
+textarea,
+select,
+.chat-input,
+.search-input,
+.dhp-brain-input,
+.dhp-brain-textarea,
+.ai-thread-select,
+.dhp-edit-input,
+.dhp-date-picker,
+.game-select {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+  color: #fafafa !important;
+}
+
+input::placeholder,
+textarea::placeholder { color: #71717a !important; }
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.16) !important;
+}
+
+/* CHAT & SECOND BRAIN */
+.ai-status-badge,
+.sb-account-pill,
+.ai-sync-tag {
+  font-family: "JetBrains Mono", monospace !important;
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #10b981 !important;
+}
+
+.ai-history-bar {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+}
+
+.chat-messages,
+.sb-chat-box {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+}
+
+.chat-sender {
+  color: #71717a !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.chat-bubble.bot {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.chat-bubble.user {
+  background: #fafafa !important;
+  color: #09090b !important;
+  font-weight: 500 !important;
+}
+
+.schedule-draft,
+.dhp-brain-saved-pill,
+.dhp-brain-add-box,
+.dhp-brain-item {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.dhp-brain-item-title { color: #fafafa !important; }
+.dhp-brain-item-preview { color: #a1a1aa !important; }
+
+.dhp-brain-tag {
+  background: #27272a !important;
+  color: #d4d4d8 !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.sb-mode-switch {
+  background: #09090b !important;
+  border: 1px solid #27272a !important;
+}
+
+.sb-mode-btn { color: #a1a1aa !important; }
+.sb-mode-btn.active {
+  background: #1f1f23 !important;
+  color: #fafafa !important;
+}
+
+/* CALENDAR TIMELINE (.dhp-*) */
+.calendar-user-bar,
+.user-info-pill,
+.calendar-empty-state,
+.dhp-day-toolbar,
+.dhp-allday-strip,
+.dhp-allday-pill,
+.dhp-edit-box,
+.dhp-manual-create-box,
+.dhp-free-banner {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.dhp-date-title-box,
+.dhp-card-title,
+.dhp-tl-time {
+  color: #fafafa !important;
+}
+
+.dhp-sub-toolbar,
+.dhp-card-desc,
+.dhp-tl-dur,
+.dhp-subtask-item {
+  color: #a1a1aa !important;
+}
+
+.dhp-tl-line { background: #27272a !important; }
+.dhp-tl-dot { border-color: #111114 !important; }
+
+.dhp-tl-card {
+  background: #18181b !important;
+  border-color: #27272a !important;
+}
+
+.dhp-tl-row.is-past .dhp-tl-card {
+  background: #111114 !important;
+  opacity: 0.62;
+}
+
+.dhp-tl-row.is-now .dhp-tl-card {
+  background: rgba(16, 185, 129, 0.08) !important;
+  border-color: #10b981 !important;
+}
+
+.dhp-weather-pill {
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: #7dd3fc !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+}
+
+.dhp-rain-warn {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  color: #fcd34d !important;
+}
+
+.dhp-subtasks { border-top-color: #27272a !important; }
+.dhp-add-subtask,
+.dhp-quick-add-btn { color: #10b981 !important; }
+
+/* WORK VIDEO & PRICING TABLE */
+.work-video-frame-wrap {
+  background: #09090b !important;
+  border-color: #27272a !important;
+}
+
+.table-responsive {
+  border: 1px solid #27272a !important;
+  border-radius: 12px !important;
+  background: #09090b !important;
+}
+
+.price-table th {
+  background: #18181b !important;
+  color: #a1a1aa !important;
+  border-bottom: 1px solid #27272a !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.price-table td {
+  color: #e4e4e7 !important;
+  border-bottom: 1px solid #1f1f23 !important;
+}
+
+.price-table tbody tr:hover td { background-color: #18181b !important; }
+
+.price-badge {
+  font-family: "JetBrains Mono", monospace !important;
+  color: #34d399 !important;
+}
+
+/* NOTEPAD ONLINE (.dhp-np-*) */
+.dhp-notepad-fab {
+  background: #18181b !important;
+  color: #fafafa !important;
+  border: 1px solid #3f3f46 !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65) !important;
+}
+
+.dhp-notepad-overlay {
+  background: #09090b !important;
+}
+
+.dhp-np-topbar {
+  background: #111114 !important;
+  border-bottom: 1px solid #27272a !important;
+}
+
+.dhp-np-slug-box,
+.dhp-np-status {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #a1a1aa !important;
+}
+
+.dhp-np-slug-input { color: #10b981 !important; }
+
+.dhp-np-title-input {
+  color: #fafafa !important;
+  border-bottom-color: #27272a !important;
+}
+
+.dhp-np-textarea {
+  background: #111114 !important;
+  border-color: #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.dhp-np-footer { color: #71717a !important; }
+
+/* MINI GAMES */
+.game-toolbar,
+.game-tab-btn,
+.dpad-btn,
+.num-btn {
+  background: #18181b !important;
+  border-color: #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.game-tab-btn.active,
+.num-btn:hover {
+  background: #fafafa !important;
+  color: #09090b !important;
+  border-color: #fafafa !important;
+}
+
+.game-status-pill { color: #fafafa !important; }
+
+.caro-board,
+.sudoku-grid {
+  background: #111114 !important;
+  border-color: #3f3f46 !important;
+}
+
+.caro-cell,
+.sudoku-cell {
+  border-color: #27272a !important;
+  color: #e4e4e7 !important;
+}
+
+.caro-cell:hover,
+.sudoku-cell:hover { background-color: #1f1f23 !important; }
+
+.sudoku-cell.given {
+  background-color: #18181b !important;
+  color: #fafafa !important;
+}
+
+.sudoku-cell.user-val { color: #10b981 !important; }
+.sudoku-cell.selected {
+  background-color: rgba(16, 185, 129, 0.2) !important;
+  outline-color: #10b981 !important;
+}
+
+.sudoku-cell.border-right-thick { border-right: 2px solid #52525b !important; }
+.sudoku-cell.border-bottom-thick { border-bottom: 2px solid #52525b !important; }
+
+/* FOOTER & TOAST */
+.site-footer {
+  background: #09090b !important;
+  border-top: 1px solid #27272a !important;
+}
+
+.footer-heading {
+  color: #fafafa !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.footer-list a,
+.footer-nav-link { color: #a1a1aa !important; }
+.footer-list a:hover,
+.footer-nav-link:hover { color: #fafafa !important; }
+
+.toast-notice {
+  background: #18181b !important;
+  color: #fafafa !important;
+  border: 1px solid #3f3f46 !important;
+}

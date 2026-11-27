@@ -1,0 +1,527 @@
+/* Giữ nguyên file gốc và bổ sung badge hoàn thành */
+.dhp-agenda-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.dhp-day-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.dhp-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dhp-date-title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: #0f172a;
+}
+
+.dhp-date-picker {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.dhp-sub-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 4px;
+  font-size: 0.86rem;
+  color: #475569;
+}
+
+.dhp-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.dhp-weather-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.dhp-allday-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.dhp-allday-pill {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 500;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dhp-timeline-list {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 4px 0;
+}
+
+.dhp-tl-row {
+  display: grid;
+  grid-template-columns: 96px 24px 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.dhp-tl-time {
+  text-align: right;
+  padding-top: 12px;
+  font-size: 0.84rem;
+  color: #334155;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.dhp-tl-dur {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.dhp-tl-axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.dhp-tl-line {
+  width: 2px;
+  flex: 1;
+  background: #e2e8f0;
+}
+
+.dhp-tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 15px;
+  flex-shrink: 0;
+  background: #94a3b8;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #cbd5e1;
+  z-index: 1;
+}
+
+.dhp-tl-row.is-past .dhp-tl-dot {
+  background: #94a3b8;
+  box-shadow: 0 0 0 2px #e2e8f0;
+}
+
+.dhp-tl-row.is-now .dhp-tl-dot {
+  background: #0f766e;
+  box-shadow: 0 0 0 3px #99f6e4;
+}
+
+.dhp-tl-row.is-upcoming .dhp-tl-dot {
+  background: #2563eb;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.dhp-tl-card {
+  margin: 6px 0;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left-width: 4px;
+  border-radius: 12px;
+  padding: 11px 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.dhp-tl-row.is-past .dhp-tl-card {
+  opacity: 0.68;
+  background: #f8fafc;
+}
+
+.dhp-tl-row.is-now .dhp-tl-card {
+  border-color: #0f766e;
+  border-left-width: 5px;
+  background: #f0fdfa;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.1);
+}
+
+/* Nhãn màu theo nhóm công việc */
+.dhp-tag-urgent {
+  border-left-color: #dc2626 !important;
+}
+.dhp-tag-business {
+  border-left-color: #059669 !important;
+}
+.dhp-tag-meeting {
+  border-left-color: #d97706 !important;
+}
+.dhp-tag-personal {
+  border-left-color: #2563eb !important;
+}
+
+.dhp-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dhp-card-title {
+  font-weight: 700;
+  font-size: 0.96rem;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.dhp-tl-row.is-past .dhp-card-title {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
+.dhp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.dhp-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.dhp-badge-now {
+  background: #0f766e;
+  color: #fff;
+}
+.dhp-badge-countdown {
+  background: #fef3c7;
+  color: #92400e;
+}
+.dhp-badge-cat-urgent {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.dhp-badge-cat-business {
+  background: #d1fae5;
+  color: #065f46;
+}
+.dhp-badge-cat-meeting {
+  background: #fef3c7;
+  color: #92400e;
+}
+.dhp-badge-cat-personal {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.dhp-card-desc {
+  font-size: 0.84rem;
+  color: #475569;
+  margin-top: 4px;
+  white-space: pre-line;
+}
+
+.dhp-rain-warn {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 5px 9px;
+  display: inline-block;
+}
+
+.dhp-subtasks {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dhp-subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.dhp-subtask-item.done span {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.dhp-add-subtask {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #0f766e;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dhp-free-slot {
+  display: grid;
+  grid-template-columns: 96px 24px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.dhp-free-banner {
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(248, 250, 252, 0.7);
+}
+
+.dhp-quick-add-btn {
+  background: none;
+  border: none;
+  color: #0f766e;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dhp-quick-add-btn:hover {
+  text-decoration: underline;
+}
+
+.dhp-now-divider {
+  display: grid;
+  grid-template-columns: 96px 24px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.dhp-now-label {
+  text-align: right;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.dhp-now-line {
+  height: 2px;
+  background: #dc2626;
+  position: relative;
+  border-radius: 2px;
+}
+
+@media (max-width: 640px) {
+  .dhp-tl-row,
+  .dhp-free-slot,
+  .dhp-now-divider {
+    grid-template-columns: 72px 18px 1fr;
+    gap: 6px;
+  }
+  .dhp-tl-time {
+    font-size: 0.78rem;
+  }
+}
+/* Checkbox hoàn thành cho từng sự kiện chính */
+.dhp-event-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.dhp-event-done-cb {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent, #0d9488);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dhp-tl-row.is-done .dhp-card-title {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.dhp-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Form chỉnh sửa sự kiện ngay tại thẻ */
+.dhp-edit-box {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dhp-edit-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .dhp-edit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dhp-edit-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  background: #ffffff;
+}
+
+.dhp-edit-input:focus {
+  outline: none;
+  border-color: var(--accent, #0d9488);
+}
+
+.dhp-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+/* Nhóm nút hành động bên phải thanh điều hướng ngày */
+.dhp-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Khung form thêm lịch thủ công mở trượt đầu timeline */
+.dhp-manual-create-box {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08);
+  animation: dhpSlideDown 0.2s ease-out;
+}
+
+@keyframes dhpSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dhp-manual-create-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent-dark, #0f766e);
+}
+
+.dhp-manual-create-header span.dhp-date-hint {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary, #64748b);
+}
+
+.dhp-empty-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.dhp-badge-done {
+  background: #d1fae5;
+  color: #065f46;
+}

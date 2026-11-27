@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đinh Hữu Phúc — Profile</title>
+  <meta name="description" content="Trang thông tin cá nhân của Đinh Hữu Phúc — Kết nối trực tiếp, trợ lý AI Gemini và tiện ích giải trí." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/chat.css" />
+  <link rel="stylesheet" href="/css/second-brain.css" />
+  <link rel="stylesheet" href="/css/calendar-timeline.css" />
+  <link rel="stylesheet" href="/css/caro.css" />
+  <link rel="stylesheet" href="/css/snake.css" />
+  <link rel="stylesheet" href="/css/sudoku.css" />
+  <link rel="stylesheet" href="/css/notepad.css" />
+  <link rel="stylesheet" href="/css/dark-theme.css" />
+</head>
+<body>
+  <div id="scrollProgress" class="scroll-progress"></div>
+  <div class="ambient-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#about" class="brand-logo" data-tab="about">
+        <span class="brand-mark">DHP</span>
+        <span class="brand-name">Đinh Hữu Phúc<span class="brand-dot">.</span></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Menu chính">
+        <button type="button" class="nav-btn active" data-tab="about">
+          <span class="nav-num">01</span> Cá nhân
+        </button>
+        <button type="button" class="nav-btn" data-tab="work">
+          <span class="nav-num">02</span> Công việc
+        </button>
+        <button type="button" class="nav-btn" data-tab="minigame">
+          <span class="nav-num">03</span> Mini Game
+        </button>
+        <button type="button" class="nav-btn" data-tab="brain">
+          <span class="nav-num">04</span> Second Brain
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <div id="headerAuthArea" class="header-auth">
+          <button type="button" id="googleLoginHeaderBtn" class="btn btn-outline btn-sm hover-arrow">
+            <span>Đăng nhập Google</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+        <a href="https://zalo.me/0983533945" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm hover-arrow">
+          <span>Liên hệ Zalo</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div id="sectionMount" class="container section-mount">
+      <div class="skeleton-loader">Đang tải không gian cá nhân...</div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand-col">
+        <div class="footer-logo">
+          <span class="brand-mark">DHP</span>
+          <span class="brand-name">Đinh Hữu Phúc<span class="brand-dot">.</span></span>
+        </div>
+        <p class="footer-bio">
+          Tích hợp trợ lý AI sắp xếp lịch làm việc theo tài khoản Google.
+        </p>
+      </div>
+
+      <div class="footer-links-col">
+        <h4 class="footer-heading">Điều hướng</h4>
+        <ul class="footer-list">
+          <li><button type="button" class="footer-nav-link" data-tab="about">01 / Thông tin cá nhân</button></li>
+          <li><button type="button" class="footer-nav-link" data-tab="work">02 / Công việc hiện tại</button></li>
+          <li><button type="button" class="footer-nav-link" data-tab="minigame">03 / Mini Game giải trí</button></li>
+          <li><button type="button" class="footer-nav-link" data-tab="brain">04 / Second Brain (Kho tri thức AI)</button></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4 class="footer-heading">Kết nối nhanh</h4>
+        <ul class="footer-list">
+          <li><a href="https://zalo.me/0983533945" target="_blank" rel="noopener noreferrer">Nhắn tin qua Zalo</a></li>
+          <li><a href="mailto:dhphuc2212@dinhhuuphuc.com">dhphuc2212@dinhhuuphuc.com</a></li>
+          <li><button type="button" id="footerVcardBtn" class="footer-nav-link">Lưu danh bạ (.vcf)</button></li>
+          <li><button type="button" id="footerTrollBtn" class="footer-nav-link text-danger-soft">Góc thư giãn bất ngờ</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2026 Đinh Hữu Phúc.</p>
+      <p class="footer-loc">Phường Hòa Bình, TP. Hồ Chí Minh</p>
+    </div>
+  </footer>
+
+  <div id="trollModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="trollTitle">
+    <div class="modal-card hover-card">
+      <div class="modal-badge">CẢNH BÁO TÒ MÒ</div>
+      <h3 id="trollTitle">Bị bắt quả tang rồi nhé!</h3>
+      <p id="trollMessage">
+        Làm gì có ảnh nóng nào ở đây đâu! Quay lại trò chuyện với AI hoặc chơi thử ván Cờ Caro, Rắn săn mồi nhé.
+      </p>
+      <div class="modal-actions">
+        <button type="button" id="closeTrollBtn" class="btn btn-primary hover-arrow">
+          <span>Đã hiểu, quay lại</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastNotice" class="toast-notice" role="status" aria-live="polite"></div>
+
+  <!-- Tầng lõi dùng chung -->
+  <script src="/js/core/utils.js"></script>
+  <script src="/js/core/api.js"></script>
+
+  <!-- Dữ liệu & API module -->
+  <script src="/js/modules/work/work-data.js"></script>
+  <script src="/js/modules/brain/brain-api.js"></script>
+
+  <!-- Calendar -->
+  <script src="/js/calendar-helpers.js"></script>
+  <script src="/js/calendar-api.js"></script>
+  <script src="/js/calendar-render.js"></script>
+  <script src="/js/calendar-ai-bridge.js"></script>
+  <script src="/js/calendar.js"></script>
+
+  <!-- Chat, Second Brain, Work & Games -->
+  <script src="/js/chat-history.js"></script>
+  <script src="/js/second-brain.js"></script>
+  <script src="/js/chat.js"></script>
+  <script src="/js/work.js"></script>
+  <script src="/js/caro.js"></script>
+  <script src="/js/snake.js"></script>
+  <script src="/js/sudoku.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/notepad.js"></script>
+</body>
+</html>
