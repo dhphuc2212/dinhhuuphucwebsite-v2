@@ -1396,26 +1396,26 @@ html[data-theme="night"] .chess-cell.dark {
 }
 /* Bàn cờ & quân cờ: đồng bộ Night / Day */
 html[data-theme="night"] .chess-cell.light {
-  background: #263349 !important;
+  background: #27354c !important;
 }
 
 html[data-theme="night"] .chess-cell.dark {
-  background: #131b29 !important;
+  background: #141c2b !important;
 }
 
 html[data-theme="day"] .chess-cell.light {
-  background: #f5f2eb !important;
+  background: #f7f5f0 !important;
 }
 
 html[data-theme="day"] .chess-cell.dark {
-  background: #ddd6c7 !important;
+  background: #dfd8c8 !important;
 }
 
-.chess-cell.is-white-piece .chess-piece-svg {
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+.chess-piece-svg.is-white {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.42));
 }
 
-.chess-cell.is-black-piece .chess-piece-svg {
+.chess-piece-svg.is-black {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
 }
 
