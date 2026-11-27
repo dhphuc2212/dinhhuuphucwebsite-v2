@@ -1,9 +1,9 @@
 /* =========================================================
-   DHP MULTI-THEME SYSTEM — SLATE / WARM LINEN / INDIGO
+   DHP THEME SYSTEM — NIGHT & DAY
    ========================================================= */
 
 :root,
-html[data-theme="slate"] {
+html[data-theme="night"] {
   --bg-page: #0b0f14;
   --bg-surface: #111827;
   --bg-elevated: #172033;
@@ -27,7 +27,7 @@ html[data-theme="slate"] {
   --color-scheme: dark;
 }
 
-html[data-theme="linen"] {
+html[data-theme="day"] {
   --bg-page: #faf8f5;
   --bg-surface: #ffffff;
   --bg-elevated: #f4f1ea;
@@ -49,30 +49,6 @@ html[data-theme="linen"] {
   --card-shadow: 0 1px 2px rgba(24, 24, 27, 0.04), 0 10px 26px rgba(24, 24, 27, 0.06);
   --dropdown-shadow: 0 18px 40px rgba(24, 24, 27, 0.14);
   --color-scheme: light;
-}
-
-html[data-theme="indigo"] {
-  --bg-page: #090a10;
-  --bg-surface: #121420;
-  --bg-elevated: #181b2b;
-  --bg-subtle: #202438;
-  --border-color: #23273a;
-  --border-hover: #363c59;
-  --text-primary: #f5f7ff;
-  --text-secondary: #9aa2c4;
-  --text-muted: #6c7394;
-  --accent: #2dd4bf;
-  --accent-dark: #14b8a6;
-  --accent-soft: rgba(45, 212, 191, 0.14);
-  --sky-accent: #818cf8;
-  --header-bg: rgba(9, 10, 16, 0.88);
-  --dot-color: rgba(129, 140, 248, 0.11);
-  --primary-btn-bg: #f5f7ff;
-  --primary-btn-text: #090a10;
-  --primary-btn-hover: #e0e7ff;
-  --card-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 14px 34px rgba(0, 0, 0, 0.5);
-  --dropdown-shadow: 0 20px 44px rgba(0, 0, 0, 0.82);
-  --color-scheme: dark;
 }
 
 html,
@@ -141,56 +117,49 @@ body {
   color: var(--accent) !important;
 }
 
-/* THEME SWITCHER */
-.dhp-theme-switcher {
+/* THEME DROPDOWN ("Giao diện") */
+.dhp-theme-dropdown-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 3px;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
   border-radius: 999px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
+  transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
-.dhp-theme-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 30px;
-  padding: 0 9px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-secondary);
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
-}
-
-.dhp-theme-btn:hover {
-  color: var(--text-primary);
-  background: var(--bg-elevated);
-}
-
-.dhp-theme-btn.is-active {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
+.dhp-theme-dropdown-wrap:hover,
+.dhp-theme-dropdown-wrap:focus-within {
   border-color: var(--accent);
 }
 
-.dhp-theme-swatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 1px solid rgba(128, 128, 128, 0.45);
+.dhp-theme-prefix {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
-.swatch-slate { background: #10b981; }
-.swatch-linen { background: #f5efe6; }
-.swatch-indigo { background: #6366f1; }
+.dhp-theme-select {
+  height: 26px !important;
+  padding: 0 6px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+
+.dhp-theme-select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 /* CARDS */
 .card,
@@ -338,8 +307,7 @@ body {
   color: #e11d48 !important;
 }
 
-html[data-theme="slate"] .btn-troll,
-html[data-theme="indigo"] .btn-troll {
+html[data-theme="night"] .btn-troll {
   color: #fda4af !important;
 }
 
@@ -486,8 +454,7 @@ select:focus {
 }
 
 .ai-ctx-item.danger { color: #e11d48 !important; }
-html[data-theme="slate"] .ai-ctx-item.danger,
-html[data-theme="indigo"] .ai-ctx-item.danger { color: #fb7185 !important; }
+html[data-theme="night"] .ai-ctx-item.danger { color: #fb7185 !important; }
 
 .ai-ctx-divider { background: var(--border-color) !important; }
 
@@ -549,8 +516,7 @@ html[data-theme="indigo"] .ai-ctx-item.danger { color: #fb7185 !important; }
   color: #d97706 !important;
 }
 
-html[data-theme="slate"] .dhp-rain-warn,
-html[data-theme="indigo"] .dhp-rain-warn {
+html[data-theme="night"] .dhp-rain-warn {
   color: #fcd34d !important;
 }
 
@@ -844,8 +810,7 @@ html[data-theme="indigo"] .dhp-rain-warn {
   color: #e11d48 !important;
 }
 
-html[data-theme="slate"] .dhp-dd-item.danger,
-html[data-theme="indigo"] .dhp-dd-item.danger {
+html[data-theme="night"] .dhp-dd-item.danger {
   color: #fb7185 !important;
 }
 
@@ -936,7 +901,7 @@ html[data-theme="indigo"] .dhp-dd-item.danger {
     flex-shrink: 0 !important;
   }
 
-  .dhp-theme-switcher,
+  .dhp-theme-dropdown-wrap,
   .dhp-user-menu-wrap,
   .site-header .header-actions .status-pill,
   .site-header .header-actions > a[href*="zalo.me"] {
@@ -1073,9 +1038,12 @@ html[data-theme="indigo"] .dhp-dd-item.danger {
     color: var(--text-secondary);
   }
 
-  .mobile-drawer-theme-pills {
-    display: inline-flex;
-    gap: 6px;
+  .mobile-drawer-mobile-select {
+    height: 32px !important;
+    padding: 0 8px !important;
+    border-radius: 8px !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 0.8rem !important;
   }
 
   .site-header .main-nav.is-mobile-open .nav-btn {
