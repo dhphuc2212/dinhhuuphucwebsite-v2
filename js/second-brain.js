@@ -42,7 +42,7 @@ window.SecondBrainManager = (function () {
       : itemsCache;
 
     if (filtered.length === 0) {
-      box.innerHTML = `<div class="calendar-empty-state">Kho tri thức đang trống. Hãy dán link YouTube/Facebook hoặc nội dung vào khung phía trên để AI học nhé!</div>`;
+      box.innerHTML = `<div class="calendar-empty-state">Kho tri thức đang trống. Hãy dán link YouTube/Facebook hoặc nội dung vào khung phía trên để lưu thông tin nhé!</div>`;
       return;
     }
 
@@ -102,30 +102,30 @@ window.SecondBrainManager = (function () {
     const input = document.getElementById("sbQuickIngestInput");
     const btn = document.getElementById("sbQuickIngestBtn");
     const rawText = input?.value.trim() || "";
-    if (!rawText) return notify("Vui lòng dán link hoặc nội dung cần AI học.");
+    if (!rawText) return notify("Vui lòng dán link hoặc nội dung cần lưu.");
 
     if (btn) {
       btn.disabled = true;
-      btn.textContent = "AI đang học...";
+      btn.textContent = "Đang lưu...";
     }
 
     try {
-      const prompt = `Ghi nhớ và lưu nội dung sau vào Bộ não thứ 2 giúp tôi:\n${rawText}`;
+      const prompt = `Chỉ lưu và tóm tắt thông tin sau vào Bộ não thứ 2 (không tạo cuộc trò chuyện lịch sử):\n${rawText}`;
       const data = await window.SecondBrainApi.chatOrIngest(prompt, "second_brain_ingest");
       if (data.savedMemory) {
         input.value = "";
-        notify(`🧠 Đã nạp kiến thức: ${data.savedMemory.title}`);
+        notify(`🧠 Đã lưu thông tin: ${data.savedMemory.title}`);
         await fetchBrainList();
         renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
       } else {
-        notify(data.reply || "Vui lòng đăng nhập Google để lưu kiến thức.");
+        notify(data.reply || "Vui lòng đăng nhập Google để lưu thông tin.");
       }
     } catch {
-      notify("Lỗi kết nối khi nạp kiến thức.");
+      notify("Lỗi kết nối khi lưu thông tin.");
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.textContent = "⚡ Gửi AI nạp ngay";
+        btn.textContent = "⚡ Lưu thông tin";
       }
     }
   }
@@ -156,7 +156,7 @@ window.SecondBrainManager = (function () {
       appendChatBubble("bot", reply);
 
       if (data.savedMemory) {
-        notify(`Đã học: ${data.savedMemory.title}`);
+        notify(`Đã lưu: ${data.savedMemory.title}`);
         await fetchBrainList();
         renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
       }
@@ -213,7 +213,7 @@ window.SecondBrainManager = (function () {
           ["dhpBrainNewTitle", "dhpBrainNewUrl", "dhpBrainNewContent", "dhpBrainNewTags"].forEach(
             (id) => (document.getElementById(id).value = "")
           );
-          notify("Đã nạp kiến thức vào Bộ não thứ 2!");
+          notify("Đã lưu thông tin vào Bộ não thứ 2!");
           await fetchBrainList();
           renderList("");
         } else {
@@ -230,7 +230,7 @@ window.SecondBrainManager = (function () {
       sbHistory = [];
       const box = document.getElementById("sbChatMessages");
       if (box) {
-        box.innerHTML = `<div class="chat-row bot"><span class="chat-sender">Second Brain AI</span><div class="chat-bubble bot">Đã làm mới phiên hỏi-đáp. Bạn muốn tra cứu kiến thức nào trong kho đã lưu?</div></div>`;
+        box.innerHTML = `<div class="chat-row bot"><span class="chat-sender">Second Brain AI</span><div class="chat-bubble bot">Đã làm mới phiên hỏi-đáp. Bạn muốn tra cứu thông tin nào trong kho đã lưu?</div></div>`;
       }
     });
   }
