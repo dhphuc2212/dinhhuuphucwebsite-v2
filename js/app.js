@@ -349,7 +349,7 @@
       const defaultGame = activeBtn?.dataset.game || "caro";
       switchMiniGameTab(defaultGame, true);
     } else if (targetTab === "brain") {
-      window.SecondBrainManager?.bindSectionEvents?.();
+      window.SecondBrainManager?.initTab?.();
     }
 
     window.DhpI18n?.applyToDom?.(mountEl);
