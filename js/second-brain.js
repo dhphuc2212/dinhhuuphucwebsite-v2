@@ -3,9 +3,26 @@ window.SecondBrainManager = (function () {
   let sbHistory = [];
   let isAuthenticated = false;
   let isSending = false;
+  let isIngesting = false;
 
-  const esc = (s) => window.DhpUtils.escapeHtml(s);
-  const notify = (m) => window.DhpUtils.showToast(m);
+  const esc = (s) =>
+    window.DhpUtils?.escapeHtml
+      ? window.DhpUtils.escapeHtml(s)
+      : String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+
+  const notify = (m) => {
+    if (window.DhpUtils?.showToast) {
+      window.DhpUtils.showToast(m);
+    } else if (typeof window.showToast === "function") {
+      window.showToast(m);
+    } else {
+      console.log("[SecondBrain]", m);
+    }
+  };
 
   function setAccountStatusText(text) {
     const statusEl = document.getElementById("sbAccountStatus");
@@ -115,15 +132,27 @@ window.SecondBrainManager = (function () {
   }
 
   async function handleQuickIngestSubmit(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isIngesting) return;
+
     const input = document.getElementById("sbQuickIngestInput");
     const btn = document.getElementById("sbQuickIngestBtn");
-    const rawText = input?.value.trim() || "";
-    if (!rawText) return notify("Vui lòng dán link hoặc nội dung cần lưu.");
+    const rawText = input ? input.value.trim() : "";
 
+    if (!rawText) {
+      notify("Vui lòng dán link hoặc nội dung cần lưu.");
+      input?.focus();
+      return;
+    }
+
+    isIngesting = true;
+    const oldBtnText = btn ? btn.textContent : "⚡ Gửi AI nạp ngay";
     if (btn) {
       btn.disabled = true;
-      btn.textContent = "Đang lưu...";
+      btn.textContent = "Đang nạp...";
     }
 
     try {
@@ -131,14 +160,13 @@ window.SecondBrainManager = (function () {
       const data = await window.SecondBrainApi.chatOrIngest(prompt, "second_brain_ingest");
 
       if (data && data.savedMemory) {
-        input.value = "";
+        if (input) input.value = "";
         notify(`🧠 Đã lưu thông tin: ${data.savedMemory.title}`);
         await fetchBrainList();
         renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
         return;
       }
 
-      // Nếu chưa đăng nhập Google thì báo rõ
       if (data && typeof data.reply === "string" && data.reply.includes("đăng nhập Google")) {
         isAuthenticated = false;
         setAccountStatusText("Chưa đăng nhập Google");
@@ -147,7 +175,6 @@ window.SecondBrainManager = (function () {
         return;
       }
 
-      // Fallback lưu trực tiếp nếu đã đăng nhập nhưng AI không trả savedMemory
       if (isAuthenticated) {
         const urlMatch = rawText.match(/https?:\/\/[^\s)]+/i);
         const savedRes = await window.SecondBrainApi.saveManual({
@@ -157,7 +184,7 @@ window.SecondBrainManager = (function () {
           tags: []
         });
         if (savedRes && savedRes.ok) {
-          input.value = "";
+          if (input) input.value = "";
           notify("🧠 Đã lưu thông tin vào Bộ não thứ 2!");
           await fetchBrainList();
           renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
@@ -166,18 +193,20 @@ window.SecondBrainManager = (function () {
       }
 
       notify((data && data.reply) || "Chưa thể lưu thông tin lúc này.");
-    } catch {
-      notify("Lỗi kết nối khi lưu thông tin.");
+    } catch (err) {
+      console.error("Quick ingest error:", err);
+      notify("Lỗi kết nối khi nạp thông tin.");
     } finally {
+      isIngesting = false;
       if (btn) {
         btn.disabled = false;
-        btn.textContent = "⚡ Gửi AI nạp ngay";
+        btn.textContent = oldBtnText || "⚡ Gửi AI nạp ngay";
       }
     }
   }
 
   async function handleBrainChatSubmit(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (isSending) return;
     const input = document.getElementById("sbChatInput");
     const sendBtn = document.getElementById("sbChatSendBtn");
@@ -234,8 +263,13 @@ window.SecondBrainManager = (function () {
       });
     });
 
-    document.getElementById("sbQuickIngestForm")?.addEventListener("submit", handleQuickIngestSubmit);
-    document.getElementById("sbQuickIngestInput")?.addEventListener("keydown", (e) => {
+    const quickForm = document.getElementById("sbQuickIngestForm");
+    const quickBtn = document.getElementById("sbQuickIngestBtn");
+    const quickInput = document.getElementById("sbQuickIngestInput");
+
+    quickForm?.addEventListener("submit", handleQuickIngestSubmit);
+    quickBtn?.addEventListener("click", handleQuickIngestSubmit);
+    quickInput?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         handleQuickIngestSubmit(e);
