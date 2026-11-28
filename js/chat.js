@@ -5,9 +5,14 @@
 
   let isSidebarCollapsed = false;
   let isMobileDrawerOpen = false;
+  let drawerLockUntil = 0;
   let openMenuThreadId = "";
   let menuCoords = { top: 0, left: 0 };
   let renamingThreadId = "";
+
+  function isMobileLayout() {
+    return window.innerWidth <= 820;
+  }
 
   function getChatElements() {
     const card = document.querySelector(".ai-hub-card") || document;
@@ -18,18 +23,34 @@
     return { card, form, input, sendBtn, messagesBox };
   }
 
-  function closeMobileDrawer(shouldRender = true) {
+  function closeMobileDrawer(shouldRender = false) {
     isMobileDrawerOpen = false;
+    drawerLockUntil = Date.now() + 400;
     openMenuThreadId = "";
     renamingThreadId = "";
     document.getElementById("aiFloatingCtxMenu")?.remove();
+
     const sidebar = document.getElementById("aiChatSidebar");
     if (sidebar) {
       sidebar.classList.remove("mobile-open");
     }
+
+    const toggleBtn = document.getElementById("aiToggleSidebarBtn");
+    if (toggleBtn) {
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+
     if (shouldRender) {
       ensureHistoryToolbar();
     }
+  }
+
+  function openMobileDrawer() {
+    if (!isMobileLayout()) return;
+    if (Date.now() < drawerLockUntil) return;
+    isMobileDrawerOpen = true;
+    openMenuThreadId = "";
+    ensureHistoryToolbar();
   }
 
   function ensureWorkspaceLayout() {
@@ -127,12 +148,13 @@
     const { threads, visibleThreads, activeThread, filterMode, isCloudMode } = History.getState();
     const unreadTotal = threads.filter((t) => t.unread).length;
 
-    if (window.innerWidth > 820) {
+    if (!isMobileLayout() || Date.now() < drawerLockUntil) {
       isMobileDrawerOpen = false;
     }
 
+    const shouldOpenMobile = Boolean(isMobileDrawerOpen && isMobileLayout());
     workspace.classList.toggle("sidebar-collapsed", isSidebarCollapsed);
-    sidebar.classList.toggle("mobile-open", isMobileDrawerOpen && window.innerWidth <= 820);
+    sidebar.classList.toggle("mobile-open", shouldOpenMobile);
 
     const listItemsHtml =
       visibleThreads.length === 0
@@ -181,7 +203,7 @@
 
     topBar.innerHTML = `
       <div class="ai-topbar-left">
-        <button type="button" id="aiToggleSidebarBtn" class="btn btn-outline btn-sm ai-toggle-sidebar-btn" aria-expanded="${isMobileDrawerOpen ? "true" : "false"}" title="Ẩn/hiện danh sách trò chuyện">
+        <button type="button" id="aiToggleSidebarBtn" class="btn btn-outline btn-sm ai-toggle-sidebar-btn" aria-expanded="${shouldOpenMobile ? "true" : "false"}" title="Ẩn/hiện danh sách trò chuyện">
           <span>☰</span>
           <span class="ai-toggle-label">Lịch sử (${threads.length})</span>
           ${unreadTotal > 0 ? `<span class="ai-unread-count">${unreadTotal}</span>` : ""}
@@ -398,23 +420,20 @@
   );
 
   document.addEventListener("click", async (e) => {
-    // 1. Nút đóng drawer lịch sử trên mobile (xử lý đầu tiên và dừng hẳn)
     const closeDrawerBtn = e.target.closest("#aiCloseMobileDrawerBtn, .ai-sidebar-close-mobile");
     if (closeDrawerBtn) {
       e.preventDefault();
       e.stopPropagation();
-      closeMobileDrawer(true);
+      closeMobileDrawer(false);
       return;
     }
 
-    // 2. Nút gửi tin nhắn
     if (e.target.closest("#chatSendBtn, #sendChatBtn, .chat-input-bar button")) {
       e.preventDefault();
       handleSendMessage(e);
       return;
     }
 
-    // 3. Nút tạo cuộc trò chuyện mới
     if (e.target.closest("#aiNewChatBtn") && History) {
       e.preventDefault();
       e.stopPropagation();
@@ -423,21 +442,24 @@
       return;
     }
 
-    // 4. Nút bật/tắt sidebar hoặc drawer lịch sử
     if (e.target.closest("#aiToggleSidebarBtn")) {
       e.preventDefault();
       e.stopPropagation();
+      if (Date.now() < drawerLockUntil) return;
       openMenuThreadId = "";
-      if (window.innerWidth <= 820) {
-        isMobileDrawerOpen = !isMobileDrawerOpen;
+      if (isMobileLayout()) {
+        if (isMobileDrawerOpen) {
+          closeMobileDrawer(false);
+        } else {
+          openMobileDrawer();
+        }
       } else {
         isSidebarCollapsed = !isSidebarCollapsed;
+        ensureHistoryToolbar();
       }
-      ensureHistoryToolbar();
       return;
     }
 
-    // 5. Lọc ghim / tất cả (giữ nguyên trạng thái drawer hiện tại)
     if (e.target.closest("#aiFilterToggleBtn") && History) {
       e.preventDefault();
       e.stopPropagation();
@@ -447,7 +469,6 @@
       return;
     }
 
-    // 6. Menu 3 chấm từng hội thoại
     const dotsBtn = e.target.closest(".ai-thread-dots-btn");
     if (dotsBtn) {
       e.preventDefault();
@@ -465,7 +486,6 @@
       return;
     }
 
-    // 7. Các hành động trong menu nổi 3 chấm
     const ctxBtn = e.target.closest(".ai-ctx-item");
     if (ctxBtn && History) {
       e.preventDefault();
@@ -502,7 +522,6 @@
       return;
     }
 
-    // 8. Chuyển hội thoại -> tự đóng drawer trên mobile
     const switchArea = e.target.closest(".ai-thread-select-area");
     if (switchArea && History) {
       e.preventDefault();
@@ -514,7 +533,6 @@
       return;
     }
 
-    // 9. Đóng menu nổi 3 chấm nếu bấm ra ngoài
     if (openMenuThreadId && !e.target.closest("#aiFloatingCtxMenu")) {
       openMenuThreadId = "";
       ensureHistoryToolbar();
@@ -551,7 +569,7 @@
 
     if (e.key === "Escape" && isMobileDrawerOpen) {
       e.preventDefault();
-      closeMobileDrawer(true);
+      closeMobileDrawer(false);
       return;
     }
 
