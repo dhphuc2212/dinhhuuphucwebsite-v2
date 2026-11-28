@@ -1,25 +1,41 @@
 window.SecondBrainManager = (function () {
   let itemsCache = [];
   let sbHistory = [];
+  let isAuthenticated = false;
   let isSending = false;
 
   const esc = (s) => window.DhpUtils.escapeHtml(s);
   const notify = (m) => window.DhpUtils.showToast(m);
 
-  async function fetchBrainList() {
+  function setAccountStatusText(text) {
     const statusEl = document.getElementById("sbAccountStatus");
+    if (statusEl) {
+      statusEl.textContent = text;
+    }
+  }
+
+  async function fetchBrainList() {
+    setAccountStatusText("Đang kiểm tra tài khoản...");
     try {
       const data = await window.SecondBrainApi.listItems();
-      itemsCache = Array.isArray(data.items) ? data.items : [];
-      if (statusEl) {
-        statusEl.textContent = data.authenticated
-          ? `☁️ Đồng bộ: ${data.email}`
-          : "Chưa đăng nhập Google";
+      isAuthenticated = Boolean(data && data.authenticated);
+      itemsCache = Array.isArray(data && data.items) ? data.items : [];
+
+      if (isAuthenticated) {
+        setAccountStatusText(`☁️ Đồng bộ: ${data.email || "Google"}`);
+      } else {
+        setAccountStatusText("Chưa đăng nhập Google");
       }
+
       const countEl = document.getElementById("sbTotalCount");
       if (countEl) countEl.textContent = String(itemsCache.length);
-      return data;
+      return data || { authenticated: false, items: [] };
     } catch {
+      isAuthenticated = false;
+      itemsCache = [];
+      setAccountStatusText("Chưa đăng nhập Google");
+      const countEl = document.getElementById("sbTotalCount");
+      if (countEl) countEl.textContent = "0";
       return { authenticated: false, items: [] };
     }
   }
@@ -28,8 +44,7 @@ window.SecondBrainManager = (function () {
     const box = document.getElementById("dhpBrainListContainer");
     if (!box) return;
 
-    const statusText = document.getElementById("sbAccountStatus")?.textContent || "";
-    if (!window.DhpApi.getSessionId() && statusText.includes("Chưa đăng nhập")) {
+    if (!isAuthenticated) {
       box.innerHTML = `<div class="calendar-empty-state">Hãy nhấn <strong>Đăng nhập Google</strong> ở góc trên để lưu và đồng bộ Bộ Não Thứ 2 của riêng bạn.</div>`;
       return;
     }
@@ -37,7 +52,9 @@ window.SecondBrainManager = (function () {
     const kw = keyword.toLowerCase().trim();
     const filtered = kw
       ? itemsCache.filter((it) =>
-          `${it.title} ${it.preview} ${(it.tags || []).join(" ")}`.toLowerCase().includes(kw)
+          `${it.title || ""} ${it.preview || ""} ${(it.tags || []).join(" ")}`
+            .toLowerCase()
+            .includes(kw)
         )
       : itemsCache;
 
@@ -59,7 +76,7 @@ window.SecondBrainManager = (function () {
         return `
           <div class="dhp-brain-item">
             <div style="flex:1;min-width:0;">
-              <div class="dhp-brain-item-title">${esc(it.title)} <span style="font-weight:400;font-size:0.76rem;color:#71717a;">• ${dateStr}</span></div>
+              <div class="dhp-brain-item-title">${esc(it.title || "Ghi nhớ")} <span style="font-weight:400;font-size:0.76rem;color:#71717a;">• ${dateStr}</span></div>
               <div class="dhp-brain-item-preview">${esc(it.preview || "")}</div>
               ${linkHtml}
               ${tagsHtml ? `<div class="dhp-brain-tags">${tagsHtml}</div>` : ""}
@@ -74,7 +91,7 @@ window.SecondBrainManager = (function () {
       btn.addEventListener("click", async () => {
         if (!window.confirm("Xóa kiến thức này khỏi Bộ não thứ 2?")) return;
         const data = await window.SecondBrainApi.deleteItem(btn.dataset.brainId);
-        if (data.ok) {
+        if (data && data.ok) {
           notify("Đã xóa khỏi Bộ não thứ 2.");
           await fetchBrainList();
           renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
@@ -110,22 +127,51 @@ window.SecondBrainManager = (function () {
     }
 
     try {
-      const prompt = `Chỉ lưu và tóm tắt thông tin sau vào Bộ não thứ 2 (không tạo cuộc trò chuyện lịch sử):\n${rawText}`;
+      const prompt = `Ghi nhớ và lưu nội dung sau vào Bộ não thứ 2 giúp tôi:\n${rawText}`;
       const data = await window.SecondBrainApi.chatOrIngest(prompt, "second_brain_ingest");
-      if (data.savedMemory) {
+
+      if (data && data.savedMemory) {
         input.value = "";
         notify(`🧠 Đã lưu thông tin: ${data.savedMemory.title}`);
         await fetchBrainList();
         renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
-      } else {
-        notify(data.reply || "Vui lòng đăng nhập Google để lưu thông tin.");
+        return;
       }
+
+      // Nếu chưa đăng nhập Google thì báo rõ
+      if (data && typeof data.reply === "string" && data.reply.includes("đăng nhập Google")) {
+        isAuthenticated = false;
+        setAccountStatusText("Chưa đăng nhập Google");
+        renderList("");
+        notify("Vui lòng đăng nhập Google để lưu thông tin vào Bộ não thứ 2.");
+        return;
+      }
+
+      // Fallback lưu trực tiếp nếu đã đăng nhập nhưng AI không trả savedMemory
+      if (isAuthenticated) {
+        const urlMatch = rawText.match(/https?:\/\/[^\s)]+/i);
+        const savedRes = await window.SecondBrainApi.saveManual({
+          title: "",
+          sourceUrl: urlMatch ? urlMatch[0] : "",
+          summary: rawText,
+          tags: []
+        });
+        if (savedRes && savedRes.ok) {
+          input.value = "";
+          notify("🧠 Đã lưu thông tin vào Bộ não thứ 2!");
+          await fetchBrainList();
+          renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
+          return;
+        }
+      }
+
+      notify((data && data.reply) || "Chưa thể lưu thông tin lúc này.");
     } catch {
       notify("Lỗi kết nối khi lưu thông tin.");
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.textContent = "⚡ Lưu thông tin";
+        btn.textContent = "⚡ Gửi AI nạp ngay";
       }
     }
   }
@@ -151,11 +197,12 @@ window.SecondBrainManager = (function () {
 
     try {
       const data = await window.SecondBrainApi.chatOrIngest(message, "second_brain", recent);
-      const reply = data.reply || "Tôi chưa tìm thấy thông tin phù hợp trong Bộ não thứ 2.";
+      const reply =
+        (data && data.reply) || "Tôi chưa tìm thấy thông tin phù hợp trong Bộ não thứ 2.";
       sbHistory.push({ role: "bot", text: reply });
       appendChatBubble("bot", reply);
 
-      if (data.savedMemory) {
+      if (data && data.savedMemory) {
         notify(`Đã lưu: ${data.savedMemory.title}`);
         await fetchBrainList();
         renderList(document.getElementById("dhpBrainSearchInput")?.value || "");
@@ -179,7 +226,9 @@ window.SecondBrainManager = (function () {
     document.querySelectorAll("[data-ingest-mode]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const mode = btn.dataset.ingestMode;
-        document.querySelectorAll("[data-ingest-mode]").forEach((b) => b.classList.toggle("active", b === btn));
+        document
+          .querySelectorAll("[data-ingest-mode]")
+          .forEach((b) => b.classList.toggle("active", b === btn));
         document.getElementById("sbQuickIngestForm")?.classList.toggle("hidden", mode !== "quick");
         document.getElementById("sbManualIngestBox")?.classList.toggle("hidden", mode !== "manual");
       });
@@ -193,13 +242,19 @@ window.SecondBrainManager = (function () {
       }
     });
 
-    document.getElementById("dhpBrainSearchInput")?.addEventListener("input", (e) => renderList(e.target.value));
+    document
+      .getElementById("dhpBrainSearchInput")
+      ?.addEventListener("input", (e) => renderList(e.target.value));
 
     document.getElementById("dhpBrainSaveManualBtn")?.addEventListener("click", async () => {
       const title = document.getElementById("dhpBrainNewTitle").value.trim();
       const sourceUrl = document.getElementById("dhpBrainNewUrl").value.trim();
       const summary = document.getElementById("dhpBrainNewContent").value.trim();
-      const tags = document.getElementById("dhpBrainNewTags").value.split(",").map((t) => t.trim()).filter(Boolean);
+      const tags = document
+        .getElementById("dhpBrainNewTags")
+        .value.split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
 
       if (!summary && !sourceUrl) return notify("Vui lòng nhập nội dung hoặc đường dẫn cần lưu.");
 
@@ -209,7 +264,7 @@ window.SecondBrainManager = (function () {
 
       try {
         const data = await window.SecondBrainApi.saveManual({ title, sourceUrl, summary, tags });
-        if (data.ok) {
+        if (data && data.ok) {
           ["dhpBrainNewTitle", "dhpBrainNewUrl", "dhpBrainNewContent", "dhpBrainNewTags"].forEach(
             (id) => (document.getElementById(id).value = "")
           );
@@ -217,7 +272,7 @@ window.SecondBrainManager = (function () {
           await fetchBrainList();
           renderList("");
         } else {
-          notify(data.error || "Không thể lưu.");
+          notify((data && data.error) || "Không thể lưu (hãy kiểm tra đăng nhập Google).");
         }
       } finally {
         btn.disabled = false;
